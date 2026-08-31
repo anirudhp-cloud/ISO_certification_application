@@ -1,0 +1,32 @@
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Python
+backend/venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Logs
+logs/
+*.log
+
+# Runtime / generated artifacts
+backend/storage_data/
+prompt_logs/
+frontend/response.json
+
+# Reference material (not for public distribution)
+referance_documents_/
+*.pdf
+*.xlsx
+
+# Local tooling
+.claude/settings.local.json
+.vscode/
+.DS_Store
+
+# Generated artifacts
+full_prompt_iso42001.txt

@@ -1,0 +1,927 @@
+:root {
+  --bg: #f5f6f8;
+  --surface: #ffffff;
+  --border: #e2e5ea;
+  --text: #1f2430;
+  --text-muted: #6b7280;
+  --primary: #2f5fe0;
+  --primary-hover: #2549b3;
+  --accent-green: #12805c;
+  --accent-green-bg: #e5f6ef;
+  --accent-purple: #6d3fb8;
+  --accent-purple-bg: #f0e9fb;
+  --accent-amber: #a5650b;
+  --accent-amber-bg: #fdf1e0;
+  --accent-blue-bg: #e8eefd;
+  --danger: #c13a3a;
+  --radius: 8px;
+  --shadow: 0 1px 2px rgba(20, 24, 34, 0.06), 0 1px 8px rgba(20, 24, 34, 0.04);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.hidden { display: none !important; }
+
+/* ---------- Centered screens (user select, standard select) ---------- */
+.centered-screen {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.switch-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 40px;
+  width: 100%;
+  max-width: 480px;
+}
+
+.switch-card h1 {
+  font-size: 20px;
+  margin: 0 0 8px;
+}
+
+.subtitle {
+  color: var(--text-muted);
+  font-size: 14px;
+  margin: 0 0 24px;
+}
+
+/* ---------- Standard select screen ---------- */
+.standard-card { max-width: 560px; }
+
+.standard-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.standard-option {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  background: var(--bg);
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+  font: inherit;
+  color: inherit;
+}
+
+.standard-option:hover {
+  border-color: var(--primary);
+  background: var(--accent-blue-bg);
+}
+
+.standard-code {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 64px;
+  height: 40px;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.standard-code-iso9001 { background: var(--accent-blue-bg); color: var(--primary); }
+.standard-code-iso42001 { background: var(--accent-purple-bg); color: var(--accent-purple); }
+.standard-code-iso27001 { background: var(--accent-green-bg); color: var(--accent-green); }
+
+.standard-option-info { display: flex; flex-direction: column; gap: 2px; }
+.standard-option-name { font-weight: 600; font-size: 14px; }
+.standard-option-desc { font-size: 12px; color: var(--text-muted); }
+
+.header-divider { color: var(--border); }
+
+.badge-standard-iso9001 { background: var(--accent-blue-bg); color: var(--primary); }
+.badge-standard-iso42001 { background: var(--accent-purple-bg); color: var(--accent-purple); }
+.badge-standard-iso27001 { background: var(--accent-green-bg); color: var(--accent-green); }
+
+/* ---------- App Shell ---------- */
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 28px;
+}
+
+.brand { font-weight: 700; font-size: 16px; }
+
+.acting-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+}
+
+.acting-name { font-weight: 600; }
+.acting-org { color: var(--text-muted); }
+
+.app-body {
+  display: flex;
+  align-items: flex-start;
+}
+
+.app-sidebar {
+  width: 200px;
+  flex-shrink: 0;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  min-height: calc(100vh - 58px);
+  padding: 16px 12px;
+}
+
+.sidebar-group-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--text-muted);
+  font-weight: 700;
+  padding: 12px 10px 4px;
+}
+.sidebar-group-label:first-child { padding-top: 0; }
+
+.sidebar-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 9px 10px;
+  border-radius: 6px;
+  border: none;
+  background: none;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  cursor: pointer;
+  margin-bottom: 2px;
+}
+.sidebar-item:hover:not(:disabled) { background: var(--bg); }
+.sidebar-item.active { background: var(--primary); color: #fff; }
+.sidebar-item:disabled { color: var(--text-muted); cursor: not-allowed; opacity: 0.55; }
+
+.app-main {
+  flex: 1;
+  min-width: 0;
+  max-width: 1080px;
+  padding: 28px;
+}
+
+/* ---------- View header ---------- */
+.view-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.view-header h2 { margin: 0; font-size: 20px; }
+.meta-line { color: var(--text-muted); font-size: 13px; margin: 4px 0 0; }
+
+.back-btn { margin-bottom: 16px; }
+
+/* ---------- Buttons ---------- */
+.btn {
+  border: none;
+  border-radius: 6px;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.btn-primary { background: var(--primary); color: #fff; }
+.btn-primary:hover { background: var(--primary-hover); }
+
+.btn-danger { background: var(--danger); color: #fff; }
+.btn-danger:hover { filter: brightness(0.92); }
+
+.btn-ghost { background: transparent; color: var(--text); border: 1px solid var(--border); }
+.btn-ghost:hover { background: var(--bg); }
+
+.btn-link {
+  background: none;
+  border: none;
+  color: var(--primary);
+  cursor: pointer;
+  font-size: 13px;
+  padding: 2px 4px;
+  font-family: inherit;
+}
+.btn-link:hover { text-decoration: underline; }
+
+.btn-danger-link { color: var(--danger); }
+
+/* ---------- Panels / Forms ---------- */
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.panel h3 { margin: 0 0 14px; font-size: 15px; }
+
+.panel label,
+#login-panel label,
+#register-panel label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: var(--text);
+}
+
+.panel input[type="text"],
+.panel input[type="file"],
+.panel select,
+#login-panel input,
+#register-panel input,
+#register-panel select,
+textarea {
+  display: block;
+  width: 100%;
+  margin-top: 6px;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 13px;
+  font-family: inherit;
+  background: var(--bg);
+  color: var(--text);
+}
+
+#login-panel .btn,
+#register-panel .btn {
+  width: 100%;
+  padding: 10px 14px;
+  margin-top: 4px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.hint {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin: -4px 0 14px;
+}
+
+/* ---------- Tabs ---------- */
+.tabs {
+  display: flex;
+  gap: 4px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.tab-btn {
+  background: none;
+  border: none;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  font-family: inherit;
+}
+
+.tab-btn.active {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+}
+
+/* ---------- Table ---------- */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+.data-table th,
+.data-table td {
+  text-align: left;
+  padding: 10px 14px;
+  font-size: 13px;
+  border-bottom: 1px solid var(--border);
+}
+
+.data-table th {
+  background: var(--bg);
+  color: var(--text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 0.03em;
+}
+
+.data-table tbody tr:last-child td { border-bottom: none; }
+.data-table tbody tr:hover { background: #fafbfc; }
+
+.row-actions { display: flex; gap: 10px; }
+
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-muted);
+  background: var(--surface);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 20px;
+}
+
+/* ---------- Badges ---------- */
+.badge {
+  display: inline-block;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.badge-developer { background: var(--accent-blue-bg); color: var(--primary); }
+.badge-auditor { background: var(--accent-purple-bg); color: var(--accent-purple); }
+.badge-internal { background: var(--accent-green-bg); color: var(--accent-green); }
+.badge-external { background: var(--accent-amber-bg); color: var(--accent-amber); }
+.badge-current { background: var(--accent-green-bg); color: var(--accent-green); }
+.badge-superseded { background: var(--bg); color: var(--text-muted); }
+
+.badge-source-upload { background: var(--accent-blue-bg); color: var(--primary); }
+.badge-source-share_path { background: var(--accent-amber-bg); color: var(--accent-amber); }
+.badge-source-zip { background: var(--accent-purple-bg); color: var(--accent-purple); }
+
+.badge-status-met { background: var(--accent-green-bg); color: var(--accent-green); }
+.badge-status-partial { background: var(--accent-amber-bg); color: var(--accent-amber); }
+.badge-status-gap { background: #fbe7e7; color: var(--danger); }
+.badge-status-not_applicable { background: var(--bg); color: var(--text-muted); }
+.badge-status-not_assessed { background: var(--bg); color: var(--text-muted); }
+
+/* Evidence = a real quote (indented, italic) with its source as a caption
+   underneath, like a citation — not two disconnected lines of text. */
+.evidence-quote {
+  margin: 0 0 10px;
+  padding: 10px 16px;
+  border-left: 3px solid var(--primary);
+  background: var(--bg);
+  border-radius: 0 6px 6px 0;
+  font-style: italic;
+  line-height: 1.5;
+}
+.evidence-citation {
+  display: block;
+  margin-top: 8px;
+  font-style: normal;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.checkbox-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 400;
+  font-size: 13px;
+  margin: 0 12px 8px 0;
+}
+.checkbox-label input { width: auto; }
+
+.additional-standards { margin: -6px 0 12px; }
+
+/* ---------- Findings view ---------- */
+.findings-summary {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+
+.summary-stat {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 10px 16px;
+  font-size: 13px;
+}
+
+.summary-stat strong { font-size: 16px; margin-right: 4px; }
+
+.category-row td {
+  background: var(--bg);
+  font-weight: 700;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--text-muted);
+}
+
+.evidence-list { display: flex; flex-direction: column; gap: 2px; }
+.rationale-cell { max-width: 280px; font-size: 12px; color: var(--text-muted); }
+
+.guidance-checklist { list-style: none; margin: 0; padding: 0; min-width: 220px; font-size: 12px; }
+.guidance-checklist li { margin: 0 0 4px; }
+.guidance-met { color: var(--accent-green); }
+.guidance-unmet { color: var(--danger); }
+
+/* ---------- Modal ---------- */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(20, 24, 34, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 100;
+}
+
+.modal {
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  width: 100%;
+  max-width: 520px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-wide { max-width: 900px; }
+.modal-wide .modal-body { overflow-x: auto; }
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.modal-header h3 { margin: 0; font-size: 15px; }
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--text-muted);
+}
+
+.modal-body {
+  padding: 20px;
+  overflow-y: auto;
+}
+
+/* ---------- Version history list ---------- */
+.version-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+.version-item:last-child { border-bottom: none; }
+.version-meta { color: var(--text-muted); font-size: 12px; }
+
+/* ---------- Comments ---------- */
+.comments-thread {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.comment-item {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 10px 12px;
+}
+
+.comment-author {
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.comment-date {
+  font-weight: 400;
+  color: var(--text-muted);
+  margin-left: 6px;
+}
+
+.comment-text { font-size: 13px; }
+
+.comment-composer textarea {
+  min-height: 70px;
+  margin-bottom: 10px;
+  resize: vertical;
+}
+
+.zip-result {
+  margin-top: 14px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 10px 12px;
+  font-size: 13px;
+}
+
+.zip-result ul { margin: 6px 0 0; padding-left: 18px; }
+
+/* ===== Mappings modal — a document's clause and control structure ===== */
+
+.mapping-meta {
+  color: var(--text-muted);
+  font-size: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.mapping-segment { margin-bottom: 24px; }
+.mapping-segment:last-of-type { margin-bottom: 12px; }
+
+.mapping-segment h4 {
+  margin: 0 0 12px;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.mapping-count {
+  font-size: 12px;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--primary);
+  background: var(--accent-blue-bg);
+  border-radius: 10px;
+  padding: 1px 8px;
+  font-variant-numeric: tabular-nums;
+}
+
+.mapping-segment-empty { color: var(--text-muted); font-size: 13px; margin: 0; }
+
+.mapping-item {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  margin-bottom: 10px;
+  background: var(--surface);
+}
+
+.mapping-head {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.mapping-code {
+  font-family: ui-monospace, "Cascadia Mono", Consolas, monospace;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--primary);
+  background: var(--accent-blue-bg);
+  border-radius: 4px;
+  padding: 2px 6px;
+  white-space: nowrap;
+}
+
+.mapping-title { font-weight: 600; font-size: 13px; flex: 1 1 200px; }
+
+.mapping-coverage {
+  font-size: 13px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+}
+
+.mapping-quote {
+  margin: 10px 0 6px;
+  padding: 8px 12px;
+  border-left: 3px solid var(--border);
+  color: var(--text);
+  font-size: 13px;
+  line-height: 1.55;
+  background: var(--bg);
+}
+
+.mapping-citation {
+  font-size: 12px;
+  color: var(--accent-green);
+  font-weight: 500;
+}
+
+.mapping-citation-missing { color: var(--accent-amber); font-weight: 400; }
+
+.mapping-guidance {
+  margin-top: 10px;
+  padding: 8px 12px;
+  background: var(--accent-amber-bg);
+  border-radius: 6px;
+}
+
+.mapping-guidance-head {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent-amber);
+  margin-bottom: 4px;
+}
+
+.mapping-guidance ul { margin: 0; padding-left: 18px; }
+.mapping-guidance li { font-size: 12px; line-height: 1.5; margin-bottom: 3px; }
+
+.mapping-guidance-all-met {
+  margin-top: 10px;
+  font-size: 12px;
+  color: var(--accent-green);
+  background: var(--accent-green-bg);
+  border-radius: 6px;
+  padding: 6px 12px;
+}
+
+.mapping-notice { padding: 8px 0; }
+.mapping-notice strong { display: block; margin-bottom: 6px; font-size: 14px; }
+.mapping-notice p { margin: 0; color: var(--text-muted); font-size: 13px; line-height: 1.6; }
+.mapping-notice-warn strong { color: var(--accent-amber); }
+
+.mapping-disclaimer {
+  margin: 0;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* ===== Clause / control segment tabs (findings page) ===== */
+
+.segment-tabs {
+  display: flex;
+  gap: 4px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 14px;
+}
+
+.segment-tab {
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 8px 14px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.segment-tab:hover { color: var(--text); }
+.segment-tab.active { color: var(--primary); border-bottom-color: var(--primary); }
+.segment-tab:focus-visible { outline: 2px solid var(--primary); outline-offset: -2px; }
+
+/* ===== Grades — what a certification body issues, not a percentage ===== */
+
+.badge-grade-conforming { background: var(--accent-green-bg); color: var(--accent-green); }
+.badge-grade-ofi { background: var(--accent-blue-bg); color: var(--primary); }
+.badge-grade-minor_nc { background: var(--accent-amber-bg); color: var(--accent-amber); }
+.badge-grade-major_nc { background: #fbe9e9; color: var(--danger); }
+.badge-grade-not_applicable { background: var(--bg); color: var(--text-muted); }
+.badge-grade-none { background: var(--bg); color: var(--text-muted); }
+
+/* An unconfirmed grade is a suggestion, not a decision — dashed to say so. */
+.badge-provisional { border: 1px dashed currentColor; }
+
+.evidence-none, .evidence-partial, .evidence-stale, .applicability-note {
+  display: block;
+  font-size: 11px;
+  margin-top: 3px;
+}
+
+.evidence-none { color: var(--text-muted); }
+.evidence-partial { color: var(--accent-amber); }
+.evidence-stale { color: var(--danger); font-weight: 600; }
+.applicability-note { color: var(--text-muted); font-style: italic; }
+
+.summary-stat-blocking { color: var(--danger); }
+.summary-stat-clear { color: var(--accent-green); }
+.summary-stat-note {
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 400;
+  align-self: center;
+}
+
+/* ===== Coverage gate ===== */
+
+.gate-meta {
+  color: var(--text-muted);
+  font-size: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 14px;
+}
+
+.gate-segment {
+  margin-bottom: 16px;
+  font-size: 13px;
+}
+
+.gate-segment-complete { color: var(--accent-green); }
+
+.gate-missing-head {
+  font-size: 12px;
+  color: var(--accent-amber);
+  margin: 8px 0 4px;
+  font-weight: 600;
+}
+
+.gate-missing {
+  margin: 0;
+  padding-left: 18px;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.gate-missing li { font-size: 12px; line-height: 1.6; }
+
+.gate-code {
+  font-family: ui-monospace, "Cascadia Mono", Consolas, monospace;
+  font-weight: 600;
+  color: var(--primary);
+  margin-right: 6px;
+}
+
+.gate-warn {
+  background: var(--accent-amber-bg);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  margin-top: 8px;
+}
+
+.gate-warn strong { color: var(--accent-amber); display: block; margin-bottom: 4px; }
+.gate-warn p { margin: 0 0 10px; font-size: 12px; line-height: 1.6; color: var(--text); }
+.gate-warn label { display: block; font-size: 12px; }
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 12px 18px;
+  border-top: 1px solid var(--border);
+}
+
+/* A skipped document is a failure to look, not a finding about the evidence —
+   styled as an error rather than sharing the amber "missing requirement" treatment. */
+.gate-skipped {
+  background: #fbe9e9;
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  margin-bottom: 16px;
+}
+
+.gate-skipped strong { color: var(--danger); display: block; margin-bottom: 4px; }
+.gate-skipped p { margin: 0 0 8px; font-size: 12px; line-height: 1.6; }
+.gate-skipped ul { margin: 0; padding-left: 18px; }
+.gate-skipped li { font-size: 12px; line-height: 1.6; }
+
+/* Zip result — what was skipped is reported, never dropped silently. */
+.zip-skipped {
+  margin-top: 12px;
+  padding: 10px 12px;
+  background: var(--accent-amber-bg);
+  border-radius: 6px;
+}
+
+.zip-skipped strong { color: var(--accent-amber); display: block; margin-bottom: 4px; font-size: 12px; }
+.zip-skipped p { margin: 0 0 6px; font-size: 12px; line-height: 1.55; }
+.zip-skipped ul { margin: 0; padding-left: 18px; }
+.zip-skipped li { font-size: 12px; line-height: 1.6; }
+.zip-skipped code { font-family: ui-monospace, Consolas, monospace; font-size: 11px; }
+
+.zip-type {
+  font-size: 11px;
+  color: var(--text-muted);
+  background: var(--bg);
+  border-radius: 3px;
+  padding: 1px 5px;
+  margin-left: 6px;
+}
+
+/* A run that finished but hasn't been accepted. Analyze is a long request; this is the
+   UI's only route back to a completed run once the original request is gone. */
+.pending-run {
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  margin-bottom: 16px;
+}
+
+.pending-run strong { display: block; margin-bottom: 4px; font-size: 14px; }
+.pending-run p { margin: 0 0 8px; font-size: 13px; line-height: 1.6; color: var(--text); }
+.pending-run p:last-of-type { margin-bottom: 10px; }
+
+.pending-run-ready { background: var(--accent-blue-bg); }
+.pending-run-ready strong { color: var(--primary); }
+
+.pending-run-info { background: var(--bg); border: 1px solid var(--border); }
+.pending-run-info strong { color: var(--text-muted); }
+
+.pending-run-failed { background: #fbe9e9; }
+.pending-run-failed strong { color: var(--danger); }
+
+/* One contributing document's evidence inside a finding — the verifiable citation,
+   as opposed to the merged narrative shown above it as a summary. */
+.doc-evidence {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 10px 12px;
+  margin-bottom: 8px;
+}
+
+.doc-evidence-head {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  justify-content: space-between;
+}
+
+.doc-evidence-name { font-weight: 600; font-size: 13px; }
+.doc-evidence-cov {
+  font-size: 13px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+}
+
+/* Whether a grade carries an auditor's decision or is still only a suggestion. */
+.badge-confirmed { background: var(--accent-green-bg); color: var(--accent-green); }
+.badge-suggested { background: var(--bg); color: var(--text-muted); border: 1px dashed var(--border); }
+
+/* All / Needs review / Nonconformities — what used to be three separate pages. */
+.filter-tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.filter-tab {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 5px 13px;
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-variant-numeric: tabular-nums;
+}
+
+.filter-tab:hover { color: var(--text); border-color: var(--text-muted); }
+.filter-tab.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+}
+.filter-tab:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+
+/* A requirement no document provided evidence for — nothing to confirm yet. */
+.badge-unassessed { background: #fbe9e9; color: var(--danger); }

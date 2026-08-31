@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ISO Certification Platform — UI Flow Mockup</title>
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ===================== LOGIN / REGISTER SCREEN ===================== -->
+  <section id="auth-screen" class="centered-screen">
+    <div class="switch-card">
+      <h1>ISO Certification Platform</h1>
+
+      <div id="login-panel">
+        <p class="subtitle">Sign in to continue.</p>
+        <label>Email
+          <input type="email" id="login-email" placeholder="you@example.com" />
+        </label>
+        <label>Password
+          <input type="password" id="login-password" placeholder="••••••••" />
+        </label>
+        <button id="login-submit-btn" class="btn btn-primary">Log In</button>
+        <p id="login-error" class="hint hidden" style="color:#b00;"></p>
+        <p class="hint">No account? <button id="show-register-btn" class="btn-link">Register</button></p>
+      </div>
+
+      <div id="register-panel" class="hidden">
+        <p class="subtitle">Create an account.</p>
+        <label>Name
+          <input type="text" id="register-name" placeholder="Your name" />
+        </label>
+        <label>Email
+          <input type="email" id="register-email" placeholder="you@example.com" />
+        </label>
+        <label>Password
+          <input type="password" id="register-password" placeholder="At least 8 characters" />
+        </label>
+        <label>Role
+          <select id="register-persona">
+            <option value="developer">Developer</option>
+            <option value="auditor">Auditor</option>
+          </select>
+        </label>
+        <div class="tabs">
+          <button class="tab-btn active" data-org-tab="join">Join existing organization</button>
+          <button class="tab-btn" data-org-tab="create">Create new organization</button>
+        </div>
+        <div class="tab-panel" data-org-tab-panel="join">
+          <label>Organization
+            <select id="register-org-select"></select>
+          </label>
+        </div>
+        <div class="tab-panel hidden" data-org-tab-panel="create">
+          <label>Organization name
+            <input type="text" id="register-org-name" placeholder="e.g. Acme Health AI" />
+          </label>
+        </div>
+        <button id="register-submit-btn" class="btn btn-primary">Register</button>
+        <p id="register-error" class="hint hidden" style="color:#b00;"></p>
+        <p class="hint">Already have an account? <button id="show-login-btn" class="btn-link">Log in</button></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CERTIFICATION SELECT SCREEN ===================== -->
+  <section id="standard-select-screen" class="centered-screen hidden">
+    <div class="switch-card standard-card">
+      <h1>Select a Certification Standard</h1>
+      <p class="subtitle">Each standard has its own workflow. You can switch this at any time from the header.</p>
+      <div id="standard-list" class="standard-list"></div>
+    </div>
+  </section>
+
+  <!-- ===================== MAIN APP ===================== -->
+  <div id="main-app" class="hidden">
+
+    <header class="app-header">
+      <div class="brand">ISO Certification Platform</div>
+      <div class="acting-user">
+        <span id="acting-user-name" class="acting-name"></span>
+        <span id="acting-user-org" class="acting-org"></span>
+        <span id="acting-user-persona-wrap"></span>
+        <span class="header-divider">|</span>
+        <span id="active-standard-wrap"></span>
+        <button id="switch-standard-btn" class="btn btn-ghost">Switch standard</button>
+        <button id="logout-btn" class="btn btn-ghost">Log out</button>
+      </div>
+    </header>
+
+    <div class="app-body">
+
+    <!-- ---------- PERSISTENT SIDEBAR — always visible, shows which page you're on, one click to any other ---------- -->
+    <nav id="app-sidebar" class="app-sidebar"></nav>
+
+    <main class="app-main">
+
+      <!-- ---------- ORGANIZATIONS LIST VIEW (auditor only) ---------- -->
+      <section id="organizations-list-view" class="view hidden">
+        <div class="view-header">
+          <div>
+            <h2>Organizations</h2>
+            <p class="meta-line" id="org-list-standard-line"></p>
+          </div>
+        </div>
+
+        <table id="organizations-table" class="data-table">
+          <thead>
+            <tr>
+              <th>Organization</th>
+              <th>Scope</th>
+              <th>Documents submitted</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="organizations-tbody"></tbody>
+        </table>
+      </section>
+
+      <!-- ---------- ORGANIZATION DOCUMENTATION VIEW ---------- -->
+      <section id="org-documentation-view" class="view hidden">
+        <button id="back-to-organizations" class="btn btn-ghost back-btn hidden">&larr; Back to Organizations</button>
+
+        <div class="view-header">
+          <div>
+            <h2 id="org-doc-name"></h2>
+            <p class="meta-line" id="org-doc-meta"></p>
+          </div>
+          <!-- Analyze lives here, with the documents it acts on. It reads the
+               document set; putting it on the Findings page meant going to a results
+               screen to trigger work on a different screen's subject, and made that
+               page do two unrelated jobs. -->
+          <button id="run-analyze-btn" class="btn btn-primary hidden">Analyze documents</button>
+          <button id="open-findings-btn" class="btn btn-ghost">Findings &rarr;</button>
+        </div>
+
+        <!-- A completed analysis awaiting the gate. Analyze takes minutes (17 for a
+             real 31-document set), so if the browser gave up or the page was reloaded
+             the result had no route back to the UI — it sat in the database unseen. -->
+        <div id="pending-run-banner" class="pending-run hidden"></div>
+
+        <div id="add-document-panel" class="panel">
+          <h3>Add Organization Documentation</h3>
+          <div class="tabs">
+            <button class="tab-btn active" data-tab="upload">Manual Upload</button>
+            <button class="tab-btn" data-tab="share_path">Share Path</button>
+            <button class="tab-btn" data-tab="zip">Zip Upload</button>
+          </div>
+
+          <div class="tab-panel" data-tab-panel="upload">
+            <label>Document name
+              <input type="text" class="doc-name" placeholder="e.g. AI Management System Policy" />
+            </label>
+            <label>Document type
+              <input type="text" class="doc-type" placeholder="e.g. Policy" />
+            </label>
+            <label>File
+              <input type="file" class="doc-file" />
+            </label>
+            <div class="additional-standards" data-additional-standards></div>
+            <button class="btn btn-primary submit-doc" data-method="upload">Upload Document</button>
+          </div>
+
+          <div class="tab-panel hidden" data-tab-panel="share_path">
+            <p class="hint">No file is transferred — this records a reference to a file that lives on a shared/network location.</p>
+            <label>Document name
+              <input type="text" class="doc-name" placeholder="e.g. Risk Assessment Report" />
+            </label>
+            <label>Document type
+              <input type="text" class="doc-type" placeholder="e.g. Risk Assessment" />
+            </label>
+            <label>File name
+              <input type="text" class="doc-file-name" placeholder="e.g. risk_assessment_v2.pdf" />
+            </label>
+            <label>Shared path
+              <input type="text" class="doc-share-path" placeholder="e.g. \\fileserver\compliance\risk_assessment_v2.pdf" />
+            </label>
+            <div class="additional-standards" data-additional-standards></div>
+            <button class="btn btn-primary submit-doc" data-method="share_path">Save Reference</button>
+          </div>
+
+          <div class="tab-panel hidden" data-tab-panel="zip">
+            <p class="hint">The archive is extracted server-side and each file inside becomes its own document.</p>
+            <label>Zip file
+              <input type="file" class="doc-zip-file" accept=".zip" />
+            </label>
+            <div class="additional-standards" data-additional-standards></div>
+            <button class="btn btn-primary submit-doc" data-method="zip">Upload &amp; Extract</button>
+            <div id="zip-result" class="zip-result hidden"></div>
+          </div>
+        </div>
+
+        <div id="documents-empty" class="empty-state hidden">
+          <p>No documents submitted yet for this standard.</p>
+        </div>
+
+        <input type="file" id="reupload-file-input" class="hidden" />
+
+        <table id="documents-table" class="data-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Type</th>
+              <th>Version</th>
+              <th>Standards</th>
+              <th>Submitted by</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="documents-tbody"></tbody>
+        </table>
+      </section>
+
+      <!-- ---------- FINDINGS VIEW ---------- -->
+      <section id="findings-view" class="view hidden">
+        <button id="back-to-documentation" class="btn btn-ghost back-btn">&larr; Back to Documentation</button>
+
+        <div class="view-header">
+          <div>
+            <h2 id="findings-org-name"></h2>
+            <p class="meta-line">Gap analysis against <span id="findings-standard-wrap"></span> — 38 Annex A controls + clauses 4-10</p>
+          </div>
+        </div>
+
+        <p class="hint">All 70 requirements. A grade marked <strong>Suggested</strong> is the machine's
+        assessment and carries no auditor decision yet — confirm or override it on the
+        <strong>Review</strong> page. Click <strong>Open</strong> on any row for the quote from each
+        contributing document and where it sits.</p>
+
+        <div id="findings-summary" class="findings-summary"></div>
+
+        <!-- Clause / control tabs. Two lists, not one: the 32 clauses are mandatory
+             and can never be excluded, the 38 Annex A controls are excludable with a
+             documented justification — so only the Controls tab offers N/A. -->
+        <div class="segment-tabs" id="findings-segment-tabs">
+          <button class="segment-tab active" data-segment="clause">Clauses 4&ndash;10</button>
+          <button class="segment-tab" data-segment="control">Annex A controls</button>
+        </div>
+
+        <!-- Review and Gap Analysis used to be separate pages over these same 70
+             requirements — one filtered to unreviewed, one to gaps. They were filters
+             wearing the costume of pages, so they are filters now, and Confirm /
+             Override happen inline instead of on another screen. -->
+        <div class="filter-tabs" id="findings-filter-tabs">
+          <button class="filter-tab active" data-filter="all">All</button>
+          <button class="filter-tab" data-filter="pending">Needs review</button>
+          <button class="filter-tab" data-filter="gaps">Nonconformities</button>
+        </div>
+
+        <div id="findings-empty" class="empty-state hidden">
+          <p>No reviewed findings yet for this organization.</p>
+        </div>
+
+        <table id="findings-table" class="data-table hidden">
+          <thead>
+            <tr>
+              <th>Document(s)</th>
+              <th id="findings-col-requirement">Requirement</th>
+              <th>Grade</th>
+              <th>Coverage</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="findings-tbody"></tbody>
+        </table>
+      </section>
+
+
+
+    </main>
+
+    </div>
+  </div>
+
+  <!-- ===================== VERSION HISTORY MODAL ===================== -->
+  <div id="version-modal" class="modal-overlay hidden">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="version-modal-title">Version History</h3>
+        <button class="modal-close" data-close="version-modal">&times;</button>
+      </div>
+      <div class="modal-body" id="version-modal-body"></div>
+    </div>
+  </div>
+
+  <!-- ===================== COVERAGE GATE MODAL =====================
+       Step 1 of Analyze. Shows which requirements have no evidence at all BEFORE
+       any findings are written, so "nothing submitted yet" is never graded as
+       though it had been examined. Accepting while incomplete requires a reason,
+       which is recorded on the run. -->
+  <div id="gate-modal" class="modal-overlay hidden">
+    <div class="modal modal-wide">
+      <div class="modal-header">
+        <h3 id="gate-modal-title">Coverage Report</h3>
+        <button class="modal-close" data-close="gate-modal">&times;</button>
+      </div>
+      <div class="modal-body" id="gate-modal-body"></div>
+      <div class="modal-footer" id="gate-modal-footer"></div>
+    </div>
+  </div>
+
+  <!-- ===================== MAPPINGS MODAL =====================
+       One document's clause structure and control structure from the most recent
+       analysis. Two sections, not one list: the 32 clauses are mandatory and can
+       never be excluded, the 38 Annex A controls are excludable and carry Annex B
+       guidance. Populated by renderMappings() in app.js. -->
+  <div id="mappings-modal" class="modal-overlay hidden">
+    <div class="modal modal-wide">
+      <div class="modal-header">
+        <h3 id="mappings-modal-title">Requirements Covered</h3>
+        <button class="modal-close" data-close="mappings-modal">&times;</button>
+      </div>
+      <div class="modal-body" id="mappings-modal-body"></div>
+    </div>
+  </div>
+
+  <!-- ===================== COMMENTS MODAL ===================== -->
+  <div id="comments-modal" class="modal-overlay hidden">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="comments-modal-title">Review Comments</h3>
+        <button class="modal-close" data-close="comments-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div id="comments-thread" class="comments-thread"></div>
+        <div id="comment-composer" class="comment-composer hidden">
+          <textarea id="comment-text-input" placeholder="Leave a review comment..."></textarea>
+          <button id="submit-comment-btn" class="btn btn-primary">Add Comment</button>
+        </div>
+        <p id="comment-readonly-note" class="hint hidden">Only auditors can add comments.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== OVERRIDE FINDING MODAL (auditor only — Review page's Override action) ===================== -->
+  <div id="save-finding-modal" class="modal-overlay hidden">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="save-finding-modal-title">Override Finding</h3>
+        <button class="modal-close" data-close="save-finding-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p class="hint">Your decision replaces the suggested grade and becomes the permanent
+        record. A <strong>major nonconformity</strong> blocks certification; an
+        <strong>OFI</strong> does not.</p>
+        <label>Grade
+          <select id="save-finding-grade">
+            <option value="conforming">Conforming</option>
+            <option value="ofi">Opportunity for improvement</option>
+            <option value="minor_nc">Minor nonconformity</option>
+            <option value="major_nc">Major nonconformity</option>
+            <option value="not_applicable">Not applicable (Annex A controls only)</option>
+          </select>
+        </label>
+        <label>Coverage score (0-100)
+          <input type="number" id="save-finding-coverage-score" min="0" max="100" />
+        </label>
+        <p class="hint" id="save-finding-suggested" style="margin-top:8px;"></p>
+        <div class="form-actions">
+          <button id="submit-save-finding-btn" class="btn btn-primary">Save Override</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== FINDING DETAIL MODAL (read-only — quoted evidence + citation, guidance checklist) ===================== -->
+  <div id="finding-detail-modal" class="modal-overlay hidden">
+    <div class="modal modal-wide">
+      <div class="modal-header">
+        <h3 id="finding-detail-modal-title">Finding Detail</h3>
+        <button class="modal-close" data-close="finding-detail-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div id="finding-detail-meta" class="meta-line" style="margin-bottom:12px;"></div>
+        <h4 style="margin:0 0 4px;">Summary</h4>
+        <div id="finding-detail-evidence" style="margin-bottom:16px;"></div>
+        <!-- The verbatim quote from each contributing document, with where it sits.
+             The summary above is the reduce step's merged narrative — prose about
+             several documents rather than a quote from one, so it cannot be located
+             and is not a citation. This is the evidence. -->
+        <h4 style="margin:0 0 4px;">Evidence by document</h4>
+        <div id="finding-detail-doc-evidence" style="margin-bottom:16px;">
+          <p class="hint" style="margin:0;">Loading…</p>
+        </div>
+        <!-- Annex A controls carry Annex B implementation guidance; clauses 4-10 have
+             no Annex B at all, so for a clause this whole block is hidden rather than
+             rendered empty — an "Annex B guidance" heading over a dash implies the
+             guidance exists and simply wasn't found. -->
+        <div id="finding-detail-guidance-wrap">
+          <h4 style="margin:0 0 4px;" id="finding-detail-guidance-heading">Annex B guidance</h4>
+          <div id="finding-detail-guidance"></div>
+        </div>
+        <div id="finding-detail-delete-wrap" class="form-actions hidden">
+          <button id="finding-detail-delete-btn" class="btn btn-danger">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
