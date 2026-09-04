@@ -1,0 +1,20 @@
+10.2 Nonconformity and corrective action
+
+When a nonconformity occurs, the organization shall:
+
+a) react to the nonconformity and as applicable:
+    1) take action to control and correct it;
+    2) deal with the consequences;
+b) evaluate the need for action to eliminate the cause(s) of the nonconformity, so that it does not recur or occur elsewhere, by:
+    1) reviewing the nonconformity;
+    2) determining the causes of the nonconformity;
+    3) determining if similar nonconformities exist or can potentially occur;
+c) implement any action needed;
+d) review the effectiveness of any corrective action taken;
+e) make changes to the AI management system, if necessary.
+
+Corrective actions shall be appropriate to the effects of the nonconformities encountered.
+
+Documented information shall be available as evidence of:
+— the nature of the nonconformities and any subsequent actions taken;
+— the results of any corrective action.

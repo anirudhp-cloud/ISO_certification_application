@@ -1,0 +1,48 @@
+Certainly! Here is the content from the page as plain text, with clause/annex numbers and headings exactly as printed, every requirement or guidance statement, and every NOTE. Unreadable regions are marked [illegible].
+
+---
+
+Implementation guidance  
+Documentation on data should include, but is not limited to, the following topics:  
+— the provenance of the data;  
+— the date that the data were last updated or modified (e.g. date tag in metadata);  
+— for machine learning, the categories of data (e.g. training, validation, test and production data);  
+— categories of data (e.g. as defined in ISO/IEC 19944-1);  
+— process for labelling data;  
+— intended use of the data;  
+— quality of data (e.g. as described in the ISO/IEC 5259 series[2]);  
+— applicable data retention and disposal policies;  
+— known or potential bias issues in the data;  
+— data preparation.
+
+B.4.4 Tooling resources
+
+Control  
+As part of resource identification, the organization should document information about the tooling resources utilized for the AI system.
+
+Implementation guidance  
+Tooling resources for an AI system and particularly for machine learning, can include but are not limited to:  
+— algorithm types and machine learning models;  
+— data conditioning tools or processes;  
+— optimization methods;  
+— evaluation methods;  
+— provisioning tools for resources;  
+— tools to aid model development;  
+— software and hardware for AI system design, development and deployment.
+
+Other information  
+ISO/IEC 23053 provides detailed guidance on the types, methods and approaches for various tooling resources for machine learning.
+
+B.4.5 System and computing resources
+
+Control  
+As part of resource identification, the organization should document information about the system and computing resources utilized for the AI system.
+
+[illegible]  
+2) Under preparation. Stage at the time of publication: ISO/IEC DIS 5259-1:2023, ISO/IEC DIS 5259-2:2023, ISO/IEC DIS 5259-3:2023, ISO/IEC DIS 5259-4:2023, ISO/IEC CD 5259-5:2023.
+
+© ISO/IEC 2023 – All rights reserved
+
+---
+
+Let me know if you need more pages or further formatting!

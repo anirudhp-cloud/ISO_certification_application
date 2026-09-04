@@ -1,0 +1,37 @@
+BS ISO/IEC 42001:2023  
+ISO/IEC 42001:2023(E)
+
+Implementation guidance  
+Defining roles and responsibilities is critical for ensuring accountability throughout the organization for its role with respect to the AI system throughout its life cycle. The organization should consider AI policies, AI objectives and identified risks when assigning roles and responsibilities, in order to ensure that all relevant areas are covered. The organization can prioritize how the roles and responsibilities are assigned. Examples of areas that can require defined roles and responsibilities can include:
+
+— risk management;  
+— AI system impact assessments;  
+— asset and resource management;  
+— security;  
+— safety;  
+— privacy;  
+— development;  
+— performance;  
+— human oversight;  
+— supplier relationships;  
+— demonstrate its ability to consistently fulfil legal requirements;  
+— data quality management (during the whole life cycle).
+
+Responsibilities of the various roles should be defined to the level appropriate for the individuals to perform their duties.
+
+B.3.3 Reporting of concerns  
+Control  
+The organization should define and put in place a process to report concerns about the organization’s role with respect to an AI system throughout its life cycle.
+
+Implementation guidance  
+The reporting mechanism should fulfil the following functions:  
+a) options for confidentiality or anonymity or both;  
+b) available and promoted to employed and contracted persons;  
+c) staffed with qualified persons;  
+d) stipulates appropriate investigation and resolution powers for the persons referred to in c);  
+e) provides for mechanisms to report and to escalate to management in a timely manner;  
+f) provides for effective protection from reprisals for both the persons concerned with reporting and investigation (e.g. by allowing reports to be made anonymously and confidentially);  
+g) provides reports according to 4.4 and, if appropriate, e); while maintaining confidentiality and anonymity in a), and respecting general business confidentiality considerations;  
+h) provides response mechanisms within an appropriate time frame.
+
+© ISO/IEC 2023 – All rights reserved 23

@@ -1,0 +1,245 @@
+==============================================================================
+CLAUSE 4.1 — THE COMPLETE PROMPT AND OUTPUT   (prompt iso42001-v4-draft)
+==============================================================================
+
+One API call. system message = everything in PART 1 below. user message = the
+document's full extracted text. temperature=0, seed=42,
+response_format=json_object.
+
+
+##############################################################################
+# PART 1 — THE SYSTEM MESSAGE (what the model is told)
+##############################################################################
+
+You are assessing ONE clause of ISO/IEC 42001:2023 against ONE document.
+
+A clause states several distinct REQUIREMENTS — the separate things its "shall" wording
+demands, each of which must be satisfied. You are given the clause, its numbered
+requirements, and the document's full text. Return one verdict per requirement.
+
+Nothing else is being asked of you. Do not judge any other clause, and do not decide
+whether the document is "about" this clause — that is determined from your verdicts,
+not by you.
+
+WHAT COUNTS AS EVIDENCE
+A passage evidences a requirement when it states, about the organisation, the thing
+the requirement demands — in terms specific enough that a reader could tell whether it
+had been done. It follows that none of these are evidence:
+  - a passage that names the topic without stating what the organisation does about it
+  - a pointer to something you cannot see ("refer to the risk register", "as per the
+    training matrix") — the referenced artefact is not in front of you
+  - a document's own control block (id, version, classification, prepared/reviewed/
+    approved-by), which shows how that one file is controlled and nothing more
+  - a heading, title, purpose statement or scope sentence, unless it itself states the
+    required thing
+
+WHO MUST DO IT
+Each requirement names its actor. Where the actor is "top management", evidence must
+show top management doing or ensuring it — an approval, a signature, a decision, a
+minuted review, an allocation. A statement in a document that top management is
+committed to something is the document's claim, not top management's act.
+
+WHAT KIND OF EVIDENCE SATISFIES IT
+Each requirement names the kind of thing that satisfies it:
+  determination           - the organisation has worked the thing out and can show it
+  process                 - a defined, repeatable way of doing it exists
+  documented_information  - it exists as a document, available for use
+  record                  - evidence that it actually happened, at least once
+A defined process does NOT satisfy a requirement whose kind is "record": a procedure
+saying assessments are performed annually is not evidence that one was performed.
+
+VERDICTS
+  "met"     - a specific passage states the required thing, by the required actor,
+              in the required form
+  "partial" - the document addresses the requirement but incompletely: it asserts
+              without evidencing, covers part of what is required, states an
+              intention rather than a practice, or the actor or form is wrong
+  "unmet"   - the document contains nothing that addresses the requirement
+
+RULES
+1. Judge each requirement independently. A strong passage for one requirement
+   carries no weight for another.
+2. For "met" or "partial", quote the passage verbatim — exactly as it appears in the
+   document, not paraphrased. The quote is matched back against the source to locate
+   the evidence, so an inexact quote cannot be shown to the auditor.
+3. For "unmet", omit the quote. There is no passage to cite for something absent.
+4. Return a verdict for EVERY requirement listed, in index order, including unmet ones.
+5. One quote supports one requirement. If the same passage is the best you have for
+   two requirements, at most one of them is genuinely evidenced.
+6. Use only this document. Never infer from outside knowledge of the organisation,
+   and never assume a practice exists because it would be normal.
+6a. An adjacent theme is not the requirement. A passage about a neighbouring subject —
+   sustainability where the requirement asks about climate change, job titles where it
+   asks about the organisation's role as an AI provider or customer — is "unmet", not
+   "partial". "partial" is for incomplete evidence of THIS requirement, not for
+   evidence of something nearby.
+7. The "look for" entries are informative — they come from the standard's NOTES and
+   tell you what an answer tends to look like. They are NOT themselves requirements:
+   never return a verdict about one, and never mark a requirement unmet merely because
+   one of them is unaddressed.
+8. Return no score, percentage or rating. Coverage is counted from your verdicts.
+9. If the document text is empty or unreadable, return "unmet" for every requirement.
+
+Output strict JSON, no text before or after it:
+{
+  "clause": string,
+  "requirements": [
+    { "index": number, "verdict": "met" | "partial" | "unmet", "quote": string }
+  ]
+}
+
+
+CLAUSE 4.1 — Understanding the organization and its context
+
+This clause does NOT require documented information. It says 'determine' and 'consider'. Evidence may therefore sit in any record showing the determination was made — it need not be a dedicated document.
+
+REQUIREMENTS TO BE SATISFIED — judge each one separately and return a verdict for each:
+
+  [0] External and internal issues relevant to the organization's purpose, that affect its ability to achieve the intended result(s) of the AI management system, are determined
+       who must do it: organization
+       satisfied by:   determination
+       look for (informative, from the standard's NOTES — these carry
+       no verdict of their own and cannot make this requirement unmet):
+         · external: applicable legal requirements, including prohibited uses of AI
+         · external: policies, guidelines and decisions from regulators that affect the interpretation or enforcement of legal requirements
+         · external: incentives or consequences associated with the intended purpose and use of AI systems
+         · external: culture, traditions, values, norms and ethics with respect to development and use of AI
+         · external: competitive landscape and trends for new products and services using AI systems
+         · internal: organizational context, governance, objectives, policies and procedures
+         · internal: contractual obligations
+         · internal: intended purpose of the AI system to be developed or used
+       NOTE: External and internal issues to be addressed under this clause vary according to the organization's roles and jurisdiction, and their impact on its ability to achieve the intended outcome(s) of the AIMS.
+
+  [1] Whether climate change is a relevant issue has been determined
+       who must do it: organization
+       satisfied by:   determination
+       look for (informative, from the standard's NOTES — these carry
+       no verdict of their own and cannot make this requirement unmet):
+         · an explicit determination that climate change is, or is not, a relevant issue for this organization
+
+  [2] The intended purpose of the AI system(s) that are developed, provided or used by the organization is considered
+       who must do it: organization
+       satisfied by:   determination
+       look for (informative, from the standard's NOTES — these carry
+       no verdict of their own and cannot make this requirement unmet):
+         · a statement of what the organization's AI system(s) are for
+         · whether each system is developed, provided, or used by the organization
+
+  [3] The organization's role(s) with respect to those AI systems are determined — that is, whether it acts as an AI provider, AI producer, AI customer, AI partner, AI subject, or relevant authority
+       who must do it: organization
+       satisfied by:   determination
+       look for (informative, from the standard's NOTES — these carry
+       no verdict of their own and cannot make this requirement unmet):
+         · AI provider: AI platform providers, AI product or service providers
+         · AI producer: AI developers, designers, operators, testers and evaluators, deployers, human factor professionals, domain experts, impact assessors, procurers, governance and oversight professionals
+         · AI customer: including AI users
+         · AI partner: AI system integrators, data providers
+         · AI subject: data subjects and other subjects
+         · relevant authorities: policymakers and regulators
+         · the role may follow from the categories of data processed (e.g. PII controller or PII processor), or from legal requirements specific to AI systems
+       NOTE: The organization's roles can determine the applicability and extent of applicability of the requirements and controls in this document. Detailed role descriptions are given in ISO/IEC 22989; the relationship of roles to the AI system life cycle is also described in the NIST AI risk management framework.
+
+
+##############################################################################
+# PART 2 — THE USER MESSAGE (the document being assessed)
+##############################################################################
+
+Document: 2A.AI_Policy for TechVest — 10,477 characters.
+First 1,500 characters, to show what the model is reading:
+
+====================================================================================================
+ 1 | AI POLICY FOR TECHVEST
+ 2 | Version 1.0
+ 3 | CONFIDENTIALITY NOTICE: This document is the property of TechVest Global and contains confidential information related to the AI Management System. Unauthorized reproduction, distribution, or disclosure is strictly prohibited. This document is classified for internal use only and must be handled in accordance with the organization's information security policies.
+ 4 | DOCUMENT CONTROL
+ 5 | Document ID | AIMS-QMS-D-02A
+ 6 | Version | 1.0
+ 7 | Classification | Internal — Controlled Document
+ 8 | Effective Date | 2026-2-24
+ 9 | Document Owner | Mr.Kiran
+10 | Role | Name | Designation | Date
+11 | Prepared By | Mr.Kiran | CTO | 24th February 2026
+12 | Reviewed By | Mr. Balaji T S &
+13 | Mr. Srinivas | AI Governance and Certifications Director &
+14 | Chief AI Officer | 24th February 2026
+15 | Approved By | Mr. Shanker Madishetty | Founder and CEO | 24th February 2026
+16 | Version | Date | Author | Description of Changes
+17 | 1.0 | 2026-2-24 | Mr.Kiran | Initial release
+18 | Contents
+19 | Artificial Intelligence (AI) Policy For TechVest Global
+20 | 1.  Purpose
+21 | This Artificial Intelligence Policy ("AI Policy" or "the Policy") sets forth TechVest Global's overarching commitment to the responsible design, development, procurement, deployment, and governance of Artificial Intelligence (AI) and Machine Learning (ML) systems across the
+
+        [... remainder of the document ...]
+
+
+##############################################################################
+# PART 3 — THE RAW MODEL OUTPUT
+##############################################################################
+
+{
+  "clause": "4.1 — Understanding the organization and its context",
+  "requirements": [
+    {
+      "index": 0,
+      "verdict": "partial",
+      "quote": "38 | This Policy applies globally across all jurisdictions in which TechVest Global operates. Where local legislation, regulation, or sectoral guidance imposes requirements that exceed those set out in this Policy, such local requirements shall prevail and shall be incorporated into jurisdiction-specific operational procedures.\n...\n66 | 07 | Regulatory Compliance\n67 | TechVest Global shall at all times comply with applicable laws, regulations, and standards governing AI, including data protection legislation, sector-specific regulatory requirements, and evolving AI-specific regulatory frameworks.\n...\n74 | Chief AI Officer (CAIO) | Strategic leadership of the organisation's AI initiatives. Responsible for defining the AI vision, driving responsible AI adoption, and ensuring alignment between AI strategy and business objectives. Provides expert guidance on AI governance and emerging AI risks."
+    },
+    {
+      "index": 1,
+      "verdict": "partial",
+      "quote": "68 | 08 | Sustainability and Societal Responsibility\n69 | TechVest Global recognises its broader responsibility to society. AI systems shall be developed and deployed in ways that consider environmental impact, long-term societal consequences, and the promotion of equitable and inclusive outcomes."
+    },
+    {
+      "index": 2,
+      "verdict": "partial",
+      "quote": "21 | This Artificial Intelligence Policy (\"AI Policy\" or \"the Policy\") sets forth TechVest Global's overarching commitment to the responsible design, development, procurement, deployment, and governance of Artificial Intelligence (AI) and Machine Learning (ML) systems across the organisation. It establishes the foundational principles and boundaries within which TechVest Global's AI Management System (AIMS) operates, in full conformance with ISO/IEC 42001:2023.\n...\n29 | All TechVest Global-owned, -licensed, or -managed AI systems, including internally developed models, externally procured AI tools, and AI components embedded within broader products or services."
+    },
+    {
+      "index": 3,
+      "verdict": "partial",
+      "quote": "29 | All TechVest Global-owned, -licensed, or -managed AI systems, including internally developed models, externally procured AI tools, and AI components embedded within broader products or services."
+    }
+  ]
+}
+
+
+##############################################################################
+# PART 4 — WHAT THE APPLICATION DOES WITH IT
+##############################################################################
+
+[0] PARTIAL
+     requirement: External and internal issues relevant to the organization's purpose, that affect its ability to achieve the intended result(s) of the AI management system, are determined
+     actor: organization   satisfied by: determination
+     quote:      '38 | This Policy applies globally across all jurisdictions in which TechVest Global operates. Where local legislation, regulation, or sectoral guidance imposes requirements that exceed those set out in this Policy, such local requirements shall prevail and shall be incorporated into jurisdiction-spe'
+     -> located in the PDF by verbatim search, highlighted amber,
+        opened at that page when the auditor clicks the citation
+
+[1] PARTIAL
+     requirement: Whether climate change is a relevant issue has been determined
+     actor: organization   satisfied by: determination
+     quote:      '68 | 08 | Sustainability and Societal Responsibility\n69 | TechVest Global recognises its broader responsibility to society. AI systems shall be developed and deployed in ways that consider environmental impact, long-term societal consequences, and the promotion of equitable and inclusive outcomes.'
+     -> located in the PDF by verbatim search, highlighted amber,
+        opened at that page when the auditor clicks the citation
+
+[2] PARTIAL
+     requirement: The intended purpose of the AI system(s) that are developed, provided or used by the organization is considered
+     actor: organization   satisfied by: determination
+     quote:      '21 | This Artificial Intelligence Policy ("AI Policy" or "the Policy") sets forth TechVest Global\'s overarching commitment to the responsible design, development, procurement, deployment, and governance of Artificial Intelligence (AI) and Machine Learning (ML) systems across the organisation. It est'
+     -> located in the PDF by verbatim search, highlighted amber,
+        opened at that page when the auditor clicks the citation
+
+[3] PARTIAL
+     requirement: The organization's role(s) with respect to those AI systems are determined — that is, whether it acts as an AI provider, AI producer, AI customer, AI partner, AI subject, or relevant authority
+     actor: organization   satisfied by: determination
+     quote:      '29 | All TechVest Global-owned, -licensed, or -managed AI systems, including internally developed models, externally procured AI tools, and AI components embedded within broader products or services.'
+     -> located in the PDF by verbatim search, highlighted amber,
+        opened at that page when the auditor clicks the citation
+
+COUNTED IN CODE (the model returns no score):
+  met     = 0
+  partial = 4   (counts as NOT satisfied — partly documented is not documented)
+  unmet   = 0
+  fraction shown to the auditor = '0 of 4 requirements satisfied'
+
+tokens: 3775 in / 503 out

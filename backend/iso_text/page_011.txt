@@ -1,0 +1,51 @@
+Certainly! Here is the content from the page, set out as requested:
+
+---
+
+**3.9 competence**  
+ability to apply knowledge and skills to achieve intended results
+
+**3.10 documented information**  
+information required to be controlled and maintained by an organization (3.1) and the medium on which it is contained
+
+Note 1 to entry: Documented information can be in any format and media and from any source.
+
+Note 2 to entry: Documented information can refer to:  
+— the management system (3.4), including related processes (3.8);  
+— information created in order for the organization to operate (documentation);  
+— evidence of results achieved (records).
+
+**3.11 performance**  
+measurable result
+
+Note 1 to entry: Performance can relate either to quantitative or qualitative findings.
+
+Note 2 to entry: Performance can relate to managing activities, processes (3.8), products, services, systems or organizations (3.1).
+
+Note 3 to entry: In the context of this document, performance refers both to results achieved by using AI systems and results related to the AI management system (3.4). The correct interpretation of the term is clear from the context of its use.
+
+**3.12 continual improvement**  
+recurring activity to enhance performance (3.11)
+
+**3.13 effectiveness**  
+extent to which planned activities are realized and planned results are achieved
+
+**3.14 requirement**  
+need or expectation that is stated, generally implied or obligatory
+
+Note 1 to entry: "Generally implied" means that it is custom or common practice for the organization (3.1) and interested parties (3.2) that the need or expectation under consideration is implied.
+
+Note 2 to entry: A specified requirement is one that is stated, e.g. in documented information (3.10).
+
+**3.15 conformity**  
+fulfilment of a requirement (3.14)
+
+**3.16 nonconformity**  
+non-fulfilment of a requirement (3.14)
+
+**3.17 corrective action**  
+action to eliminate the cause(s) of a nonconformity (3.16) and to prevent recurrence
+
+---
+
+Let me know if you need more pages or further formatting!

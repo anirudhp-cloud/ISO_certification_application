@@ -1,0 +1,50 @@
+BS ISO/IEC 42001:2023  
+ISO/IEC 42001:2023(E)
+
+NOTE 2	Applicable actions can include, for example: the provision of training to, the mentoring of, or the re-assignment of currently employed persons; or the hiring or contracting of competent persons.
+
+7.3	Awareness  
+Persons doing work under the organization’s control shall be aware of:
+
+—	the AI policy (see 5.2);
+
+—	their contribution to the effectiveness of the AI management system, including the benefits of improved AI performance;
+
+—	the implications of not conforming with the AI management system requirements.
+
+7.4	Communication  
+The organization shall determine the internal and external communications relevant to the AI management system including:
+
+—	what it will communicate;
+
+—	when to communicate;
+
+—	with whom to communicate;
+
+—	how to communicate.
+
+7.5	Documented information
+
+7.5.1	General  
+The organization’s AI management system shall include:
+
+a)	documented information required by this document;
+
+b)	documented information determined by the organization as being necessary for the effectiveness of the AI management system.
+
+NOTE	The extent of documented information for an AI management system can differ from one organization to another due to:
+
+—	the size of organization and its type of activities, processes, products and services;
+
+—	the complexity of processes and their interactions;
+
+—	the competence of persons.
+
+7.5.2	Creating and updating documented information  
+When creating and updating documented information, the organization shall ensure appropriate:
+
+—	identification and description (e.g. a title, date, author or reference number);
+
+—	format (e.g. language, software version, graphics) and media (e.g. paper, electronic);
+
+—	review and approval for suitability and adequacy.

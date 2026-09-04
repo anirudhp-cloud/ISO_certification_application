@@ -1,6 +1,7 @@
 # DB access for AnalysisRun, plus the coverage report the readiness gate turns on.
 
 import uuid
+from datetime import datetime, timedelta, timezone
 
 from sqlalchemy.orm import Session
 
@@ -28,17 +29,29 @@ def get_run(db: Session, run_id: uuid.UUID) -> AnalysisRun | None:
     return db.get(AnalysisRun, run_id)
 
 
-def fail_stale_runs(db: Session, *, organization_id: uuid.UUID, certification_standard: str) -> int:
-    """Mark any run still 'running' for this organization+standard as failed.
+# A 'running' run is only stale once it has been running longer than any real run
+# plausibly takes. Without this threshold, a request that merely CHECKS on progress
+# (the pending-run banner polling GET /runs/latest) marked the in-flight run failed:
+# a real 44-document run took 13 minutes, and the poll landed in the middle of it, so
+# a run that went on to finish perfectly well carried "Interrupted — the server
+# stopped before this run finished" for the rest of its life.
+STALE_RUN_AFTER_MINUTES = 120
 
-    Execution is inline in the request, so a run only stays 'running' if the process
-    that owned it went away — a stopped server, a killed request. Nothing will ever
-    advance it, and left alone it becomes the "latest run" forever and hides the last
-    real result from the UI. Returns how many were closed out.
+
+def fail_stale_runs(db: Session, *, organization_id: uuid.UUID, certification_standard: str) -> int:
+    """Mark a run abandoned mid-flight as failed, so it stops masking the last real
+    result.
+
+    Execution is inline in the request, so a run stuck at 'running' usually means the
+    process that owned it went away. But a run legitimately sits at 'running' while it
+    executes, and this is called from a read endpoint — so only runs older than
+    STALE_RUN_AFTER_MINUTES are touched. Returns how many were closed out.
     """
+    cutoff = datetime.now(timezone.utc) - timedelta(minutes=STALE_RUN_AFTER_MINUTES)
     stale = (
         db.query(AnalysisRun)
         .filter_by(organization_id=organization_id, certification_standard=certification_standard, status="running")
+        .filter(AnalysisRun.started_at < cutoff)
         .all()
     )
     for run in stale:

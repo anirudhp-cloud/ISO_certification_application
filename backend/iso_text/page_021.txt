@@ -1,0 +1,44 @@
+7.5.3 Control of documented information
+
+Documented information required by the AI management system and by this document shall be controlled to ensure:
+
+a) it is available and suitable for use, where and when it is needed;
+b) it is adequately protected (e.g. from loss of confidentiality, improper use or loss of integrity).
+
+For the control of documented information, the organization shall address the following activities, as applicable:
+
+— distribution, access, retrieval and use;
+— storage and preservation, including preservation of legibility;
+— control of changes (e.g. version control);
+— retention and disposition.
+
+Documented information of external origin determined by the organization to be necessary for the planning and operation of the AI management system shall be identified as appropriate and controlled.
+
+NOTE Access can imply a decision regarding the permission to view the documented information only, or the permission and authority to view and change the documented information.
+
+8 Operation
+
+8.1 Operational planning and control
+
+The organization shall plan, implement and control the processes needed to meet requirements, and to implement the actions determined in Clause 6, by:
+
+— establishing criteria for the processes;
+— implementing control of the processes in accordance with the criteria.
+
+The organization shall implement the controls determined according to 6.1.3 that are related to the operation of the AI management system (e.g. AI system development and usage life cycle related controls).
+
+The effectiveness of these controls shall be monitored and corrective actions shall be considered if the intended results are not achieved. Annex A lists reference controls and Annex B provides implementation guidance for them.
+
+Documented information shall be available to the extent necessary to have confidence that the processes have been carried out as planned.
+
+The organization shall control planned changes and review the consequences of unintended changes, taking action to mitigate any adverse effects, as necessary.
+
+The organization shall ensure that externally provided processes, products or services that are relevant to the AI management system are controlled.
+
+8.2 AI risk assessment
+
+The organization shall perform AI risk assessments in accordance with 6.1.2 at planned intervals or when significant changes are proposed or occur.
+
+The organization shall retain documented information of the results of all AI risk assessments.
+
+© ISO/IEC 2023 – All rights reserved

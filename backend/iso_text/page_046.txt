@@ -1,0 +1,43 @@
+Certainly! Here is the content from the page, set out as requested:
+
+---
+
+**B.7.4 Quality of data for AI systems**
+
+**Control**  
+The organization should define and document requirements for data quality and ensure that data used to develop and operate the AI system meet those requirements.
+
+**Implementation guidance**  
+The quality of data used to develop and operate AI systems potentially has significant impacts on the validity of the system’s outputs. ISO/IEC 25024 defines data quality as the degree to which the characteristics of data satisfy stated and implied needs when used under specified conditions. For AI systems that use supervised or semi-supervised machine learning, it is important that the quality of training, validation, test and production data are defined, measured and improved to the extent possible, and the organization should ensure that the data are suitable for its intended purpose. The organization should consider the impact of bias on system performance and system fairness and make such adjustments as necessary to the model and data used to improve performance and fairness so they are acceptable for the use case.
+
+**Other information**  
+Additional information regarding data quality is available in the ISO/IEC 5259 series[2] on data quality for analytics and ML. Additional information regarding different forms of bias in data used in AI systems is available in ISO/IEC TR 24027.
+
+---
+
+**B.7.5 Data provenance**
+
+**Control**  
+The organization should define and document a process for recording the provenance of data used in its AI systems over the life cycles of the data and the AI system.
+
+**Implementation guidance**  
+According to ISO 8000-2, a record of data provenance can include information about the creation, update, transcription, abstraction, validation and transferring of the control of data. Additionally, data sharing (without transfer of control) and data transformations can be considered under data provenance. Depending on factors such as the source of the data, its content and the context of its use, organizations should consider whether measures to verify the provenance of the data are needed.
+
+---
+
+**B.7.6 Data preparation**
+
+**Control**  
+The organization shall define and document its criteria for selecting data preparations and the data preparation methods to be used.
+
+**Implementation guidance**  
+Data used in an AI system ordinarily needs preparation to make it usable for a given AI task. For example, machine learning algorithms are sometimes intolerant of missing or incorrect entries, non- [illegible]
+
+---
+
+**NOTES:**  
+No notes are present on this page.
+
+---
+
+If you need more pages or further formatting, let me know!

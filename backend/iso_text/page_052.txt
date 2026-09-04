@@ -1,0 +1,37 @@
+Certainly! Here is the content from the page, set out as requested:
+
+---
+
+**B.10.3 Suppliers**
+
+**Control**
+The organization should establish a process to ensure that its usage of services, products or materials provided by suppliers aligns with the organization’s approach to the responsible development and use of AI systems.
+
+**Implementation guidance**
+Organizations developing or using an AI system can utilize suppliers in a number of ways, from sourcing datasets, machine learning algorithms or models, or other components of a system such as software libraries, to an entire AI system itself for use on its own or as part of another product (e.g. a vehicle).
+
+Organizations should consider different types of suppliers, what they supply, and the varying level of risk this can pose to the system and organization as a whole in determining the selection of suppliers, the requirements placed on those suppliers, and the levels of ongoing monitoring and evaluation needed for the suppliers.
+
+Organizations should document how the AI system and AI system components are integrated into AI systems developed or used by the organization.
+
+Where the organization considers that the AI system or AI system components from a supplier do not perform as intended or can result in impacts to individuals or groups of individuals, or both, and societies that are not aligned with the responsible approach to AI systems taken by the organization, the organization should require the supplier to take corrective actions. The organization can decide to work with the supplier to achieve this objective.
+
+The organization should ensure that the supplier of an AI system delivers appropriate and adequate documentation related to the AI system (see B.6.2.7 and B.8.2).
+
+---
+
+**B.10.4 Customers**
+
+**Control**
+The organization should ensure that its responsible approach to the development and use of AI systems considers their customer expectations and needs.
+
+**Implementation guidance**
+The organization should understand customer expectations and needs when it is supplying a product or service related to an AI system (i.e. when it is itself a supplier). These can come in the form of requirements for the product or service itself during a design or engineering phase, or in the form of contractual requirements or general usage agreements. One organization can have many different types of customer relationships, and these can all have different needs and expectations.
+
+The organization should particularly understand the complex nature of supplier and customer relationships and understand where responsibility lies with the provider of the AI system and where it lies with the customer, while still meeting needs and expectations.
+
+---
+
+[No NOTES are present on this page.]
+
+[No unreadable regions detected.]

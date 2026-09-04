@@ -35,6 +35,14 @@ class Clause(Base):
     title: Mapped[str] = mapped_column(String(500), nullable=False)
     description: Mapped[str | None] = mapped_column(Text, nullable=True)
     evidence_requirements: Mapped[list[str] | None] = mapped_column(ARRAY(Text), nullable=True)
+    # The mark scheme: this requirement's own "shall" wording split into the distinct
+    # obligations it imposes. The assessment answers one narrow question per
+    # obligation, and the score is a COUNT of those answers — so a coverage figure is
+    # derived arithmetic rather than a number the model chose. Before this, the model
+    # returned a single percentage per requirement with nothing behind it: 98% of
+    # scores landed on a multiple of 5, and a document evidencing 1 of 3 obligations
+    # was scored 100%.
+    obligations: Mapped[list[str] | None] = mapped_column(ARRAY(Text), nullable=True)
     # Annex B "Implementation guidance" bullets for this Annex A control (the
     # standard's "how", vs. description's one-line Annex A "what") — only
     # populated for requirement_type == "control" rows; NULL for clauses 4-10,

@@ -1,0 +1,40 @@
+Certainly! Here is the content from the page, set out as requested:
+
+---
+
+**3.18 audit**  
+systematic and independent process (3.8) for obtaining evidence and evaluating it objectively to determine the extent to which the audit criteria are fulfilled  
+Note 1 to entry: An audit can be an internal audit (first party) or an external audit (second party or third party), and it can be a combined audit (combining two or more disciplines).  
+Note 2 to entry: An internal audit is conducted by the organization (3.1) itself, or by an external party on its behalf.  
+Note 3 to entry: "Audit evidence" and "audit criteria" are defined in ISO 19011.
+
+**3.19 measurement**  
+process (3.8) to determine a value
+
+**3.20 monitoring**  
+determining the status of a system, a process (3.8) or an activity  
+Note 1 to entry: To determine the status, there can be a need to check, supervise or critically observe.
+
+**3.21 control**  
+<risk> measure that maintains and/or modifies risk (3.7)  
+Note 1 to entry: Controls include, but are not limited to, any process, policy, device, practice or other conditions and/or actions which maintain and/or modify risk.  
+Note 2 to entry: Controls may not always exert the intended or assumed modifying effect.  
+[SOURCE: ISO 31000:2018, 3.8, modified — Added <risk> as application domain]
+
+**3.22 governing body**  
+person or group of people who are accountable for the performance and conformance of the organization  
+Note 1 to entry: Not all organizations, particularly small organizations, will have a governing body separate from top management.  
+Note 2 to entry: A governing body can include, but is not limited to, board of directors, committees of the board, supervisory board, trustees or overseers.  
+[SOURCE: ISO/IEC 38500:2015, 2.2, modified — Added Notes to entry.]
+
+**3.23 information security**  
+preservation of confidentiality, integrity and availability of information  
+Note 1 to entry: Other properties such as authenticity, accountability, non-repudiation and reliability can also be involved.  
+[SOURCE: ISO/IEC 27000:2018, 3.28]
+
+**3.24 AI system impact assessment**  
+formal, documented process by which the impacts on individuals, groups of individuals, or both, and societies are identified, evaluated and addressed by an organization developing, providing or using products or services utilizing artificial intelligence
+
+---
+
+Let me know if you need more pages or further formatting!

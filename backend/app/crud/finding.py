@@ -14,7 +14,7 @@ from datetime import datetime, timezone
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 
-from app.ai.grading import propose_grade
+from app.ai.grading import NOT_APPLICABLE, propose_grade, propose_grade_from_obligations
 from app.models.clause import Clause
 from app.models.finding import Finding
 from app.models.standard import Standard
@@ -82,9 +82,9 @@ def upsert_finding_from_mapping(
     clause: Clause,
     evidence_document_id: uuid.UUID,
     evidence_document_ids: list[uuid.UUID],
-    relevance_score: float,
     coverage_score: float,
-    rationale: str,
+    proposed_grade: str,
+    obligation_rollup: dict | None = None,
     unmet_guidance_points: list[str] | None = None,
     analysis_run_id: uuid.UUID | None = None,
 ) -> Finding:
@@ -115,19 +115,22 @@ def upsert_finding_from_mapping(
         db.add(finding)
 
     finding.status = derive_status(coverage_score)
-    finding.proposed_grade = propose_grade(
-        segment=clause.requirement_type,
-        has_evidence=bool(evidence_document_ids),
-        coverage_score=coverage_score,
-        unmet_guidance_points=unmet_guidance_points,
-        is_applicable=finding.is_applicable,
+    # Supplied by the caller from the obligation counts (app/ai/grading.py
+    # propose_grade_from_obligations) rather than derived from a percentage here —
+    # the percentage thresholds that used to decide this were invented numbers acting
+    # on a number the model also invented.
+    finding.proposed_grade = (
+        NOT_APPLICABLE if finding.is_applicable is False and clause.requirement_type == "control"
+        else proposed_grade
     )
     finding.analysis_run_id = analysis_run_id
     finding.evidence_document_id = evidence_document_id
     finding.evidence_document_ids = evidence_document_ids
-    finding.relevance_score = relevance_score
     finding.coverage_score = coverage_score
-    finding.rationale = rationale
+    finding.obligation_rollup = obligation_rollup
+    # No prose rationale any more: the reasoning is obligation_rollup. Cleared so a
+    # stale narrative from a pre-mark-scheme run can't sit under new verdicts.
+    finding.rationale = None
     finding.unmet_guidance_points = unmet_guidance_points
     finding.mapping_method = "unreviewed"
     finding.evidence_changed_since_review = False
@@ -174,10 +177,12 @@ def set_applicability(
     finding.applicability_note = (note or "").strip() or None
     finding.reviewed_by = decided_by
     finding.reviewed_at = func.now()
-    finding.proposed_grade = propose_grade(
+    rollup = finding.obligation_rollup or {}
+    finding.proposed_grade = propose_grade_from_obligations(
         segment="control",
-        has_evidence=bool(finding.evidence_document_ids),
-        coverage_score=float(finding.coverage_score) if finding.coverage_score is not None else None,
+        total_obligations=rollup.get("total_obligations", 0),
+        met=rollup.get("met", 0),
+        partial=rollup.get("partial", 0),
         unmet_guidance_points=finding.unmet_guidance_points,
         is_applicable=is_applicable,
     )
@@ -193,7 +198,6 @@ def review_finding(
     action: str,
     reviewed_by: uuid.UUID,
     status: str | None = None,
-    relevance_score: float | None = None,
     coverage_score: float | None = None,
     grade: str | None = None,
 ) -> Finding | None:
@@ -219,11 +223,8 @@ def review_finding(
         # approving a finding clears any stale-evidence flag by definition.
         finding.grade = grade
     finding.evidence_changed_since_review = False
-    if relevance_score is not None or coverage_score is not None or status is not None:
-        finding.previous_relevance_score = finding.relevance_score
+    if coverage_score is not None or status is not None:
         finding.previous_coverage_score = finding.coverage_score
-        if relevance_score is not None:
-            finding.relevance_score = relevance_score
         if coverage_score is not None:
             finding.coverage_score = coverage_score
         finding.status = status if status is not None else (

@@ -13,7 +13,7 @@ from types import SimpleNamespace
 import pytest
 
 from app.ai import clause_mapper
-from app.ai.schemas import ClauseEvaluation, MappingResult
+from app.ai.schemas import ClauseEvaluation, MappingResult, ObligationVerdict
 from app.crud import evidence_mapping as evidence_crud
 
 CLAUSE_CODES = ["4.1", "5.2"]
@@ -31,6 +31,9 @@ def _clause(code: str, order: int):
         description=f"description {code}",
         evidence_requirements=["something documented"],
         implementation_guidance=["a guidance point"] if code.startswith("A.") else None,
+        # The mark scheme. Two obligations, so a document satisfying one scores 1 of 2
+        # — the score is a count of these, never a number the model supplies.
+        obligations=[f"first obligation of {code}", f"second obligation of {code}"],
     )
 
 
@@ -70,12 +73,17 @@ class _StubLLM:
         return MappingResult(mappings=self.by_segment.get(segment, [])), f"stub-{segment}-v1"
 
 
-def _evaluation(code: str, *, coverage=80.0, unmet=None, rationale="This policy sets out our commitment."):
+def _evaluation(code: str, *, verdicts=None, unmet=None, rationale="This policy sets out our commitment."):
+    """An evaluation as the model now returns one: obligation verdicts and quotes, no
+    score. `verdicts` defaults to satisfying only the first of two obligations."""
     return ClauseEvaluation(
         requirement_code=code,
-        relevance_score=90.0,
-        coverage_score=coverage,
-        rationale=rationale,
+        obligations=verdicts
+        if verdicts is not None
+        else [
+            ObligationVerdict(index=0, verdict="met", quote=rationale),
+            ObligationVerdict(index=1, verdict="unmet"),
+        ],
         unmet_guidance_points=unmet or [],
     )
 
@@ -243,14 +251,14 @@ def test_a_code_missing_from_the_catalogue_produces_no_orphan_row(catalog, docum
     assert db.added == []
 
 
-def test_scores_and_quote_are_carried_through(catalog, document, extraction):
+def test_verdicts_and_quotes_are_carried_through(catalog, document, extraction):
     db = _FakeSession()
     rows = evidence_crud.record_mappings(
         db,
         run_id=(run := uuid.uuid4()),
         document_id=document.id,
         clauses_by_code={c.code: c for c in catalog},
-        evaluations_by_segment={"clause": [_evaluation("5.2", coverage=42.5)]},
+        evaluations_by_segment={"clause": [_evaluation("5.2")]},
         chunks=extraction.extracted_chunks,
     )
 
@@ -258,6 +266,8 @@ def test_scores_and_quote_are_carried_through(catalog, document, extraction):
     assert row.run_id == run
     assert row.document_id == document.id
     assert row.clause_id == next(c.id for c in catalog if c.code == "5.2")
-    assert float(row.coverage_score) == 42.5
-    assert float(row.relevance_score) == 90.0
+    # Every verdict is stored with the obligation text it answers, so the row is
+    # readable without re-joining the catalogue.
+    assert [v["verdict"] for v in row.obligation_verdicts] == ["met", "unmet"]
+    assert row.obligation_verdicts[0]["obligation"] == "first obligation of 5.2"
     assert row.rationale == "This policy sets out our commitment."

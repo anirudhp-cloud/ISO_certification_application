@@ -1,0 +1,47 @@
+8.3 AI risk treatment
+
+The organization shall implement the AI risk treatment plan according to 6.1.3 and verify its effectiveness.
+
+When risk assessments identify new risks that require treatment, a risk treatment process in accordance with 6.1.3 shall be performed for these risks.
+
+When risk treatment options as defined by the risk treatment plan are not effective, these treatment options shall be reviewed and revalidated following the risk treatment process according to 6.1.3 and the risk treatment plan shall be updated.
+
+The organization shall retain documented information of the results of all AI risk treatments.
+
+8.4 AI system impact assessment
+
+The organization shall perform AI system impact assessments according to 6.1.4 at planned intervals or when significant changes are proposed to occur.
+
+The organization shall retain documented information of the results of all AI system impact assessments.
+
+9 Performance evaluation
+
+9.1 Monitoring, measurement, analysis and evaluation
+
+The organization shall determine:
+
+— what needs to be monitored and measured;
+— the methods for monitoring, measurement, analysis and evaluation, as applicable, to ensure valid results;
+— when the monitoring and measuring shall be performed;
+— when the results from monitoring and measurement shall be analysed and evaluated.
+
+Documented information shall be available as evidence of the results.
+
+The organization shall evaluate the performance and the effectiveness of the AI management system.
+
+9.2 Internal audit
+
+9.2.1 General
+
+The organization shall conduct internal audits at planned intervals to provide information on whether the AI management system:
+
+a) conforms to:
+    1) the organization’s own requirements for its AI management system;
+    2) the requirements of this document;
+b) is effectively implemented and maintained.
+
+9.2.2 Internal audit programme
+
+The organization shall plan, establish, implement and maintain (an) audit programme(s), including the frequency, methods, responsibilities, planning requirements and reporting.
+
+14 © ISO/IEC 2023 – All rights reserved

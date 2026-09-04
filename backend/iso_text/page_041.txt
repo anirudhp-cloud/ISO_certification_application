@@ -1,0 +1,37 @@
+Certainly! Here is the content from the page as requested:
+
+---
+
+- the evaluation plan can be based on, for example:
+  - reliability and safety requirements of the AI system, including acceptable error rates for the AI system performance;
+  - responsible AI system development and use objectives such as those in 8.6.1.2 and 8.9.3;
+  - operational factors such as quality of data, intended use, including acceptable ranges of each operational factor;
+  - any intended uses which can require more rigorous operational factors to be defined, including different acceptable ranges for operational factors or lower error rates;
+- the methods, guidance or metrics to be used to evaluate whether relevant interested parties who make decisions or are subject to decisions based on the AI system outputs can adequately interpret the AI system outputs. The frequency of evaluation should be determined and can be based upon results from an AI system impact assessment;
+- any acceptable factors that can account for an inability to meet a target minimum performance level, especially when the AI system is evaluated for impacts on individuals or groups of individuals, or both, and societies (e.g. poor image resolution for computer vision systems or background noise affecting speech recognition systems). Mechanisms to deal with poor AI system performance as a result of these factors should also be documented.
+
+The AI system should be evaluated against the documented criteria for evaluation.
+
+Where the AI system cannot meet the documented criteria for evaluation, especially against responsible AI system development and use objectives (see 8.6.1.2 and 8.9.3), the organization should reconsider or manage the deficiencies of the intended use of the AI system, its performance requirements and how the organization can effectively address the impacts to individuals or groups of individuals, or both, and societies.
+
+NOTE Further information on how to deal with robustness of neural networks can be found in ISO/IEC TR 24029-1.
+
+**B.6.2.5 AI system deployment**
+
+**Control**
+
+The organization should document a deployment plan and ensure that appropriate requirements are met prior to deployment.
+
+**Implementation guidance**
+
+AI systems can be developed in various environments and deployed in others (such as developed on premises and deployed using cloud computing) and the organization should take these differences into account for the deployment plan. The organization should also consider whether components are deployed separately (e.g. software and model can be deployed independently). Additionally, the organization should have a set of requirements to be met prior to release and deployment (sometimes referred to as "release criteria"). This can include verification and validation measures that are to be passed, performance metrics that are to be met, user testing to be completed, as well as management approvals and sign-offs to be obtained. The deployment plan should take into account the perspectives of and impacts to relevant interested parties.
+
+**B.6.2.6 AI system operation and monitoring**
+
+**Control**
+
+The organization should define and document the necessary elements for the ongoing operation of the AI system. At the minimum this should include system and performance monitoring, repairs, updates and support.
+
+---
+
+Let me know if you need further formatting or additional pages!

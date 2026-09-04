@@ -1,0 +1,11 @@
+Certainly! Here is the content from the page as plain text, following your instructions:
+
+---
+
+For example, the organization can identify risks related to the use of its AI products and services by the customer and can decide to treat the identified risks by giving appropriate information to its customer, so that the customer can then treat the corresponding risks.
+
+As an example of appropriate information, when an AI system is valid for a certain domain of use, the limits of the domain should be communicated to the customer. See B.6.2.7 and B.8.2.
+
+---
+
+There are no clause/annex numbers or headings visible on this page. No NOTE is present. If you need the content from other pages, please upload them.

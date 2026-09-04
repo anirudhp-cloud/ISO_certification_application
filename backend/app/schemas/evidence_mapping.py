@@ -19,8 +19,14 @@ class RequirementMappingRead(BaseModel):
     code: str
     title: str
     category: str | None
-    relevance_score: float | None
     coverage_score: float | None
+    # How the score is written for a person: "1 of 3". Preferred over the percentage —
+    # with 3 obligations the only reachable values are 0/1/2/3 of 3.
+    fraction: str | None = None
+    obligations_total: int = 0
+    # This document's verdict on each obligation, with the passage behind it. The
+    # reasoning, per document.
+    obligation_verdicts: list[dict] = []
     # The LLM's verbatim quote from this document.
     rationale: str | None
     # Where that quote sits, e.g. 'Section "7. Policy Review", paragraph 1'. None when
@@ -71,6 +77,9 @@ class FindingEvidenceItem(BaseModel):
     document_name: str
     file_name: str
     coverage_score: float | None
+    # "1 of 3" — how the score is written for a person.
+    fraction: str | None = None
+    obligation_verdicts: list[dict] = []
     quote: str | None
     source_location: str | None
     unmet_guidance_points: list[str]

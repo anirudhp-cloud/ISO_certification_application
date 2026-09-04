@@ -1,0 +1,44 @@
+Certainly! Here is a conformity checklist based on the provided page of **ISO/IEC 42001:2023**:
+
+---
+
+### 5 Leadership
+
+#### 5.1 Leadership and commitment
+
+**Top management shall demonstrate leadership and commitment with respect to the AI management system by:**
+- "ensuring that the AI policy (see 5.2) and AI objectives (see 6.2) are established and are compatible with the strategic direction of the organization;"
+- "ensuring the integration of the AI management system requirements into the organization’s business processes;"
+- "ensuring that the resources needed for the AI management system are available;"
+- "communicating the importance of effective AI management and of conforming to the AI management system requirements;"
+- "ensuring that the AI management system achieves its intended result(s);"
+- "directing and supporting persons to contribute to the effectiveness of the AI management system;"
+- "promoting continual improvement;"
+- "supporting other relevant roles to demonstrate their leadership as it applies to their areas of responsibility."
+
+**NOTES:**
+- NOTE 1: Reference to “business” in this document can be interpreted broadly to mean those activities that are core to the purposes of the organization’s existence.
+- NOTE 2: Establishing, encouraging and modelling a culture within the organization, to take a responsible approach to using, development and governing AI systems can be an important demonstration of commitment and leadership by top management. Ensuring awareness of and compliance with such a responsible approach and in support of the AI management system through leadership can aid the success of the AI management system.
+
+---
+
+#### 5.2 AI policy
+
+**Top management shall establish an AI policy that:**
+- "is appropriate to the purpose of the organization;"
+- "provides a framework for setting AI objectives (see 6.2);"
+- "includes a commitment to meet applicable requirements;"
+- "includes a commitment to continual improvement of the AI management system."
+
+**The AI policy shall:**
+- "be available as documented information;"
+- "refer as relevant to other organizational policies;"
+- "be communicated within the organization;"
+- "be available to interested parties, as appropriate."
+
+**NOTE:**  
+Considerations for organizations when developing AI policies are provided in ISO/IEC 38507.
+
+---
+
+This format lists each clause, its heading, and every distinct 'shall' requirement as a checklist item, quoting the obligation wording as written. All NOTE content is also included as requested.

@@ -1,0 +1,17 @@
+BS ISO/IEC 42001:2023  
+ISO/IEC 42001:2023(E)
+
+Table A.1 (continued)
+
+| A.9.4 | Intended use of the AI system | The organization shall ensure that the AI system is used according to the intended uses of the AI system and its accompanying documentation. |
+
+A.10 Third-party and customer relationships  
+Objective: To ensure that the organization understands its responsibilities and remains accountable, and risks are appropriately apportioned when third parties are involved at any stage of the AI system life cycle.
+
+| Topic | Control |
+|-------|---------|
+| A.10.2 | Allocating responsibilities | The organization shall ensure that responsibilities within their AI system life cycle are allocated between the organization, its partners, suppliers, customers and third parties. |
+| A.10.3 | Suppliers | The organization shall establish a process to ensure that its usage of services, products or materials provided by suppliers aligns with the organization’s approach to the responsible development and use of AI systems. |
+| A.10.4 | Customers | The organization shall ensure that its responsible approach to the development and use of AI systems considers their customer expectations and needs. |
+
+20 © ISO/IEC 2023 – All rights reserved

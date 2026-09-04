@@ -42,6 +42,7 @@ def load_seed_file(path: Path, db) -> None:
         clause.title = req["title"]
         clause.description = req.get("description")
         clause.evidence_requirements = req.get("evidence_requirements")
+        clause.obligations = req.get("obligations")
         clause.implementation_guidance = req.get("implementation_guidance")
 
     db.commit()

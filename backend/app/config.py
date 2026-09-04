@@ -17,6 +17,9 @@ class Settings(BaseSettings):
     llm_api_key: str
     llm_deployment: str
     llm_api_version: str
+    # Fixed so repeated assessments of the same evidence are reproducible. Paired
+    # with temperature=0 in app/ai/openai_client.py.
+    llm_seed: int = 42
 
     database_url: str
 

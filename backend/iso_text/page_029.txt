@@ -1,0 +1,34 @@
+Annex B  
+(normative)  
+
+Implementation guidance for AI controls  
+
+B.1 General  
+The implementation guidance documented in this annex relates to the controls listed in Table A.1. It provides information to support the implementation of the controls listed in Table A.1 and to meet the control objective, but organizations do not have to document or justify inclusion or exclusion of implementation guidance in the statement of applicability (see 6.1.3).  
+
+The implementation guidance is not always suitable or sufficient in all situations and does not always fulfil the organization’s specific control requirements. The organization can extend or modify the implementation guidance or define their own implementation of a control according to their specific requirements and risk treatment needs.  
+
+This annex is to be used as guidance for determining and implementing controls for AI risk treatment in the AI management system defined in this document. Additional organizational and technical controls other than those included in this annex can be determined (see AI system management risk treatment in 6.1.3). This annex can be regarded as a starting point for developing organization-specific implementation of controls.  
+
+B.2 Policies related to AI  
+
+B.2.1 Objective  
+To provide management direction and support for AI systems according to business requirements.  
+
+B.2.2 AI policy  
+Control  
+The organization should document a policy for the development or use of AI systems.  
+
+Implementation guidance  
+The AI policy should be informed by:  
+— business strategy;  
+— organizational values and culture and the amount of risk the organization is willing to pursue or retain;  
+— the level of risk posed by the AI systems;  
+— legal requirements, including contracts;  
+— the risk environment of the organization;  
+— impact to relevant interested parties (see 6.1.4).  
+The AI policy should include (in addition to requirements in 5.2):  
+— principles that guide all activities of the organization related to AI;  
+
+© ISO/IEC 2023 – All rights reserved  
+21

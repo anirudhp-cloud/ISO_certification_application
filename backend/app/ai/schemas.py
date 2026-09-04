@@ -1,13 +1,38 @@
 # Pydantic models for the LLM's structured output (ClauseEvaluation, etc.).
 
+from typing import Literal
+
 from pydantic import BaseModel, Field
+
+
+VERDICTS = ("met", "partial", "unmet")
+
+
+class ObligationVerdict(BaseModel):
+    """One answer to one obligation, with the passage behind it.
+
+    This replaces the model-chosen coverage percentage. The model answers narrow
+    questions; the score is counted from the answers in app/ai/scoring.py. Across
+    1,057 mappings under the old design only 30 distinct percentages appeared out of
+    101 and 98% were multiples of 5 — the number was picked from a mental menu, and
+    no explanation of it could be more than decoration.
+    """
+
+    index: int = Field(ge=0)
+    verdict: Literal["met", "partial", "unmet"]
+    # Required for met/partial, absent for unmet — there is no passage to quote when
+    # nothing addresses the obligation.
+    quote: str | None = None
 
 
 class ClauseEvaluation(BaseModel):
     requirement_code: str
-    relevance_score: float = Field(ge=0, le=100)
-    coverage_score: float = Field(ge=0, le=100)
-    rationale: str
+    obligations: list[ObligationVerdict] = []
+    # Set in code from the verdicts (app/ai/scoring.py), never by the model.
+    coverage_score: float | None = None
+    # The strongest supporting quote, carried for the citation lookup and the
+    # document-level summary line.
+    rationale: str | None = None
     # Verbatim subset of the control's Annex B implementation_guidance points
     # (see app/ai/requirement_catalog.py) that this document's evidence does
     # NOT satisfy. Empty for clauses 4-10 (no Annex B) or full coverage.
@@ -38,11 +63,3 @@ class SegmentedMapping(BaseModel):
         return [*self.clauses, *self.controls]
 
 
-class CombinedEvaluation(BaseModel):
-    """Output of the reduce/combine step — merges 2+ documents' ClauseEvaluations
-    for the same requirement into one assessment (see app/ai/aggregator.py)."""
-
-    relevance_score: float = Field(ge=0, le=100)
-    coverage_score: float = Field(ge=0, le=100)
-    rationale: str
-    unmet_guidance_points: list[str] = []

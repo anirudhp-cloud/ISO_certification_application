@@ -1,0 +1,39 @@
+Certainly! Here is the content from the page, set out as requested:
+
+---
+
+**B.8.5 Information for interested parties**
+
+**Control**  
+The organization should determine and document its obligations to reporting information about the AI system to interested parties.
+
+**Implementation guidance**  
+In some cases, a jurisdiction can require information about the system to be shared with authorities such as regulators. Information can be reported to interested parties such as customers or regulatory authorities within the appropriate timeframe. The information shared can include, for example:
+
+— technical system documentation, including, but not limited to, data sets for training, validation and testing as well as algorithmic choices justifications and verification and validation records;  
+— risks related to the system;  
+— results of impact assessments;  
+— logs and other system records.
+
+The organization should understand their obligations in this respect and ensure that the appropriate information is shared with the correct authorities. Additionally, it is presupposed that the organization is aware of jurisdictional requirements related to information shared with law enforcement authorities.
+
+---
+
+**B.9 Use of AI systems**
+
+**B.9.1 Objective**  
+To ensure that the organization uses AI systems responsibly and per organizational policies.
+
+**B.9.2 Processes for responsible use of AI systems**
+
+**Control**  
+The organization should define and document the processes for the responsible use of AI systems.
+
+**Implementation guidance**  
+Depending on its context, the organization can have many considerations for determining whether to use a particular AI system. Whether the AI system is developed by the organization itself or sourced from a third party, the organization should be clear on what these considerations are and develop policies to address them. Some examples are:
+
+— required approvals;
+
+---
+
+[End of page content]

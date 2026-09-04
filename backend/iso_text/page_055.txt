@@ -1,0 +1,41 @@
+Certainly! Here is the content from the page, set out as requested:
+
+---
+
+C.2.8 Robustness  
+In AI, robustness properties demonstrate the ability (or inability) of the system to have comparable performance on new data as on the data on which it was trained or the data of typical operations.
+
+C.2.9 Safety  
+Safety relates to the expectation that a system does not, under defined conditions, lead to a state in which human life, health, property or the environment is endangered.
+
+C.2.10 Security  
+In the context of AI and in particular with regard to AI systems based on ML approaches, new security issues should be considered beyond classical information and system security concerns.
+
+C.2.11 Transparency and explainability  
+Transparency relates both to characteristics of an organization operating AI systems, and to those systems themselves.  
+Explainability relates to explanations of important factors influencing the AI system results that are provided to interested parties in a way understandable to humans.
+
+C.3 Risk sources
+
+C.3.1 Complexity of environment  
+When AI systems operate in complex environments, where the range of situation is broad, there can be uncertainty on the performance and therefore a source of risk (e.g. complex environment of autonomous driving).
+
+C.3.2 Lack of transparency and explainability  
+The inability to provide appropriate information to interested parties can be a source of risk (i.e. in terms of trustworthiness and accountability of the organization).
+
+C.3.3 Level of automation  
+The level of automation can have an impact on various areas of concerns, such as safety, fairness or security.
+
+C.3.4 Risk sources related to machine learning  
+The quality of data used for ML and the process used to collect data can be sources of risk, as they can impact objectives such as safety and robustness (e.g. due to issues in data quality or data poisoning).
+
+C.3.5 System hardware issues  
+Risk sources related to hardware include hardware errors based on defective components or transferring trained ML models between different systems.
+
+C.3.6 System life cycle issues  
+Sources of risk can appear over the entire AI system life cycle (e.g. flaws in design, inadequate deployment, lack of maintenance, issues with decommissioning).
+
+---
+
+There are no NOTES visible on this page.  
+[illegible] marked where text is unreadable, but all content is legible on this page.

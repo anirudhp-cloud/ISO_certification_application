@@ -1,0 +1,18 @@
+Certainly! Here is the content from the page as plain text, formatted as requested:
+
+---
+
+BS ISO/IEC 42001:2023  
+ISO/IEC 42001:2023(E)
+
+An organization conforming with the requirements in this document can generate evidence of its responsibility and accountability regarding its role with respect to AI systems.
+
+The order in which requirements are presented in this document does not reflect their importance or imply the order in which they are implemented. The list items are enumerated for reference purposes only.
+
+**Compatibility with other management system standards**
+
+This document applies the harmonized structure (identical clause numbers, clause titles, text and common terms and core definitions) developed to enhance alignment among management system standards (MSS). The AI management system provides requirements specific to managing the issues and risks arising from using AI in an organization. This common approach facilitates implementation and consistency with other management system standards, e.g. related to quality, safety, security and privacy.
+
+---
+
+There are no clause/annex numbers or explicit requirements/NOTE statements on this page. If you need more pages processed, please upload them.

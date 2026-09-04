@@ -1,0 +1,30 @@
+Certainly! Here is the content from the page, set out as requested:
+
+---
+
+**B.6.2.7 AI system technical documentation**
+
+**Control**
+
+The organization should determine what AI system technical documentation is needed for each relevant category of interested parties, such as users, partners, supervisory authorities, and provide the technical documentation to them in the appropriate form.
+
+**Implementation guidance**
+
+The AI system technical documentation can include, but is not limited to the following elements:
+— a general description of the AI system including its intended purpose;
+— usage instructions;
+— technical assumptions about its deployment and operation (run-time environment, related software and hardware capabilities, assumptions made on data, etc.);
+— technical limitations (e.g. acceptable error rates, accuracy, reliability, robustness);
+— monitoring capabilities and functions that allow users or operators to influence the system operation.
+
+Documentation elements related to all AI system life cycle stages (as defined in ISO/IEC 22989) can include, but are not limited to:
+— design and system architecture specification;
+— design choices made and quality measures taken during the system development process;
+— information about the data used during system development;
+— assumptions made and quality measures taken on data quality (e.g. assumed statistical distributions);
+— management activities (e.g. risk management) taken during development or operation of the AI system;
+— verification and validation records;
+
+---
+
+All requirements, guidance statements, and notes from the visible page are included above, in the exact wording as printed. If you need other clauses or annexes, please provide the relevant pages.

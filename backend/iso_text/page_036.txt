@@ -1,0 +1,51 @@
+Certainly! Here is the content from the page, set out as requested:
+
+---
+
+**B.5.3 Documentation of AI system impact assessments**
+
+*Control*
+
+The organization should document the results of AI system impact assessments and retain results for a defined period.
+
+*Implementation guidance*
+
+The documentation can be helpful in determining information that should be communicated to users and other relevant interested parties.
+
+AI system impact assessments should be retained and updated, as needed, in alignment with the elements of an AI system impact assessment documented in **B.5.2**. Retention periods can follow organization retention schedules or be informed by legal requirements or other requirements.
+
+Items that the organization should consider documenting can include, but are not limited to:
+
+— the intended use of the AI system and any reasonable foreseeable misuse of the AI system;
+— positive and negative impacts of the AI system to the relevant individuals or groups of individuals, or both, and societies;
+— predictable failures, their potential impacts and measures taken to mitigate them;
+— relevant demographic groups the system is applicable to;
+— complexity of the system;
+— the role of humans in relationships with system, including human oversight capabilities, processes and tools, available to avoid negative impacts;
+— employment and staff skilling.
+
+---
+
+**B.5.4 Assessing AI system impact on individuals or groups of individuals**
+
+*Control*
+
+The organization should assess and document the potential impacts of AI systems to individuals or groups of individuals throughout the system’s life cycle.
+
+*Implementation guidance*
+
+When assessing the impacts on individuals or groups of individuals, or both, and societies, the organization should consider its governance principles, AI policies and objectives. Individuals using the AI system or whose PI are processed by the AI system, can have expectations related to the trustworthiness of the AI system. Specific protection needs of groups such as children, impaired persons, elderly persons and workers should be taken into account. The organization should evaluate these expectations and consider the means to address them as part of the system impact assessment.
+
+Depending on the scope of AI system purpose and use, areas of impact to consider as part of the assessment can include, but are not limited to:
+
+— fairness;
+— accountability;
+
+---
+
+**NOTE**
+ISO/IEC 23894 describes how an organization can perform impact analyses for the organization itself along with individuals or groups of individuals, or both, and societies, as part of an overall risk management process.
+
+---
+
+[No unreadable regions detected.]

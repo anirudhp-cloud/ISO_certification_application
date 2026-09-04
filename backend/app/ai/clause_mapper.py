@@ -7,14 +7,14 @@
 # Why two calls rather than one over the combined 70 requirements: clauses 4-10 are
 # mandatory and carry no Annex B guidance, while Annex A controls are excludable and
 # carry 248 guidance points. Sending them together meant the clause evaluation was
-# instructed about a field that is always empty for clauses. The split costs ~5
-# tokens of input in total (3,472 + 10,884 vs 14,351 combined), because the catalogue
-# splits along with the prompt.
+# instructed about a field that is always empty for clauses. The split costs almost
+# nothing (5,306 + 9,741 tokens) because the catalogue splits along with the prompt.
 
 import logging
 
 from app.ai.openai_client import get_control_mappings
 from app.ai.requirement_catalog import split_by_segment
+from app.ai.scoring import is_mapped, normalise_evaluation
 from app.ai.schemas import ClauseEvaluation, SegmentedMapping
 from app.models.clause import Clause
 from app.models.document import Document
@@ -44,6 +44,38 @@ def _keep_known_codes(
             segment, document_name, len(dropped), ", ".join(sorted(e.requirement_code for e in dropped)),
         )
     return kept
+
+
+def _dedupe_codes(
+    evaluations: list[ClauseEvaluation], *, segment: str, document_name: str
+) -> list[ClauseEvaluation]:
+    """Collapse repeated requirement_codes down to the best-evidenced one.
+
+    One LLM call covers the whole segment, but requirement_code is free text on the
+    wire and the model does sometimes emit the same code twice for a document that
+    addresses a requirement in two places. `evidence_mappings` is unique on
+    (run_id, document_id, clause_id), so a duplicate pair used to raise
+    UniqueViolation — and because run_gap_analysis.py isolates each document in its
+    own try/except, that rolled back the ENTIRE document, silently costing the run
+    every mapping that document had. Keeping the highest-coverage entry preserves the
+    strongest evidence and makes the collision a log line instead of a lost document.
+    """
+    best: dict[str, ClauseEvaluation] = {}
+    duplicates: list[str] = []
+    for evaluation in evaluations:
+        existing = best.get(evaluation.requirement_code)
+        if existing is None:
+            best[evaluation.requirement_code] = evaluation
+            continue
+        duplicates.append(evaluation.requirement_code)
+        if (evaluation.coverage_score or 0) > (existing.coverage_score or 0):
+            best[evaluation.requirement_code] = evaluation
+    if duplicates:
+        logger.warning(
+            "%s pass on %s: collapsed %d duplicate mapping(s), kept highest coverage per code: %s",
+            segment, document_name, len(duplicates), ", ".join(sorted(set(duplicates))),
+        )
+    return list(best.values())
 
 
 def map_document(
@@ -87,15 +119,33 @@ def map_document(
             label=document.document_name,
         )
         result.prompt_versions[segment] = prompt_version
+        obligation_totals = {c.code: len(c.obligations or []) for c in segment_clauses}
+
+        kept = _keep_known_codes(
+            mapping_result.mappings,
+            {c.code for c in segment_clauses},
+            segment=segment,
+            document_name=document.document_name,
+        )
+        # Score each evaluation from its verdicts BEFORE deduping, since dedupe now
+        # compares computed coverage.
+        scored = [
+            normalise_evaluation(e, obligation_totals.get(e.requirement_code, 0)) for e in kept
+        ]
+        # A document maps to a requirement only if it satisfies an obligation. The
+        # model is told to omit an all-unmet requirement, but this enforces it rather
+        # than trusting it — an all-unmet mapping would otherwise store a 0% row that
+        # reads as "assessed and found lacking" when nothing was evidenced at all.
+        mapped = [e for e in scored if is_mapped(e)]
+        if len(mapped) != len(scored):
+            logger.info(
+                "%s pass on %s: dropped %d requirement(s) with no satisfied obligation",
+                segment, document.document_name, len(scored) - len(mapped),
+            )
         setattr(
             result,
             f"{segment}s",
-            _keep_known_codes(
-                mapping_result.mappings,
-                {c.code for c in segment_clauses},
-                segment=segment,
-                document_name=document.document_name,
-            ),
+            _dedupe_codes(mapped, segment=segment, document_name=document.document_name),
         )
 
     logger.info(

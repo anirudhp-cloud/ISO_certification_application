@@ -1,0 +1,50 @@
+Certainly! Here is the content from the page, set out as requested:
+
+---
+
+**Implementation guidance**
+
+Responsible development for AI system processes should include consideration of, without limitation, the following:
+
+- life cycle stages (a generic AI system life cycle model is provided by ISO/IEC 22989, but the organization can specify their own life cycle stages);
+- testing requirements and planned means for testing;
+- human oversight requirements, including processes and tools, especially when the AI system can impact natural persons;
+- at what stages AI system impact assessments should be performed;
+- training data expectations and rules (e.g. what data can be used, approved data suppliers and labelling);
+- expertise (subject matter domain or other) required or training for developers of AI systems or both;
+- release criteria;
+- approvals and sign-offs necessary at various stages;
+- change control;
+- usability and controllability;
+- engagement of interested parties.
+
+The specific design and development processes depend on the functionality and the AI technologies that are intended to be used for the AI system.
+
+---
+
+**B.6.2 AI system life cycle**
+
+**B.6.2.1 Objective**
+
+To define the criteria and requirements for each stage of the AI system life cycle.
+
+---
+
+**B.6.2.2 AI system requirements and specification**
+
+**Control**
+
+The organization should specify and document requirements for new AI systems or material enhancements to existing systems.
+
+**Implementation guidance**
+
+The organization should document the rationale for developing an AI system and its goals. Some of the factors that should be considered, documented and understood can include:
+
+a) why the AI system is to be developed, for example, is this driven by a business case, customer request or by government policy;
+b) how the model can be trained and how data requirements can be achieved.
+
+AI system requirements should be specified and should span the entire AI system life cycle. Such requirements should be revisited in cases where the developed AI system is unable to operate as intended or new information arises that can be used to change and to improve the requirements. For instance, it can become unfeasible from a financial perspective to develop the AI system.
+
+---
+
+There are no NOTES on this page.

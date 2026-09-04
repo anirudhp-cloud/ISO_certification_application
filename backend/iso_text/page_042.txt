@@ -1,0 +1,44 @@
+Certainly! Here is the content from the page, set out as requested:
+
+---
+
+**Implementation guidance**
+
+Each minimum activity for operation and monitoring can take account of various considerations. For example:
+
+- System and performance monitoring can include monitoring for general errors and failures, as well as for whether the system is performing as expected with production data. Technical performance criteria can include success rates in resolving problems or in achieving tasks, or confidence rates. Other criteria can be related to meeting commitment or expectation and needs of interested parties, including, for example, ongoing monitoring to ensure compliance with customer requirements or applicable legal requirements.
+
+- Some deployed AI systems evolve their performance as a result of ML, where production data and output data are used to further train the ML model. Where continuous learning is used, the organization should monitor the performance of the AI system to ensure that it continues to meet its design goals and operates on production data as intended.
+
+- The performance of some AI systems can change even if such systems do not use continuous learning, usually due to concept or data drift in production data. In such cases, monitoring can identify the need for retraining to ensure that the AI system continues to meet its design goals and operates on production data as intended. More information can be found in ISO/IEC 23053.
+
+- Repairs can include responses to errors and failures in the system. The organization should have processes in place for the response and repair of these issues. Additionally, updates can be necessary as the system evolves or as critical issues are identified, or as the result of externally identified issues (e.g. non-compliance with customer expectations or legal requirement). There should be processes in place for updating the system including components affected, update schedule, information to users on what is included in the update.
+
+- System updates can also include changes in the system operation, new or modified intended uses, or other changes in system functionality. The organization should have procedures in place to address operational changes, including communication to users.
+
+- Support for the system can be internal, external, or both, depending on the needs of the organization and how the system was acquired. Support processes should consider how users can contact the appropriate help, how issues and incidents are reported, support service level agreements and metrics.
+
+- Where AI systems are being used for purposes other than those for which they were designed or in ways that were not anticipated, the appropriateness of such uses should be considered.
+
+- AI-specific information security threats related to the AI systems applied and developed by the organization should be identified. AI-specific information security threats include, but are not limited to data poisoning, model stealing and model inversion attacks.
+
+---
+
+**Other information**
+
+The organization should consider operational performance that can affect interested parties and consider this when designing and determining performance criteria.
+
+Performance criteria for AI systems in operation should be determined by the task under consideration, such as classification, regression, ranking, clustering or dimensionality reduction.
+
+Performance criteria can include statistical aspects such as error rates and processing duration. For each criterion, the organization should identify all relevant metrics as well as interdependences between metrics. For each metric, the organization should consider acceptable values based on, for example, domain expert’s recommendations and analysis of expectations of interested parties relative to existing non-AI practices.
+
+For example, an organization can determine that the F₁ score is an appropriate performance metric based on its assessment of the impact of false positives and false negatives, as described in [illegible].
+
+---
+
+**NOTES:**  
+No explicit NOTE statements are visible on this page.
+
+---
+
+If you need more pages or specific clauses, please upload them!

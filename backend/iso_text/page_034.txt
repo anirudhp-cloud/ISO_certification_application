@@ -1,0 +1,54 @@
+Certainly! Here is the content from the page, set out as requested:
+
+---
+
+**Implementation guidance**
+
+Information about system and computing resources for an AI system can include but is not limited to:
+- resource requirements of the AI system (i.e. to help ensure the system can run on constrained resource devices);
+- where the system and computing resources are located (e.g. on-premises, cloud computing or edge computing);
+- processing resources (including network and storage);
+- the impact of the hardware used to run the AI system workloads (e.g. the impact to the environment either through use or the manufacturing of the hardware or cost of using the hardware).
+
+The organization should consider that different resources can be required to allow continual improvement of AI systems. Development, deployment and operation of the system can have different system needs and requirements.
+
+**NOTE**  
+ISO/IEC 22989 describes various system resource considerations.
+
+---
+
+**B.4.6 Human resources**
+
+**Control**
+
+As part of resource identification, the organization should document information about the human resources and their competences utilized for the development, deployment, operation, change management, maintenance, transfer and decommissioning, as well as verification and integration of the AI system.
+
+**Implementation guidance**
+
+The organization should consider the need for diverse expertise and include the types of roles necessary for the system. For example, the organization can include specific demographic groups related to data sets used to train machine learning models, if their inclusion is a necessary component of the system design. Necessary human resources can include but are not limited to:
+- data scientists;
+- roles related to human oversight of AI systems;
+- experts on trustworthiness topics such as safety, security and privacy;
+- AI researchers and specialists, and domain experts relevant to the AI systems.
+
+Different resources can be necessary at different stages of the AI system life cycle.
+
+---
+
+**B.5 Assessing impacts of AI systems**
+
+**B.5.1 Objective**
+
+To assess AI system impacts to individuals or groups of individuals, or both, and societies affected by the AI system throughout its life cycle.
+
+---
+
+**B.5.2 AI system impact assessment process**
+
+**Control**
+
+The organization should establish a process to assess the potential consequences for individuals or groups of individuals, or both, and societies that can result from the AI system throughout its life cycle.
+
+---
+
+Page number: 26

@@ -1,0 +1,5 @@
+This page is the **Bibliography** section of ISO/IEC 42001:2023.  
+It does **not** contain any clause/annex numbers, headings, requirements, guidance statements, or notes.  
+It is simply a list of referenced standards and documents.
+
+No requirements, guidance statements, or notes are present on this page.

@@ -1,0 +1,32 @@
+Certainly! Here is the content from the page, set out as requested:
+
+---
+
+**B.5.5 Assessing societal impacts of AI systems**
+
+**Control**
+
+The organization should assess and document the potential societal impacts of their AI systems throughout their life cycle.
+
+**Implementation guidance**
+
+Societal impacts can vary widely depending on the organization's context and the types of AI systems.  
+The societal impacts of AI systems can be both beneficial and detrimental. Examples of these potential societal impacts can include:
+
+— environment sustainability (including the impacts on natural resources and greenhouse gas emissions);
+— economic (including access to financial services, employment opportunities, taxes, trade and commerce);
+— government (including legislative processes, misinformation for political gain, national security and criminal justice systems);
+— health and safety (including access to healthcare, medical diagnosis and treatment, and potential physical and psychological harms);
+— norms, traditions, culture and values (including misinformation that leads to biases or harms to individuals or groups of individuals, or both, and societies).
+
+**Other information**
+
+Development and use of AI systems can be computationally intensive with related impacts to environmental sustainability (e.g. greenhouse gas emissions due to increased power usage, impacts on water, land, flora and fauna). Likewise, AI systems can be used to improve the environmental sustainability of other systems (e.g. reduce greenhouse gas emissions related to buildings and transportation). The organization should consider the impacts of its AI systems in the context of its overall environmental sustainability goals and strategies.
+
+The organization should consider how its AI systems can be misused to create societal harms and how they can be used to address historical harms. For example, can AI systems prevent access to financial services such as loans, grants, insurance and investments and likewise can AI systems improve access to these instruments?
+
+AI systems have been used to influence the outcomes of elections and to create misinformation (e.g. deepfakes in digital media) that can lead to political and social unrest. Government's use of AI systems for criminal-justice purposes has exposed the risk of biases to societies, individuals or groups of individuals, or both.
+
+---
+
+If you need any other pages or sections, let me know!

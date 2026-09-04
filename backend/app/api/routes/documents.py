@@ -6,11 +6,19 @@ import zipfile
 from dataclasses import dataclass
 from io import BytesIO
 
-from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile
+from fastapi import APIRouter, Depends, File, Form, HTTPException, Response, UploadFile
 from sqlalchemy.orm import Session
 
 from app.ai.requirement_catalog import split_by_segment
+from app.ai.scoring import format_fraction
 from app.extraction.document_extraction import SUPPORTED_EXTENSIONS
+from app.extraction.document_preview import (
+    PreviewUnavailable,
+    build_preview,
+    highlight_all,
+    can_preview,
+    highlight_quote,
+)
 from app.crud.document import (
     add_document_version,
     create_document,
@@ -38,14 +46,17 @@ from app.schemas.document import (
     SkippedZipEntry,
     ZipUploadResult,
 )
-from app.schemas.document_extraction import DocumentExtractionRead
+from app.schemas.document_extraction import (
+    DocumentExtractionRead,
+    DocumentPreviewInfoRead,
+)
 from app.schemas.evidence_mapping import (
     DocumentMappingsRead,
     RequirementMappingRead,
     SegmentMappingsRead,
 )
 from app.storage.local import LocalStorageBackend
-from app.tasks.extract_document import run_extraction
+from app.tasks.extract_document import _read_document_bytes, run_extraction
 
 logger = logging.getLogger(f"iso_platform.{__name__}")
 router = APIRouter()
@@ -437,8 +448,12 @@ def get_document_mappings(
                 code=row.clause.code,
                 title=row.clause.title,
                 category=row.clause.category,
-                relevance_score=float(row.relevance_score) if row.relevance_score is not None else None,
                 coverage_score=float(row.coverage_score) if row.coverage_score is not None else None,
+                fraction=format_fraction(
+                    row.obligation_verdicts or [], len(row.clause.obligations or [])
+                ),
+                obligations_total=len(row.clause.obligations or []),
+                obligation_verdicts=row.obligation_verdicts or [],
                 rationale=row.rationale,
                 source_location=row.source_location,
                 unmet_guidance_points=row.unmet_guidance_points or [],
@@ -479,3 +494,195 @@ def delete_document_group(
     soft_delete_document_group(db, document_group_id=document_group_id, deleted_by=current_user.id)
     logger.info("document group %s deleted by %s", document_group_id, current_user.id)
     return {"status": "deleted"}
+
+
+@router.get("/documents/{document_id}/file")
+def get_document_file(
+    document_id: uuid.UUID,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_auditor_document_access),
+):
+    """The original file, unchanged.
+
+    Serves the browser's own PDF viewer for .pdf, and backs "open the original" for
+    the formats no browser can render (.pptx, .xlsx) — where a faithful download beats
+    a bad approximation.
+    """
+    document = get_document(db, document_id)
+    if document is None:
+        raise HTTPException(status_code=404, detail="Document not found")
+
+    try:
+        content = _read_document_bytes(document)
+    except OSError as exc:
+        raise HTTPException(status_code=404, detail=f"Stored file is unreadable: {exc}")
+
+    extension = document.file_name.rsplit(".", 1)[-1].lower()
+    return Response(
+        content=content,
+        media_type=_CONTENT_TYPES.get(extension, "application/octet-stream"),
+        headers={
+            # inline so a PDF opens in the viewer rather than downloading; the
+            # filename is still offered for an explicit save.
+            "Content-Disposition": f'inline; filename="{document.file_name}"'
+        },
+    )
+
+
+def _satisfying_passages(db: Session, document_id: uuid.UUID) -> list[dict]:
+    """Every passage in one document that satisfied an obligation, labelled with the
+    requirement and obligation it evidences.
+
+    Only met and partial verdicts have a quote — an unmet obligation has no passage
+    to point at, so it contributes nothing here rather than an approximate location.
+    Deduplicated on the quote text, because one passage can legitimately evidence
+    obligations under two different requirements and highlighting it twice would
+    just double the annotation.
+    """
+    passages: list[dict] = []
+    seen: set[str] = set()
+    for mapping in list_for_document(db, document_id=document_id):
+        for verdict in mapping.obligation_verdicts or []:
+            quote = (verdict.get("quote") or "").strip()
+            if not quote or verdict.get("verdict") not in ("met", "partial"):
+                continue
+            obligation = verdict.get("obligation") or f"obligation {verdict.get('index')}"
+            label = f"{mapping.clause.code} ({verdict.get('verdict')}) — {obligation}"
+            if quote in seen:
+                # Same passage, another requirement: extend the label rather than
+                # stacking a second highlight over the first.
+                for existing in passages:
+                    if existing["quote"] == quote:
+                        existing["label"] += "\n" + label
+                        break
+                continue
+            seen.add(quote)
+            passages.append({"quote": quote, "label": label})
+    return passages
+
+
+@router.get("/documents/{document_id}/preview")
+def get_document_preview(
+    document_id: uuid.UUID,
+    quote: str | None = None,
+    all_evidence: bool = False,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_auditor_document_access),
+):
+    """The document itself, as a PDF, with the cited passage highlighted.
+
+    LibreOffice converts docx/pptx/xlsx to PDF with layout, tables and images intact,
+    and every browser renders PDF natively — so one code path serves every format and
+    what the auditor sees is the document, not a re-rendering of it.
+
+    Two earlier attempts were worse. A list of extraction chunks showed the parser's
+    view (`Table 1, row 2 | Document ID | AIMS-QMS-010`), which is not how a controlled
+    document is read. Converting docx to HTML kept headings and tables but lost page
+    layout, and offered nothing at all for a slide deck.
+
+    `X-Preview-Page` carries the 1-based page the quote was found on, so the client can
+    open the viewer there.
+    """
+    document = get_document(db, document_id)
+    if document is None:
+        raise HTTPException(status_code=404, detail="Document not found")
+
+    try:
+        pdf_path = build_preview(document.id, document.file_name, _read_document_bytes(document))
+        if all_evidence:
+            passages = _satisfying_passages(db, document_id)
+            content, located = highlight_all(pdf_path, passages)
+            found = [p for p in located if p["found"]]
+            page = found[0]["page"] if found else None
+            logger.info(
+                "preview(all) %s: %d of %d passage(s) located",
+                document.file_name, len(found), len(located),
+            )
+        else:
+            content, page = highlight_quote(pdf_path, quote)
+    except PreviewUnavailable as exc:
+        raise HTTPException(status_code=415, detail=str(exc))
+    except Exception as exc:
+        logger.exception("preview failed for %s", document.file_name)
+        raise HTTPException(status_code=500, detail=f"Could not build a preview: {exc}")
+
+    return Response(
+        content=content,
+        media_type="application/pdf",
+        headers={
+            "Content-Disposition": f'inline; filename="{document.file_name}.pdf"',
+            "X-Preview-Page": str(page or ""),
+            # so the client can read the page header
+            "Access-Control-Expose-Headers": "X-Preview-Page",
+        },
+    )
+
+
+@router.get("/documents/{document_id}/preview-info", response_model=DocumentPreviewInfoRead)
+def get_document_preview_info(
+    document_id: uuid.UUID,
+    quote: str | None = None,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_auditor_document_access),
+) -> DocumentPreviewInfoRead:
+    """Whether a preview can be shown, and which page the quote is on.
+
+    Split from the PDF itself so the viewer can decide what to render — and say why not
+    — without downloading the file twice.
+    """
+    document = get_document(db, document_id)
+    if document is None:
+        raise HTTPException(status_code=404, detail="Document not found")
+
+    if not can_preview(document.file_name):
+        return DocumentPreviewInfoRead(
+            document_id=document.id,
+            document_name=document.document_name,
+            file_name=document.file_name,
+            version_number=document.version_number,
+            available=False,
+            reason=(
+                "LibreOffice is not installed, so this format cannot be converted for "
+                "in-browser viewing. Open the original file instead."
+            ),
+            page=None,
+            preview_url=None,
+            file_url=f"/api/documents/{document.id}/file",
+        )
+
+    page = None
+    reason = None
+    try:
+        pdf_path = build_preview(document.id, document.file_name, _read_document_bytes(document))
+        _, page = highlight_quote(pdf_path, quote)
+        if quote and page is None:
+            reason = (
+                "The quoted passage could not be located in the rendered document — "
+                "the extracted text and the page layout can differ, e.g. a table cell "
+                "split across lines. The document is shown unmarked."
+            )
+    except Exception as exc:
+        logger.exception("preview info failed for %s", document.file_name)
+        return DocumentPreviewInfoRead(
+            document_id=document.id,
+            document_name=document.document_name,
+            file_name=document.file_name,
+            version_number=document.version_number,
+            available=False,
+            reason=f"Could not build a preview: {exc}",
+            page=None,
+            preview_url=None,
+            file_url=f"/api/documents/{document.id}/file",
+        )
+
+    return DocumentPreviewInfoRead(
+        document_id=document.id,
+        document_name=document.document_name,
+        file_name=document.file_name,
+        version_number=document.version_number,
+        available=True,
+        reason=reason,
+        page=page,
+        preview_url=f"/api/documents/{document.id}/preview",
+        file_url=f"/api/documents/{document.id}/file",
+    )

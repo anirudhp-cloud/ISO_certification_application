@@ -30,3 +30,6 @@ referance_documents_/
 
 # Generated artifacts
 full_prompt_iso42001.txt
+
+# Document preview conversion cache (LibreOffice temp profiles)
+backend/preview_cache/

@@ -10,7 +10,7 @@ import pytest
 
 from app.ai.clause_mapper import _keep_known_codes
 from app.ai.requirement_catalog import format_requirements_listing, split_by_segment
-from app.ai.schemas import ClauseEvaluation, SegmentedMapping
+from app.ai.schemas import ClauseEvaluation, ObligationVerdict, SegmentedMapping
 from prompt_library import CLAUSE, CONTROL, get_system_prompt, has_segment
 
 SEED = Path(__file__).resolve().parent.parent.parent / "seed_data" / "iso42001_requirements.json"
@@ -30,6 +30,10 @@ def _catalog() -> list[SimpleNamespace]:
             description=r.get("description"),
             evidence_requirements=r.get("evidence_requirements"),
             implementation_guidance=r.get("implementation_guidance"),
+            # Omitting this field here is how the prompt gap went unnoticed: the
+            # stand-in row had no obligations, so no test could observe that the
+            # formatter never printed them.
+            obligations=r.get("obligations"),
         )
         for i, r in enumerate(data["requirements"], start=1)
     ]
@@ -80,6 +84,40 @@ def test_control_listing_carries_annex_b_guidance(catalog):
     assert "The AI policy should be informed by business strategy." in listing
 
 
+def test_every_requirement_ships_its_numbered_obligations(catalog):
+    """The prompt asks for a verdict per obligation INDEX, so the indexed list has to
+    be in the prompt.
+
+    It wasn't. The obligations sat in the database driving every score while the model
+    was shown only title/description/evidence, and asked for {"index": n, ...} against
+    a list it had never seen. The result, across 668 stored mappings: every single one
+    answered index 0 and 544 answered nothing else — one holistic guess wearing an
+    obligation's clothes.
+    """
+    for segment in (CLAUSE, CONTROL):
+        requirements = split_by_segment(catalog)[segment]
+        listing = format_requirements_listing(requirements, segment)
+        assert "Obligations (judge each one separately" in listing
+        for requirement in requirements:
+            for index, text in enumerate(requirement.obligations or []):
+                assert f"[{index}] {text}" in listing, (
+                    f"{requirement.code} obligation {index} missing from the {segment} prompt"
+                )
+
+
+def test_obligation_indices_are_contiguous_from_zero(catalog):
+    """An index the model returns is looked up positionally (app/ai/rollup.py), so a
+    gap in the printed numbering would bind a verdict to the wrong obligation."""
+    for requirement in catalog:
+        listing = format_requirements_listing([requirement], requirement.requirement_type)
+        printed = [
+            int(line.strip()[1:].split("]")[0])
+            for line in listing.splitlines()
+            if line.strip().startswith("[")
+        ]
+        assert printed == list(range(len(requirement.obligations or [])))
+
+
 def test_splitting_the_catalogue_does_not_inflate_the_prompt(catalog):
     """The whole case for two passes is that it's free: the catalogue splits along
     with the prompt, so combined input size is unchanged."""
@@ -101,8 +139,8 @@ def test_each_segment_resolves_to_its_own_versioned_prompt():
     clause_prompt, clause_version = get_system_prompt("iso42001", CLAUSE)
     control_prompt, control_version = get_system_prompt("iso42001", CONTROL)
 
-    assert clause_version == "iso42001-clause-v1"
-    assert control_version == "iso42001-control-v1"
+    assert clause_version == "iso42001-clause-v3"
+    assert control_version == "iso42001-control-v3"
     assert clause_prompt != control_prompt
 
 
@@ -136,7 +174,10 @@ def test_unknown_standard_and_segment_are_rejected():
 
 
 def _evaluation(code: str) -> ClauseEvaluation:
-    return ClauseEvaluation(requirement_code=code, relevance_score=80, coverage_score=70, rationale="q")
+    return ClauseEvaluation(
+        requirement_code=code,
+        obligations=[ObligationVerdict(index=0, verdict="met", quote="q")],
+    )
 
 
 def test_codes_outside_the_segment_catalogue_are_dropped(caplog):

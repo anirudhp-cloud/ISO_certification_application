@@ -1,0 +1,10 @@
+Certainly! Here is the content from the page as plain text, following your instructions:
+
+---
+C.3.7 Technology readiness
+
+Risk sources can be related to less mature technology due to unknown factors (e.g. system limitations and boundary conditions, performance drift), but also due to the more mature technology due to technology complacency.
+
+---
+
+There are no NOTES or additional requirement/guidance statements on this page.

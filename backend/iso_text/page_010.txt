@@ -1,0 +1,38 @@
+Certainly! Here is the content from the page, set out as requested:
+
+---
+
+**3.3 top management**  
+person or group of people who directs and controls an organization (3.1) at the highest level  
+Note 1 to entry: Top management has the power to delegate authority and provide resources within the organization.  
+Note 2 to entry: If the scope of the management system (3.4) covers only part of an organization, then top management refers to those who direct and control that part of the organization.
+
+**3.4 management system**  
+set of interrelated or interacting elements of an organization (3.1) to establish policies (3.5) and objectives (3.6), as well as processes (3.8) to achieve those objectives  
+Note 1 to entry: A management system can address a single discipline or several disciplines.  
+Note 2 to entry: The management system elements include the organization’s structure, roles and responsibilities, planning and operation.
+
+**3.5 policy**  
+intentions and direction of an organization (3.1) as formally expressed by its top management (3.3)
+
+**3.6 objective**  
+result to be achieved  
+Note 1 to entry: An objective can be strategic, tactical, or operational.  
+Note 2 to entry: Objectives can relate to different disciplines (such as finance, health and safety, and environment). They can be, for example, organization-wide or specific to a project, product or process (3.8).  
+Note 3 to entry: An objective can be expressed in other ways, e.g. as an intended result, as a purpose, as an operational criterion, as an AI objective or by the use of other words with similar meaning (e.g. aim, goal, or target).  
+Note 4 to entry: In the context of AI management systems (3.4), AI objectives are set by the organization (3.1), consistent with the AI policy (3.5), to achieve specific results.
+
+**3.7 risk**  
+effect of uncertainty  
+Note 1 to entry: An effect is a deviation from the expected — positive or negative.  
+Note 2 to entry: Uncertainty is the state, even partial, of deficiency of information related to, understanding or knowledge of, an event, its consequence, or likelihood.  
+Note 3 to entry: Risk is often characterized by reference to potential events (as defined in ISO Guide 73) and consequences (as defined in ISO Guide 73), or a combination of these.  
+Note 4 to entry: Risk is often expressed in terms of a combination of the consequences of an event (including changes in circumstances) and the associated likelihood (as defined in ISO Guide 73) of occurrence.
+
+**3.8 process**  
+set of interrelated or interacting activities that uses or transforms inputs to deliver a result  
+Note 1 to entry: Whether the result of a process is called an output, a product or a service depends on the context of the reference.
+
+---
+
+Let me know if you need further formatting or additional pages!

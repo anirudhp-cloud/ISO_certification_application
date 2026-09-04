@@ -1,0 +1,46 @@
+The organization shall retain documented information on actions taken to identify and address AI risks and AI opportunities.
+
+NOTE 3  Guidance on how to implement risk management for organizations developing, providing or using AI products, systems and services is provided in ISO/IEC 23894.
+
+NOTE 4  The context of the organization and its activities can have an impact on the organization’s risk management activities.
+
+NOTE 5  The way of defining risk and therefore of envisioning risk management can vary across sectors and industries. The definition of risk in 3.7 allows a broad vision of risk adaptable to any sector, such as the sectors mentioned in Annex D. In any case, it is the role of the organization, as part of risk assessment, to first adopt a vision of risk adapted to its context. This can include approaching risk through definitions used in sectors where the AI system is developed for and used, such as the definition from ISO/IEC Guide 51.
+
+6.1.2  AI risk assessment
+
+The organization shall define and establish an AI risk assessment process that:
+
+a) is informed by and aligned with the AI policy (see 5.2) and AI objectives (see 6.2);
+
+NOTE  When assessing the consequences as part of 6.1.2 d) 1), the organization can utilize an AI system impact assessment as indicated in 6.1.4.
+
+b) is designed such that repeated AI risk assessments can produce consistent, valid and comparable results;
+
+c) identifies risks that aid or prevent achieving its AI objectives;
+
+d) analyses the AI risks to:
+ 1) assess the potential consequences to the organization, individuals and societies that would result if the identified risks were to materialize;
+ 2) assess, where applicable, the realistic likelihood of the identified risks;
+ 3) determine the levels of risk;
+
+e) evaluates the AI risks to:
+ 1) compare the results of the risk analysis with the risk criteria (see 6.1.1);
+ 2) prioritize the assessed risks for risk treatment.
+
+The organization shall retain documented information about the AI risk assessment process.
+
+6.1.3  AI risk treatment
+
+Taking the risk assessment results into account, the organization shall define an AI risk treatment process to:
+
+a) select appropriate AI risk treatment options;
+
+b) determine all controls that are necessary to implement the AI risk treatment options chosen and compare the controls with those in Annex A to verify that no necessary controls have been omitted;
+
+NOTE 1  Annex A provides reference controls for meeting organizational objectives and addressing risks related to the design and use of AI systems.
+
+c) consider the controls from Annex A that are relevant for the implementation of the AI risk treatment options;
+
+d) identify if additional controls are necessary beyond those in Annex A in order to implement all risk treatment options;
+
+© ISO/IEC 2023 – All rights reserved

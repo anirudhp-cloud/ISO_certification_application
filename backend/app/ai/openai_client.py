@@ -1,4 +1,9 @@
-# Wraps Azure OpenAI GPT-4.1 mini calls — JSON-mode, retries, prompt-caching setup.
+# Wraps Azure OpenAI GPT-4.1 calls — JSON-mode, retries, prompt-caching setup.
+#
+# One call shape only: the map step, once per (document, segment). The reduce call
+# that merged several documents into a prose narrative was removed once obligation
+# verdicts made that merge arithmetic (see app/ai/rollup.py) — it cost ~70 requests
+# and ~$0.45 per run to produce text that could not be located in any document.
 
 import json
 import logging
@@ -12,11 +17,10 @@ from pydantic import ValidationError
 from app.ai.cost_tracker import record_current
 from app.ai.pricing import estimate_cost_usd
 from app.ai.requirement_catalog import format_requirements_listing
-from app.ai.schemas import CombinedEvaluation, MappingResult
+from app.ai.schemas import MappingResult
 from app.config import settings
 from app.models.clause import Clause
 from prompt_library import get_system_prompt
-from prompt_library.reduce_prompt import REDUCE_SYSTEM_PROMPT, build_reduce_user_message
 
 logger = logging.getLogger(f"iso_platform.{__name__}")
 MAX_ATTEMPTS = 3
@@ -130,6 +134,13 @@ def get_control_mappings(
         response = _client.chat.completions.create(
             model=settings.llm_deployment,
             response_format={"type": "json_object"},
+            # temperature=0 and a fixed seed because this is an assessment, not
+            # generation. At the API default (1.0) the same document and requirement
+            # could return a different verdict on every run, so two runs of the same
+            # evidence were not comparable and a re-run could silently change a
+            # finding. Determinism is a precondition for an auditable result.
+            temperature=0,
+            seed=settings.llm_seed,
             messages=[
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": document_text},
@@ -146,42 +157,4 @@ def get_control_mappings(
 
     raise RuntimeError(
         f"LLM did not return valid {segment} mapping JSON after {MAX_ATTEMPTS} attempts"
-    ) from last_error
-
-
-def combine_contributions(
-    clause_code: str,
-    clause_title: str,
-    clause_description: str | None,
-    contributions: list[dict],
-) -> CombinedEvaluation:
-    """
-    Merge 2+ documents' independent evaluations of the same requirement into
-    one combined assessment. Only called when a requirement has more than one
-    contributing document — see app/ai/aggregator.py.
-    """
-    user_message = build_reduce_user_message(clause_code, clause_title, clause_description, contributions)
-    _dump_prompt(f"reduce__{clause_code}", REDUCE_SYSTEM_PROMPT, user_message)
-
-    last_error: Exception | None = None
-    for _ in range(MAX_ATTEMPTS):
-        response = _client.chat.completions.create(
-            model=settings.llm_deployment,
-            response_format={"type": "json_object"},
-            messages=[
-                {"role": "system", "content": REDUCE_SYSTEM_PROMPT},
-                {"role": "user", "content": user_message},
-            ],
-        )
-        raw = response.choices[0].message.content
-        _dump_output(f"reduce__{clause_code}", raw)
-        _record_usage(f"reduce__{clause_code}", response)
-        try:
-            return CombinedEvaluation.model_validate(json.loads(raw))
-        except (json.JSONDecodeError, ValidationError) as exc:
-            last_error = exc
-            continue
-
-    raise RuntimeError(
-        f"LLM did not return valid combine JSON after {MAX_ATTEMPTS} attempts"
     ) from last_error

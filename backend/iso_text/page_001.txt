@@ -1,0 +1,27 @@
+The page you provided is the cover page of ISO/IEC 42001:2023. It does **not** contain any clause or annex numbers, headings, requirements, guidance statements, or notes. 
+
+Here is the content as plain text, exactly as printed:
+
+---
+
+BS ISO/IEC 42001:2023  
+ISO/IEC 42001  
+INTERNATIONAL STANDARD  
+First edition  
+2023-12  
+
+Information technology — Artificial intelligence — Management system  
+Technologies de l’information — Intelligence artificielle — Système de management  
+
+Copyrighted Document  
+For Training Purposes Only  
+
+ISO IEC  
+
+Reference number  
+ISO/IEC 42001:2023(E)  
+© ISO/IEC 2023  
+
+---
+
+No requirements, guidance statements, or notes are present on this page. If you provide a page with actual clauses or annexes, I can extract those as requested.

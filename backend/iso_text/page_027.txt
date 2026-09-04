@@ -1,0 +1,40 @@
+Table A.1 (continued)
+
+| A.6.2.6 | AI system operation and monitoring | The organization shall define and document the necessary elements for the ongoing operation of the AI system. At the minimum, this should include system and performance monitoring, repairs, updates and support. |
+|---------|-----------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| A.6.2.7 | AI system technical documentation | The organization shall determine what AI system technical documentation is needed for each relevant category of interested parties, such as users, partners, supervisory authorities, and provide the technical documentation to them in the appropriate form. |
+| A.6.2.8 | AI system recording of event logs | The organization shall determine at which phases of the AI system life cycle, record keeping of event logs should be enabled, but at the minimum when the AI system is in use. |
+
+A.7 Data for AI systems
+
+Objective: To ensure that the organization understands the role and impacts of data in AI systems in the application and development, provision or use of AI systems throughout their life cycles.
+
+| Topic | Control |
+|-------|---------|
+| A.7.2 | Data for development and enhancement of AI system | The organization shall define, document and implement data management processes related to the development of AI systems. |
+| A.7.3 | Acquisition of data | The organization shall determine and document details about the acquisition and selection of the data used in AI systems. |
+| A.7.4 | Quality of data for AI systems | The organization shall define and document requirements for data quality and ensure that data used to develop and operate the AI system meet those requirements. |
+| A.7.5 | Data provenance | The organization shall define and document a process for recording the provenance of data used in its AI systems over the life cycles of the data and the AI system. |
+| A.7.6 | Data preparation | The organization shall define and document its criteria for selecting data preparations and the data preparation methods to be used. |
+
+A.8 Information for interested parties of AI systems
+
+Objective: To ensure that relevant interested parties have the necessary information to understand and assess the risks and their impacts (both positive and negative).
+
+| Topic | Control |
+|-------|---------|
+| A.8.2 | System documentation and information for users | The organization shall determine and provide the necessary information to users of the AI system. |
+| A.8.3 | External reporting | The organization shall provide capabilities for interested parties to report adverse impacts of the AI system. |
+| A.8.4 | Communication of incidents | The organization shall determine and document a plan for communicating incidents to users of the AI system. |
+| A.8.5 | Information for interested parties | The organization shall determine and document their obligations to reporting information about the AI system to interested parties. |
+
+A.9 Use of AI systems
+
+Objective: To ensure that the organization uses AI systems responsibly and per organizational policies.
+
+| Topic | Control |
+|-------|---------|
+| A.9.2 | Processes for responsible use of AI systems | The organization shall define and document the processes for the responsible use of AI systems. |
+| A.9.3 | Objectives for responsible use of AI system | The organization shall identify and document objectives to guide the responsible use of AI systems. |
+
+© ISO/IEC 2023 – All rights reserved

@@ -141,6 +141,9 @@ def start_run(
 
     run.skipped_documents = skipped or None
     run.status = "coverage_ready"
+    # Clear any message left by a stale-run sweep that fired while this was still
+    # executing — a completed run must not carry a failure explanation.
+    run.error_message = None
     run.completed_at = _now(db)
     run.prompt_version_clause = prompt_versions.get("clause")
     run.prompt_version_control = prompt_versions.get("control")

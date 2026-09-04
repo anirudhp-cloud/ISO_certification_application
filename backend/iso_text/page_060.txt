@@ -1,0 +1,17 @@
+Certainly! Here is the content from the page as plain text, with clause/annex numbers and headings exactly as printed, every requirement or guidance statement, and every NOTE. Unreadable regions are marked as [illegible].
+
+---
+
+BS ISO/IEC 42001:2023  
+ISO/IEC 42001:2023(E)
+
+[24] ISO 31000:2018, Risk management — Guidelines  
+[25] ISO 37002, Whistleblowing management systems — Guidelines  
+[26] ISO/IEC 38500:2015, Information technology — Governance of IT for the organization  
+[27] ISO/IEC 38507, Information technology — Governance of IT — Governance implications of the use of artificial intelligence by organizations  
+[28] Lifecycle D.D.I. 3.3, 2020-04-15. Data Documentation Initiative (DDI) Alliance. [viewed on 2022-02-19]. Available at: https://ddialliance.org/Specification/DDI-Lifecycle/3.3/  
+[29] Risk Framework N.I.S.T.-A.I.1.10, 2023-01-26. National Institute of Technology (NIST) [viewed on 2023-04-17] https://www.nist.gov/itl/ai-risk-management-framework
+
+---
+
+There are no clause/annex numbers, headings, requirements, guidance statements, or NOTES on this page. The content consists solely of references. If you need another page processed, please upload it.

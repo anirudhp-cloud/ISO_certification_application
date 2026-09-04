@@ -1,0 +1,40 @@
+Certainly! Here is the content from the page, set out as requested:
+
+---
+
+**Annex C** provides examples of organizational objectives for managing risk, which can be useful in determining the objectives for AI system use.
+
+**B.9.4 Intended use of the AI system**
+
+**Control**
+The organization should ensure that the AI system is used according to the intended uses of the AI system and its accompanying documentation.
+
+**Implementation guidance**
+The AI system should be deployed according to the instructions and other documentation associated with the AI system (see B.8.2).  
+The deployment can require specific resources to support the deployment, including the need to ensure that human oversight is applied as required (see B.9.3).  
+It can be necessary that for acceptable use of the AI system, the data that the AI system is used on aligns with the documentation associated with the AI system to ensure that the AI system performance is accurate.  
+The operation of the AI system should be monitored (see B.6.2.5).  
+Where the correct deployment of the AI system according to its associated instructions causes concern regarding the impact to relevant interested parties or the organization’s legal requirements, the organization should communicate its concerns to the relevant personnel inside the organization as well as to any third-party suppliers of the AI system.  
+The organization should keep event logs or other documentation related to the deployment and operation of the AI system which can be used to demonstrate that the AI system is being used as intended or to help with communicating concerns related to the intended use of the AI system.  
+The time period during which event logs and other documentation are kept depends on the intended use of the AI system, the organization’s data retention policies and relevant legal requirements for data retention.
+
+**B.10 Third-party and customer relationships**
+
+**B.10.1 Objective**
+To ensure that the organization understands its responsibilities and remains accountable, and risks are appropriately apportioned when third parties are involved at any stage of the AI system life cycle.
+
+**B.10.2 Allocating responsibilities**
+
+**Control**
+The organization should ensure that responsibilities within their AI system life cycle are allocated between the organization, its partners, suppliers, customers and third parties.
+
+**Implementation guidance**
+In an AI system life cycle, responsibilities can be split between parties providing data, parties providing algorithms and models, parties developing or using the AI system and being accountable with regard to some or all interested parties.  
+The organization should document all parties intervening in the AI system life cycle and their roles and determine their responsibilities.  
+Where the organization supplies an AI system to a third party, the organization should ensure that it takes a responsible approach to developing the AI system. See the controls and guidance in B.6.  
+The organization should be able to provide the necessary documentation (see B.6.2.7 and B.8.2) for the AI system.
+
+---
+
+There are no NOTES visible on this page.  
+[illegible] marks are not needed for this page.

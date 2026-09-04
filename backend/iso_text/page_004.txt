@@ -1,0 +1,20 @@
+Certainly! Here is the content from the page as plain text, with clause/annex numbers and headings exactly as printed, and every requirement or guidance statement (none are present on this page), and every NOTE (none are present on this page). Unreadable regions are marked as [illegible].
+
+---
+
+BS ISO/IEC 42001:2023  
+ISO/IEC 42001:2023(E)
+
+Annex B (normative) Implementation guidance for AI controls ..................................................... 21  
+Annex C (informative) Potential AI-related organizational objectives and risk sources ............ 46  
+Annex D (informative) Use of the AI management system across domains or sectors ............. 49  
+Bibliography ............................................................................................................................. 51
+
+[illegible watermark: Copyrighted Document For Training Purposes Only]
+
+iv  
+© ISO/IEC 2023 – All rights reserved
+
+---
+
+No requirements, guidance statements, or NOTES are present on this page.

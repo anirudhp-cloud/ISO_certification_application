@@ -19,6 +19,17 @@ from app.models.document import Document
 from app.models.evidence_mapping import EvidenceMapping
 
 
+_VERDICT_RANK = {"met": 2, "partial": 1, "unmet": 0}
+
+
+def _strongest_quote(verdicts: list[dict]) -> str | None:
+    quoted = [v for v in verdicts if v.get("quote") and v.get("verdict") in ("met", "partial")]
+    if not quoted:
+        return None
+    quoted.sort(key=lambda v: _VERDICT_RANK.get(v.get("verdict", ""), 0), reverse=True)
+    return quoted[0]["quote"]
+
+
 def record_mappings(
     db: Session,
     *,
@@ -47,15 +58,34 @@ def record_mappings(
                 # clause_mapper already drops and logs unknown codes; this is a
                 # second guard so a bad code can never become an orphan row.
                 continue
+            # Each obligation's own quote gets its own location, so the UI can link
+            # every line of the reasoning to a passage rather than only the summary.
+            verdicts = [
+                {
+                    "index": v.index,
+                    "obligation": (clause.obligations or [])[v.index]
+                    if v.index < len(clause.obligations or [])
+                    else None,
+                    "verdict": v.verdict,
+                    "quote": v.quote,
+                    "source_location": locate_quote(chunks, v.quote) if v.quote else None,
+                }
+                for v in evaluation.obligations
+            ]
+            # The summary quote is derived here rather than read off the evaluation,
+            # so this function doesn't depend on normalise_evaluation having run first.
+            # It's the strongest verdict's passage — used for the one-line preview and
+            # the citation lookup, never as the justification on its own.
+            summary_quote = evaluation.rationale or _strongest_quote(verdicts)
             row = EvidenceMapping(
                 run_id=run_id,
                 document_id=document_id,
                 clause_id=clause.id,
                 segment=segment,
-                relevance_score=evaluation.relevance_score,
                 coverage_score=evaluation.coverage_score,
-                rationale=evaluation.rationale,
-                source_location=locate_quote(chunks, evaluation.rationale),
+                obligation_verdicts=verdicts or None,
+                rationale=summary_quote,
+                source_location=locate_quote(chunks, summary_quote),
                 unmet_guidance_points=evaluation.unmet_guidance_points or None,
             )
             db.add(row)

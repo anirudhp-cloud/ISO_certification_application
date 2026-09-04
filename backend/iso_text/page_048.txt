@@ -1,0 +1,38 @@
+Certainly! Here is the content from the page as plain text, with clause/annex numbers and headings exactly as printed, every requirement or guidance statement, and every NOTE. Unreadable regions are marked as [illegible].
+
+---
+
+— how and when to override the system;
+— technical requirements for system operation, including the computational resources needed, and limitations of the system as well as its expected lifetime;
+— needs for human oversight;
+— information about accuracy and performance;
+— relevant information from the impact assessment, including potential benefits and harms, particularly if they are applicable in specific contexts or certain demographic groups (see B.5.2 and B.5.4);
+— revisions to claims about the system’s benefits;
+— updates and changes in how the system works, as well as any necessary maintenance measures, including their frequency;
+— contact information;
+— educational materials for system use.
+
+Criteria used by the organization to determine whether and what information is to be provided should be documented. Relevant criteria include but are not limited to the intended use and reasonably foreseeable misuse of the AI system, the expertise of the user and specific impact of the AI system.
+
+Information can be provided to users in numerous ways, including documented instructions for use, alerts and other notifications built into the system itself, information on a web page, etc. Depending on which methods the organization uses to provide information, it should validate that the users have access to this information, and that the information provided is complete, up to date and accurate.
+
+**B.8.3 External reporting**
+
+**Control**
+The organization should provide capabilities for interested parties to report adverse impacts of the system.
+
+**Implementation guidance**
+While the system operation should be monitored for reported issues and failures, the organization should also provide capabilities for users or other external parties to report adverse impacts (e.g. unfairness).
+
+**B.8.4 Communication of incidents**
+
+**Control**
+The organization should determine and document a plan for communicating incidents to users of the system.
+
+**Implementation guidance**
+Incidents related to the AI system can be specific to the AI system itself, or related to information security or privacy (e.g. a data breach). The organization should understand its obligations around notifying users and other interested party about incidents, depending on the context in which the system operates. For example, an incident with an AI component that is part of a product that affects safety can have different notification requirements than other types of systems. Legal requirements (such as contracts) and regulatory activity can apply, which can specify requirements for:
+— types of incidents that must be communicated;
+
+---
+
+[End of page content]

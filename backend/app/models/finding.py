@@ -1,11 +1,10 @@
 # Finding model — one row per (organization, standard, clause): status, evidence, auditor review state.
 #
-# relevance_score/coverage_score/rationale are the LLM's raw output (see
-# app/ai/schemas.py MappingResult) — combined across every contributing
-# document by app/ai/aggregator.py when more than one document provides
-# evidence for the same clause. status is the auditor-facing rollup derived
-# from those scores. previous_*_score is preserved on override so the
-# original LLM suggestion is never silently lost.
+# coverage_score is COMPUTED from obligation verdicts (app/ai/scoring.py), never
+# supplied by the model — and obligation_rollup carries the reasoning behind it.
+# The model used to return coverage and relevance percentages directly; across 1,057
+# real mappings only 30 distinct values appeared out of 101 and 98% were multiples of
+# 5, so neither number could be accounted for. Both are gone as model output.
 
 import uuid
 from datetime import datetime
@@ -22,7 +21,7 @@ from sqlalchemy import (
     func,
     text,
 )
-from sqlalchemy.dialects.postgresql import ARRAY, UUID
+from sqlalchemy.dialects.postgresql import ARRAY, JSONB, UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database import Base
@@ -65,9 +64,14 @@ class Finding(Base):
     # app/ai/aggregator.py) — evidence_document_id above stays the single
     # primary/highest-scoring one, for simple "open the source" click-through.
     evidence_document_ids: Mapped[list[uuid.UUID] | None] = mapped_column(ARRAY(UUID(as_uuid=True)), nullable=True)
-    relevance_score: Mapped[float | None] = mapped_column(Numeric(5, 2), nullable=True)
     coverage_score: Mapped[float | None] = mapped_column(Numeric(5, 2), nullable=True)
     rationale: Mapped[str | None] = mapped_column(Text, nullable=True)
+
+    # The requirement-level reasoning, computed by app/ai/rollup.py: every obligation,
+    # the strongest verdict any document achieved for it, which documents supplied
+    # that, and which obligations no document satisfies at all. This is what the UI
+    # renders instead of a prose summary — the last item is the audit question.
+    obligation_rollup: Mapped[dict | None] = mapped_column(JSONB, nullable=True)
     # Subset of clause.implementation_guidance (Annex B) the LLM judged NOT
     # satisfied by the evidence — drives the Gap Analysis checklist. Met points
     # are derived at read time (full list minus this), not stored separately.
@@ -96,7 +100,6 @@ class Finding(Base):
     # citing evidence that had been deleted or replaced.
     evidence_changed_since_review: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
 
-    previous_relevance_score: Mapped[float | None] = mapped_column(Numeric(5, 2), nullable=True)
     previous_coverage_score: Mapped[float | None] = mapped_column(Numeric(5, 2), nullable=True)
 
     reviewed_by: Mapped[uuid.UUID | None] = mapped_column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=True)

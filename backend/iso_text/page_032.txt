@@ -1,0 +1,41 @@
+NOTE      The organization can utilize existing reporting mechanisms as part of this process.
+
+Other information
+
+In addition to the implementation guidance provided in this clause, the organization should further consider ISO 37002.
+
+B.4  Resources for AI systems
+
+B.4.1  Objective
+
+To ensure that the organization accounts for the resources (including AI system components and assets) of the AI system in order to fully understand and address risks and impacts.
+
+B.4.2  Resource documentation
+
+Control
+
+The organization should identify and document relevant resources required for the activities at given AI system life cycle stages and other AI-related activities relevant for the organization.
+
+Implementation guidance
+
+Documentation of resources of the AI system is critical for understanding risks, as well as potential AI system impacts (both positive and negative) to individuals or groups of individuals, or both, and societies. The documentation of such resources (which can utilize, for instance, data flow diagrams or system architecture diagrams) can inform the AI system impact assessments (see 8.5).
+
+Resources can include, but are not limited to:
+
+—  AI system components;
+—  data resources, i.e. data used at any stage in the AI system life cycle;
+—  tooling resources (e.g. AI algorithms, models or tools);
+—  system and computing resources (e.g. hardware to develop and run AI models, storage for data and tooling resources);
+—  human resources, i.e. people with the necessary expertise (e.g. for the development, sales, training, operation and maintenance of the AI system) in relation to the organization’s role throughout the AI system life cycle.
+
+Resources can be provided by the organization itself, by its customers or by third parties.
+
+Other information
+
+Documentation of resources can also help to determine if resources are available and, if they are not available, the organization should revise the design specification of the AI system or its deployment requirements.
+
+B.4.3  Data resources
+
+Control
+
+As part of resource identification, the organization should document information about the data resources utilized for the AI system.

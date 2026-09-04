@@ -1,0 +1,46 @@
+BS ISO/IEC 42001:2023  
+ISO/IEC 42001:2023(E)
+
+— processes for handling deviations and exceptions to policy.
+
+The AI policy should consider topic-specific aspects where necessary to provide additional guidance or provide cross-references to other policies dealing with these aspects. Examples of such topics include:
+
+— AI resources and assets;
+— AI system impact assessments (see 6.1.4);
+— AI system development.
+
+Relevant policies should guide the development, purchase, operation and use of AI systems.
+
+B.2.3 Alignment with other organizational policies
+
+Control  
+The organization should determine where other policies can be affected by or apply to, the organization’s objectives with respect to AI systems.
+
+Implementation guidance  
+Many domains intersect with AI, including quality, security, safety and privacy. The organization should consider a thorough analysis to determine whether and where current policies can necessarily intersect and either update those policies if updates are required or include provisions in the AI policy.
+
+Other information  
+The policies that the governing body sets on behalf of the organization should inform the AI policy. ISO/IEC 38507 provides guidance for members of the governing body of an organization to enable and govern the AI system throughout its life cycle.
+
+B.2.4 Review of the AI policy
+
+Control  
+The AI policy should be reviewed at planned intervals or additionally as needed to ensure its continuing suitability, adequacy and effectiveness.
+
+Implementation guidance  
+A role approved by management should be responsible for the development, review and evaluation of the AI policy, or the components within. The review should include assessing opportunities for improvement of the organization’s policies and approach to managing AI systems in response to changes to the organizational environment, business circumstances, legal conditions or technical environment.
+
+The review of AI policy should take the results of management reviews into account.
+
+B.3 Internal organization
+
+B.3.1 Objective
+
+To establish accountability within the organization to uphold its responsible approach for the implementation, operation and management of AI systems.
+
+B.3.2 AI roles and responsibilities
+
+Control  
+Roles and responsibilities for AI should be defined and allocated according to the needs of the organization.
+
+22 © ISO/IEC 2023 – All rights reserved

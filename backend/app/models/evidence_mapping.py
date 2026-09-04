@@ -26,7 +26,7 @@ from sqlalchemy import (
     func,
     text,
 )
-from sqlalchemy.dialects.postgresql import ARRAY, UUID
+from sqlalchemy.dialects.postgresql import ARRAY, JSONB, UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database import Base
@@ -61,8 +61,18 @@ class EvidenceMapping(Base):
     # coverage report can split by segment without joining.
     segment: Mapped[str] = mapped_column(String(10), nullable=False)
 
-    relevance_score: Mapped[float | None] = mapped_column(Numeric(5, 2), nullable=True)
+    # COMPUTED from obligation_verdicts below, never supplied by the model. Retained
+    # as a number only for ordering and for the grade rule; the UI shows "n of m
+    # satisfied" instead, because with 3 obligations the only honest values are
+    # 0/1/2/3 of 3 and a percentage implies a granularity that does not exist.
     coverage_score: Mapped[float | None] = mapped_column(Numeric(5, 2), nullable=True)
+
+    # [{"index": 0, "verdict": "met"|"partial"|"unmet", "quote": ..., "source_location": ...}]
+    # The assessment itself: one answer per obligation in clauses.obligations, each
+    # with the passage that justifies it. This is what the UI renders as the reasoning
+    # — there is no separate prose explanation, because prose written after a guessed
+    # number is decoration on the guess.
+    obligation_verdicts: Mapped[list[dict] | None] = mapped_column(JSONB, nullable=True)
 
     # The LLM's verbatim quote from the document — required by both map prompts,
     # and the input to the citation lookup below.

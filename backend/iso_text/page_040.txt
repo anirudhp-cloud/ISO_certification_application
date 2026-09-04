@@ -1,0 +1,54 @@
+Certainly! Here is the content from the page, set out as requested:
+
+---
+
+**B.6.2.3 Documentation of AI system design and development**
+
+**Control**
+The organization should document the AI system design and development based on organizational objectives, documented requirements and specification criteria.
+
+**Implementation guidance**
+There are many design choices necessary for an AI system, including, but not limited to:
+— machine learning approach (e.g. supervised vs. unsupervised);
+— learning algorithm and type of machine learning model utilized;
+— how the model is intended to be trained and which data quality (see B.7);
+— evaluation and refinement of models;
+— hardware and software components;
+— security threats considered throughout the AI system life cycle; security threats specific to AI systems include data poisoning, model stealing or model inversion attacks;
+— interface and presentation of outputs;
+— how humans can interact with the system;
+— interoperability and portability considerations.
+
+There can be multiple iterations between design and development, but documentation on the stage should be maintained and a final system architecture documentation should be available.
+
+**Other information**
+For more information about human-centred design for interactive systems, see ISO 9241-210.
+
+---
+
+**B.6.2.4 AI system verification and validation**
+
+**Control**
+The organization should define and document verification and validation measures for the AI system and specify criteria for their use.
+
+**Implementation guidance**
+The verification and validation measures can include, but are not limited to:
+— testing methodologies and tools;
+— selection of test data and their representation of the intended domain of use;
+— release criteria requirements.
+
+The organization should define and document evaluation criteria such as, but not limited to:
+— a plan to evaluate the AI system components and the whole AI system for risks related to impacts on individuals or groups of individuals, or both, and societies;
+
+---
+
+**Other information**
+For more information about human-centred design for interactive systems, see ISO 9241-210.
+
+---
+
+[No NOTES are present on this page.]
+
+---
+
+If you need more pages or further formatting, let me know!

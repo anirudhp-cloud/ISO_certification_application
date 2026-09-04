@@ -8,6 +8,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from app.ai.grading import GRADE_LABELS, evidence_state, propose_grade
+from app.ai.scoring import format_fraction
 from app.ai.source_locator import locate_quote
 from app.crud.document import get_documents_by_ids
 from app.crud.document_extraction import get_extractions_for_documents
@@ -25,6 +26,7 @@ from app.models.user import User
 from app.schemas.evidence_mapping import FindingEvidenceItem, FindingEvidenceRead
 from app.schemas.finding import (
     ApplicabilityRequest,
+    ObligationRollupRead,
     EvidenceDocumentRef,
     FindingRead,
     FindingReviewRequest,
@@ -70,6 +72,7 @@ def _build_finding_read(
     coverage = (
         float(finding.coverage_score) if finding is not None and finding.coverage_score is not None else None
     )
+    rollup = (finding.obligation_rollup or {}) if finding is not None else {}
     proposed = (
         finding.proposed_grade
         if finding is not None and finding.proposed_grade
@@ -90,7 +93,6 @@ def _build_finding_read(
         title=clause.title,
         finding_id=finding.id if finding else None,
         status=finding.status if finding else "not_assessed",
-        relevance_score=finding.relevance_score if finding else None,
         coverage_score=finding.coverage_score if finding else None,
         rationale=finding.rationale if finding else None,
         source_location=_compute_source_location(finding, extractions_by_doc_id),
@@ -110,6 +112,12 @@ def _build_finding_read(
         # nonconformity, not an absence of information. Derived here rather than
         # written as 70-odd "we found nothing" rows, so deleting a document still
         # cleanly drops its finding.
+        fraction=rollup.get("fraction") or (f"0 of {len(clause.obligations or [])}"),
+        obligations_total=rollup.get("total_obligations", len(clause.obligations or [])),
+        obligations_met=rollup.get("met", 0),
+        obligations_partial=rollup.get("partial", 0),
+        obligation_rollup=[ObligationRollupRead(**o) for o in rollup.get("obligations", [])],
+        unmet_obligations=rollup.get("unmet_obligations", [o for o in (clause.obligations or [])]),
         proposed_grade=proposed,
         grade=finding.grade if finding else None,
         grade_label=GRADE_LABELS.get((finding.grade if finding else None) or proposed),
@@ -208,7 +216,6 @@ def patch_finding(
         action=payload.action,
         reviewed_by=current_user.id,
         status=payload.status,
-        relevance_score=payload.relevance_score,
         coverage_score=payload.coverage_score,
         grade=payload.grade,
     )
@@ -296,6 +303,10 @@ def get_finding_evidence(
                     document_name=row.document.document_name,
                     file_name=row.document.file_name,
                     coverage_score=float(row.coverage_score) if row.coverage_score is not None else None,
+                    fraction=format_fraction(
+                        row.obligation_verdicts or [], len(row.clause.obligations or [])
+                    ),
+                    obligation_verdicts=row.obligation_verdicts or [],
                     quote=row.rationale,
                     source_location=row.source_location,
                     unmet_guidance_points=row.unmet_guidance_points or [],

@@ -1,0 +1,42 @@
+e)	consider the guidance in Annex B for the implementation of controls determined in b) and c);
+
+NOTE 2	Control objectives are implicitly included in the controls chosen. The organization can select an appropriate set of control objectives and controls from Annex A. The Annex A controls are not exhaustive and additional control objectives and controls can be needed. If different or additional controls are necessary beyond those in Annex A, the organization can design such controls or take them from existing sources. AI risk management can be integrated in other management systems, if applicable.
+
+f)	produce a statement of applicability that contains the necessary controls [see b), c) and d)] and provide justification for inclusion and exclusion of controls. Justification for exclusion can include where the controls are not deemed necessary by the risk assessment and where they are not required by (or are subject to exceptions under) applicable external requirements.
+
+NOTE 3	The organization can provide documented justifications for excluding any control objectives in general or for specific AI systems, whether those listed in Annex A or established by the organization itself.
+
+g)	formulate an AI risk treatment plan.
+
+The organization shall obtain approval from the designated management for the AI risk treatment plan and for acceptance of the residual AI risks. The necessary controls shall be:
+
+—	aligned to the objectives in 6.2;
+—	available as documented information;
+—	communicated within the organization;
+—	available to interested parties, as appropriate.
+
+The organization shall retain documented information about the AI risk treatment process.
+
+6.1.4	AI system impact assessment
+
+The organization shall define a process for assessing the potential consequences for individuals or groups of individuals, or both, and societies that can result from the development, provision or use of AI systems.
+
+The AI system impact assessment shall determine the potential consequences an AI system’s deployment, intended use and foreseeable misuse has on individuals or groups of individuals, or both, and societies.
+
+The AI system impact assessment shall take into account the specific technical and societal context where the AI system is deployed and applicable jurisdictions.
+
+The result of the AI system impact assessment shall be documented. Where appropriate, the result of the system impact assessment can be made available to relevant interested parties as defined by the organization.
+
+The organization shall consider the results of the AI system impact assessment in the risk assessment (see 6.1.2). A.5 in Table A.1 provides controls for assessing impacts of AI systems.
+
+NOTE	In some contexts (such as safety or privacy critical AI systems), the organization can require that discipline-specific AI system impact assessments (e.g. safety, privacy or security impact) be performed as part of the overall risk management activities of an organization.
+
+6.2	AI objectives and planning to achieve them
+
+The organization shall establish AI objectives at relevant functions and levels.
+
+The AI objectives shall:
+
+a)	be consistent with the AI policy (see 5.2);
+
+10	© ISO/IEC 2023 – All rights reserved

@@ -56,6 +56,52 @@ async function apiSend(path, { method = "POST", json, formData } = {}) {
   return res.status === 204 ? null : res.json();
 }
 
+// Fetches a binary resource WITH the Authorization header and returns a blob: URL.
+//
+// An <iframe src> or <a href> is a browser-initiated navigation and carries no custom
+// headers, so pointing either at an authenticated endpoint returns
+// {"detail":"Not authenticated"} — which is what the PDF viewer displayed. Fetching
+// the bytes ourselves and handing the browser a blob keeps header auth intact and
+// still lets the native PDF viewer render it.
+async function apiBlobUrl(path) {
+  const headers = {};
+  if (accessToken) headers["Authorization"] = `Bearer ${accessToken}`;
+  const res = await fetch(path, { headers });
+  if (!res.ok) await throwForResponse(res);
+  const blob = await res.blob();
+  // X-Preview-Page is the page the server actually found the passage on. Returned
+  // alongside the url because a highlight-everything load has no single quote for
+  // preview-info to resolve, so the header is the only source for the page.
+  const page = parseInt(res.headers.get("X-Preview-Page") || "", 10);
+  return { url: URL.createObjectURL(blob), page: Number.isNaN(page) ? null : page };
+}
+
+// Blob URLs hold their data until revoked, so anything handed to the viewer is
+// released when the viewer moves on.
+let objectUrlsInUse = [];
+
+function releaseObjectUrls() {
+  objectUrlsInUse.forEach(url => URL.revokeObjectURL(url));
+  objectUrlsInUse = [];
+}
+
+async function openAuthedFileInNewTab(path, fileName) {
+  try {
+    const { url } = await apiBlobUrl(path);
+    objectUrlsInUse.push(url);
+    const a = document.createElement("a");
+    a.href = url;
+    // download rather than target=_blank: a blob tab has no filename, so the browser
+    // would title it with a UUID and offer no sensible name if saved.
+    a.download = fileName || "document";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+  } catch (err) {
+    alert(`Could not open the file: ${err.message}`);
+  }
+}
+
 async function throwForResponse(res) {
   const detail = await errorDetail(res);
   if (res.status === 401 && accessToken) {
@@ -439,12 +485,20 @@ async function renderDocumentsTable(readOnly) {
             ${canUpload ? `<button class="btn-link" data-reupload="${doc.document_group_id}">Reupload</button>` : ""}
             ${canUpload ? `<button class="btn-link btn-danger-link" data-delete="${doc.document_group_id}">Delete</button>` : ""}
             ${isAuditor ? `<button class="btn-link" data-mappings="${doc.id}">Requirements</button>` : ""}
+            ${isAuditor ? `<button class="btn-link" data-evidence="${doc.id}"
+              title="Open the document with every satisfying passage highlighted">Evidence</button>` : ""}
             <button class="btn-link" data-versions="${doc.document_group_id}">Versions</button>
             <button class="btn-link" data-comments="${doc.id}">Comments</button>
           </div>
         </td>
       </tr>
   `).join("");
+
+  tbody.querySelectorAll("[data-evidence]").forEach(btn => {
+    btn.addEventListener("click", () => openDocumentView(btn.dataset.evidence, {
+      allEvidence: true, back: () => navigateSidebar("documents"),
+    }));
+  });
 
   tbody.querySelectorAll("[data-mappings]").forEach(btn => {
     btn.addEventListener("click", () => openMappingsModal(btn.dataset.mappings));
@@ -696,11 +750,6 @@ async function openFindingsView() {
   await renderFindingsView();
 }
 
-function statusBadge(status) {
-  const labels = { met: "Met", partial: "Partial", gap: "Gap", not_applicable: "N/A", not_assessed: "Not Assessed" };
-  return `<span class="badge badge-status-${status}">${labels[status] || status}</span>`;
-}
-
 // Which segment the findings table is showing. Clauses and controls are separate
 // lists because only controls can be excluded — see the tabs in index.html.
 let activeSegment = "clause";
@@ -755,39 +804,78 @@ function evidenceStateNote(f) {
 // Empty for clauses 4-10 (no Annex B) or a control not yet assessed.
 // Only ever called for Annex A controls — clauses have no Annex B and the caller hides
 // the whole section for them.
+// The reasoning. One row per obligation the requirement imposes: the strongest
+// verdict any contributing document achieved, the passage behind it, and — for the
+// ones nothing satisfies — an explicit statement of that, because "no document
+// evidences this" is the finding an auditor is looking for.
+//
+// The score shown is a count of these rows, not a percentage. Under the previous
+// design the model returned a coverage percentage directly: across 1,057 mappings
+// only 30 distinct values appeared out of 101, 98% were multiples of 5, and a
+// document evidencing 1 of 3 obligations was scored 100%.
+const VERDICT_MARK = { met: "✓", partial: "~", unmet: "✗" };
+const VERDICT_LABEL = { met: "Satisfied", partial: "Partly satisfied", unmet: "Not satisfied" };
+
+function renderObligations(f) {
+  // Carried into each citation so the document panel can say what it was opened from.
+  const obligationRequirement = `${f.code} — ${f.title}`;
+  if (!f.obligation_rollup || f.obligation_rollup.length === 0) {
+    return f.obligations_total
+      ? `<p class="hint" style="margin:0;">No document has been assessed against this
+         requirement's ${f.obligations_total} obligation(s) yet.</p>`
+      : `<p class="hint" style="margin:0;">This requirement has not been broken down into its individual obligations.</p>`;
+  }
+  const rows = f.obligation_rollup.map(o => {
+    const docs = o.documents.length === 0 ? "" : `
+      <div class="obligation-docs">
+        ${o.documents.slice(0, 3).map(d => `
+          <div class="obligation-doc">
+            <span class="obligation-doc-name">${escapeHtml(d.document_name)}</span>
+            ${d.quote ? `<blockquote class="mapping-quote">${escapeHtml(d.quote)}</blockquote>` : ""}
+            ${citationLink({ documentId: d.document_id, location: d.source_location,
+                             quote: d.quote, requirement: obligationRequirement })}
+          </div>`).join("")}
+        ${o.documents.length > 3
+          ? `<p class="hint" style="margin:4px 0 0;">and ${o.documents.length - 3} more document(s)</p>` : ""}
+      </div>`;
+    const none = o.verdict === "unmet"
+      ? `<div class="obligation-none">No contributing document evidences this obligation.</div>` : "";
+    return `
+      <div class="obligation obligation-${o.verdict}">
+        <div class="obligation-head">
+          <span class="obligation-mark">${VERDICT_MARK[o.verdict]}</span>
+          <span class="obligation-text">${escapeHtml(o.obligation)}</span>
+          <span class="obligation-verdict">${VERDICT_LABEL[o.verdict]}${
+            o.document_count ? ` · ${o.document_count} doc${o.document_count === 1 ? "" : "s"}` : ""}</span>
+        </div>
+        ${none}${docs}
+      </div>`;
+  }).join("");
+
+  // The arithmetic, stated — and it has to state the rule the backend actually
+  // applies. This block used to print "1 satisfied + 1 partly satisfied (half each)
+  // of 3 → 1 of 3 (1.5 ÷ 3)": three different numbers for one score, because the
+  // half-credit was removed from app/ai/scoring.py and left here. A partial earns
+  // nothing toward the count; it is reported beside it, never inside it.
+  const workings = `
+    <div class="obligation-workings">
+      ${f.obligations_met} of ${f.obligations_total} obligation(s) satisfied →
+      <strong>${escapeHtml(f.fraction || "—")}</strong>
+      ${f.obligations_partial
+        ? `<span class="obligation-workings-note">${f.obligations_partial} further obligation(s) partly
+           addressed — counted as not satisfied, since partly documented is not documented.</span>`
+        : ""}
+    </div>`;
+  return rows + workings;
+}
+
 function renderGuidanceChecklist(checklist) {
   if (!checklist || checklist.length === 0) {
-    return `<span class="hint" style="margin:0;">No Annex B guidance seeded for this control.</span>`;
+    return `<span class="hint" style="margin:0;">This control has no Annex B guidance points.</span>`;
   }
   return `<ul class="guidance-checklist">${checklist.map(point =>
     `<li class="${point.met ? "guidance-met" : "guidance-unmet"}">${point.met ? "✓" : "✗"} ${point.text}</li>`
   ).join("")}</ul>`;
-}
-
-// Sources = which document(s) plus exactly where in them — always shown
-// explicitly, even when a precise location couldn't be pinned down, so the
-// absence reads as "not identified" rather than as a missing feature.
-// Evidence = a real quote (indented, italic) with its source as a caption
-// underneath — a citation, not two disconnected lines of text.
-function renderEvidenceQuote(f) {
-  if (!f.evidence || f.evidence.length === 0) {
-    return `<span class="hint" style="margin:0;">No evidence yet.</span>`;
-  }
-  const docNames = f.evidence.map(e => e.document_name).join(", ");
-  const citation = f.source_location
-    ? `${docNames}, ${f.source_location}`
-    : `${docNames} — exact location not identified (may combine multiple documents, or predates source tracking; reupload to enable)`;
-
-  if (!f.rationale) {
-    return `<div class="evidence-list">${f.evidence.map(e => `<span>${e.document_name}</span>`).join("")}</div>
-            <span class="hint" style="margin:4px 0 0;">No rationale yet.</span>`;
-  }
-  return `
-    <blockquote class="evidence-quote">
-      “${f.rationale}”
-      <footer class="evidence-citation">— ${citation}</footer>
-    </blockquote>
-  `;
 }
 
 function documentNamesCell(f) {
@@ -805,8 +893,24 @@ let findingDetailDeleteId = null;
 function openFindingDetailModal(f, { allowDelete } = {}) {
   document.getElementById("finding-detail-modal-title").textContent = `${f.code} — ${f.title}`;
   document.getElementById("finding-detail-meta").innerHTML =
-    `${statusBadge(f.status)} &nbsp; Coverage: ${f.coverage_score != null ? Math.round(f.coverage_score) : "—"} &nbsp; Relevance: ${f.relevance_score != null ? Math.round(f.relevance_score) : "—"}`;
-  document.getElementById("finding-detail-evidence").innerHTML = renderEvidenceQuote(f);
+    // No percentages: the score is a count of obligations, and "Relevance" was a
+    // second guessed number that no longer exists.
+    `${gradeBadge(f)} ${confirmationBadge(f)} &nbsp; <strong>${escapeHtml(f.fraction || "—")}</strong> obligations satisfied &nbsp; · ${f.evidence.length} contributing document(s)`;
+  document.getElementById("finding-detail-obligations-heading").textContent =
+    `Obligations — ${f.fraction || "—"} satisfied`;
+  // What the count means, and where the grade comes from. Stated per requirement
+  // type, because the consequence of a shortfall differs: a clause cannot be
+  // excluded, a control can.
+  document.getElementById("finding-detail-obligations-note").innerHTML =
+    f.requirement_type === "control"
+      ? `The separate things this Annex A control requires. These are requirements —
+         each is judged against every contributing document, and the strongest verdict any
+         document achieved is what counts. A partly-satisfied obligation counts as
+         <em>not</em> satisfied.`
+      : `The separate things this clause's "shall" wording demands. Each is judged against
+         every contributing document, and the strongest verdict any document achieved is what
+         counts. A partly-satisfied obligation counts as <em>not</em> satisfied.`;
+  document.getElementById("finding-detail-obligations").innerHTML = renderObligations(f);
   // Clauses 4-10 have no Annex B, so the section is removed rather than emptied.
   const isControl = f.requirement_type === "control";
   const guidanceWrap = document.getElementById("finding-detail-guidance-wrap");
@@ -857,12 +961,11 @@ async function loadFindingEvidence(findingId) {
       <div class="doc-evidence">
         <div class="doc-evidence-head">
           <span class="doc-evidence-name">${escapeHtml(i.document_name)}</span>
-          <span class="doc-evidence-cov">${i.coverage_score != null ? Math.round(i.coverage_score) + "%" : "—"}</span>
+          <span class="doc-evidence-cov">${escapeHtml(i.fraction || "—")}</span>
         </div>
         ${i.quote ? `<blockquote class="mapping-quote">${escapeHtml(i.quote)}</blockquote>` : ""}
-        ${i.source_location
-          ? `<div class="mapping-citation">${escapeHtml(i.source_location)}</div>`
-          : `<div class="mapping-citation mapping-citation-missing">Location not resolved</div>`}
+        ${citationLink({ documentId: i.document_id, location: i.source_location,
+                         quote: i.quote, requirement: `${data.code} — ${data.title}` })}
         ${i.unmet_guidance_points.length
           ? `<div class="mapping-guidance"><div class="mapping-guidance-head">Annex B points not satisfied (${i.unmet_guidance_points.length})</div>
              <ul>${i.unmet_guidance_points.map(p => `<li>${escapeHtml(p)}</li>`).join("")}</ul></div>`
@@ -921,10 +1024,37 @@ async function renderFindingsView() {
   );
 }
 
+// What each half of the standard IS, in the terms that change how a row is read.
+// Written out on the page because the difference is not guessable from a table of
+// codes and grades: a clause can never be excluded and a missing one is a
+// nonconformity, whereas a control can be excluded outright and its Annex B
+// guidance can never produce a nonconformity at all.
+const SEGMENT_EXPLAINERS = {
+  clause: `<strong>Clauses 4&ndash;10 are the mandatory management-system requirements.</strong>
+    Every one applies to every organisation — none can be excluded, and none carries
+    Annex B guidance. Each clause is broken into its individual <em>obligations</em> (the
+    separate things its "shall" wording demands), and a document satisfies them one at a
+    time. An obligation no document evidences is a documentary gap, and enough of them
+    make the clause a nonconformity.`,
+  control: `<strong>Annex A controls are risk-treatment options, not blanket requirements.</strong>
+    You select them from your AI risk assessment (clause 6.1.3) and exclude the rest with
+    a justification — which is why only this tab offers <em>N/A</em>. Each control is judged
+    two separate ways:
+    <span class="segment-explainer-split">
+      <span><strong>Annex A obligations</strong> — requirements. Failing one is a shortfall.</span>
+      <span><strong>Annex B guidance</strong> — advice on how to satisfy the control. Leaving a
+        point unaddressed is an <em>opportunity for improvement</em>, never a nonconformity.</span>
+    </span>
+    So a control can score full marks on its obligations and still be graded OFI, purely
+    from unaddressed Annex B points.`,
+};
+
 // Tab counts come from the server's per-segment summaries, so "1 of 32" is the
 // standard's own total rather than a number hardcoded in the frontend (ISO 9001 has
 // no controls at all).
 function renderSegmentTabs(report) {
+  document.getElementById("findings-segment-explainer").innerHTML =
+    SEGMENT_EXPLAINERS[activeSegment] || "";
   document.getElementById("findings-col-requirement").textContent =
     activeSegment === "control" ? "Annex A control" : "Clause";
   const counts = { clause: report.clauses, control: report.controls };
@@ -1065,7 +1195,7 @@ function renderFindingsTable(findings) {
         <td>${documentNamesCell(f)}${evidenceStateNote(f)}</td>
         <td>${escapeHtml(f.code)} — ${escapeHtml(f.title)}${stale}${na}</td>
         <td>${gradeBadge(f)} ${confirmationBadge(f)}</td>
-        <td>${f.coverage_score != null ? Math.round(f.coverage_score) : "—"}</td>
+        <td class="obligation-count">${escapeHtml(f.fraction || "—")}</td>
         <td>
           <div class="row-actions">
             <button class="btn-link" data-open-finding="${escapeHtml(f.code)}">Open</button>
@@ -1149,7 +1279,7 @@ function openGateModal(run) {
   const skippedBlock = skipped.length === 0 ? "" : `
     <div class="gate-skipped">
       <strong>${skipped.length} document(s) could not be read.</strong>
-      <p>These were not analysed at all, so the requirement counts below are incomplete
+      <p>These were not analyzed at all, so the requirement counts below are incomplete
       by an unknown amount — a requirement shown as having no evidence may simply be
       covered by one of these. Re-run Analyze to retry them.</p>
       <ul>${skipped.map(d => `<li><span class="gate-code">${escapeHtml(d.document_name)}</span> ${escapeHtml(d.error)}</li>`).join("")}</ul>
@@ -1248,13 +1378,11 @@ function openSaveFindingModal(btn) {
   // a change rather than a fresh choice from a default.
   const current = (finding && (finding.grade || finding.proposed_grade)) || "minor_nc";
   document.getElementById("save-finding-grade").value = current;
-  document.getElementById("save-finding-coverage-score").value =
-    finding && finding.coverage_score != null ? Math.round(finding.coverage_score) : 0;
-
   const note = document.getElementById("save-finding-suggested");
   const isControl = finding && finding.requirement_type === "control";
   note.innerHTML = finding
     ? `Suggested: <strong>${GRADE_LABELS[finding.proposed_grade] || "—"}</strong>` +
+      ` — from ${escapeHtml(finding.fraction || "—")} obligations satisfied.` +
       (isControl ? "" : " · Not applicable is unavailable: clauses 4–10 are mandatory and cannot be excluded.")
     : "";
   showModal("save-finding-modal");
@@ -1263,7 +1391,6 @@ function openSaveFindingModal(btn) {
 document.getElementById("submit-save-finding-btn").addEventListener("click", async () => {
   if (!saveFindingTargetId) return;
   const grade = document.getElementById("save-finding-grade").value;
-  const coverageScore = Number(document.getElementById("save-finding-coverage-score").value);
 
   // 'not_applicable' is an Annex A decision only — the server rejects it for a clause,
   // but say so here rather than letting the auditor discover it via an error.
@@ -1276,7 +1403,10 @@ document.getElementById("submit-save-finding-btn").addEventListener("click", asy
   try {
     await apiSend(`/api/findings/${saveFindingTargetId}`, {
       method: "PATCH",
-      json: { action: "save", grade, coverage_score: coverageScore },
+      // No coverage override: the score is a count of obligations, so editing it by
+      // hand would decouple it from the verdicts it is supposed to summarise. The
+      // auditor overrides the GRADE, which is the judgement that's theirs to make.
+      json: { action: "save", grade },
     });
   } catch (err) {
     alert(`Override failed: ${err.message}`);
@@ -1327,6 +1457,187 @@ async function openVersionModal(groupId) {
 }
 
 // ==========================================================================
+// Document view — the document opened at a citation, text highlighted
+// ==========================================================================
+//
+// A citation was plain text: `Section "7. Policy Review", paragraph 1`. Accurate, but
+// verifying it meant opening the .docx and searching. This opens the document in the
+// app at that passage, highlighted, with its neighbours around it for context.
+//
+// Rendered from document_extractions.extracted_chunks — the same passages the
+// citation was resolved against when the run was written, so a stored location always
+// addresses one of them.
+
+// Where to return to when the panel is closed.
+let documentViewReturn = null;
+
+// What the viewer is currently showing, so the single/all toggle can flip between
+// modes without losing the citation that opened it.
+let documentViewState = null;
+
+async function openDocumentView(documentId, { location, quote, requirement, back, allEvidence } = {}) {
+  documentViewState = { documentId, location, quote, requirement, back, allEvidence };
+  documentViewReturn = back || (() => openFindingsView());
+
+  hideAllMainViews();
+  document.getElementById("document-view").classList.remove("hidden");
+
+  const nameEl = document.getElementById("document-view-name");
+  const metaEl = document.getElementById("document-view-meta");
+  const bodyEl = document.getElementById("document-view-body");
+  const ctxEl = document.getElementById("document-view-context");
+
+  nameEl.textContent = "Opening document…";
+  metaEl.textContent = "";
+  ctxEl.classList.add("hidden");
+  // First open of a document converts it via LibreOffice (~10-15s); afterwards it is
+  // cached per document version. Say so rather than showing a blank pane.
+  bodyEl.innerHTML = `<div class="doc-loading">Converting the document for viewing —
+    this takes a few seconds the first time each document is opened.</div>`;
+
+  const params = new URLSearchParams();
+  if (quote) params.set("quote", quote);
+  // Every satisfying passage at once, each labelled with the requirement it
+  // evidences — how an auditor reads a file, as opposed to chasing one citation at
+  // a time. preview-info only ever resolves a single quote, so it is not asked for
+  // a page here; the PDF opens at the first highlight the server found.
+  if (allEvidence) params.set("all_evidence", "true");
+  const query = params.toString() ? `?${params}` : "";
+  const infoQuery = quote ? `?quote=${encodeURIComponent(quote)}` : "";
+
+  let info;
+  try {
+    info = await apiGet(`/api/documents/${documentId}/preview-info${infoQuery}`);
+  } catch (err) {
+    nameEl.textContent = "Could not open document";
+    bodyEl.innerHTML = `<p class="hint">${escapeHtml(err.message)}</p>`;
+    return;
+  }
+
+  nameEl.textContent = info.document_name;
+  metaEl.textContent = `${info.file_name} · v${info.version_number}${
+    info.page ? ` · quote on page ${info.page}` : ""}`;
+
+  const openOriginal = `<button class="btn btn-ghost" data-open-file="${info.file_url}"
+    data-file-name="${escapeHtml(info.file_name)}">Open original file &darr;</button>`;
+
+  // Two ways to read a document, so the header says which one is showing and links
+  // to the other: one cited passage, or every passage that satisfied an obligation.
+  const modeToggle = allEvidence
+    ? `<button class="btn btn-ghost" data-doc-mode="single" data-doc-id="${documentId}">
+         Show only the cited passage</button>`
+    : `<button class="btn btn-ghost" data-doc-mode="all" data-doc-id="${documentId}">
+         Highlight all evidence in this document</button>`;
+
+  ctxEl.classList.remove("hidden");
+  ctxEl.innerHTML = `
+    <div class="doc-context-row">
+      <div>${allEvidence
+        ? `Every passage in this document that satisfied an obligation is highlighted.
+           Hover a highlight to see which requirement it evidences.`
+        : requirement
+          ? `Opened from <strong>${escapeHtml(requirement)}</strong>${
+              location ? ` · cited at <strong>${escapeHtml(location)}</strong>` : ""}`
+          : escapeHtml(info.document_name)}</div>
+      <div class="doc-context-actions">${modeToggle}${openOriginal}</div>
+    </div>
+    ${quote && !allEvidence ? `<blockquote class="doc-context-quote">${escapeHtml(quote)}</blockquote>` : ""}
+    ${info.reason && !allEvidence ? `<div class="doc-context-warn">${escapeHtml(info.reason)}</div>` : ""}`;
+
+  if (!info.available) {
+    bodyEl.innerHTML = `
+      <div class="doc-unrenderable">
+        <strong>This document can't be shown in the browser.</strong>
+        <p>${escapeHtml(info.reason || "")}</p>
+        <button class="btn btn-primary" data-open-file="${info.file_url}"
+          data-file-name="${escapeHtml(info.file_name)}">Open ${escapeHtml(info.file_name)}</button>
+      </div>`;
+    return;
+  }
+
+  // The browser's own PDF viewer: real page layout, real tables, real images, plus
+  // search and paging for free. Fetched as a blob because an iframe src sends no
+  // Authorization header — pointing it straight at the endpoint rendered
+  // {"detail":"Not authenticated"} inside the viewer.
+  let pdfUrl, headerPage;
+  try {
+    ({ url: pdfUrl, page: headerPage } = await apiBlobUrl(`${info.preview_url}${query}`));
+    objectUrlsInUse.push(pdfUrl);
+  } catch (err) {
+    bodyEl.innerHTML = `
+      <div class="doc-unrenderable">
+        <strong>Could not load the document preview.</strong>
+        <p>${escapeHtml(err.message)}</p>
+        <button class="btn btn-primary" data-open-file="${info.file_url}"
+          data-file-name="${escapeHtml(info.file_name)}">Open ${escapeHtml(info.file_name)}</button>
+      </div>`;
+    return;
+  }
+
+  // headerPage first: on an all-evidence load it is the only page number there is.
+  const openAt = headerPage || info.page;
+  const fragment = openAt ? `#page=${openAt}` : "";
+  bodyEl.innerHTML = `<iframe class="doc-pdf" src="${pdfUrl}${fragment}"
+    title="${escapeHtml(info.document_name)}"></iframe>`;
+}
+
+document.addEventListener("click", (e) => {
+  const btn = e.target.closest("[data-open-file]");
+  if (!btn) return;
+  openAuthedFileInNewTab(btn.dataset.openFile, btn.dataset.fileName);
+});
+
+// Flip the open viewer between one cited passage and every satisfying passage.
+// Reuses the state the viewer was opened with, so switching back restores the
+// citation rather than dropping the auditor at page 1 with no context.
+document.addEventListener("click", (e) => {
+  const btn = e.target.closest("[data-doc-mode]");
+  if (!btn) return;
+  const state = documentViewState || { documentId: btn.dataset.docId };
+  releaseObjectUrls();
+  openDocumentView(state.documentId, { ...state, allEvidence: btn.dataset.docMode === "all" });
+});
+
+document.getElementById("back-from-document-view").addEventListener("click", () => {
+  const back = documentViewReturn;
+  documentViewReturn = null;
+  document.getElementById("document-view-body").innerHTML = "";
+  releaseObjectUrls();
+  if (back) back();
+});
+
+// Any citation rendered anywhere becomes a link into the panel above. Delegated, so
+// citations inside modals that are re-rendered constantly still work.
+document.addEventListener("click", (e) => {
+  const cite = e.target.closest("[data-open-passage]");
+  if (!cite) return;
+  e.preventDefault();
+  [...document.querySelectorAll(".modal-overlay")].forEach(m => m.classList.add("hidden"));
+  openDocumentView(cite.dataset.openPassage, {
+    location: cite.dataset.location || null,
+    quote: cite.dataset.quote || null,
+    requirement: cite.dataset.requirement || null,
+  });
+});
+
+// A citation, as a link. `documentId` is required for it to be clickable — a location
+// with no document to open is still shown, just as plain text.
+function citationLink({ documentId, location, quote, requirement }) {
+  if (!location) {
+    return `<div class="mapping-citation mapping-citation-missing">Location not resolved</div>`;
+  }
+  if (!documentId) {
+    return `<div class="mapping-citation">${escapeHtml(location)}</div>`;
+  }
+  return `<a class="mapping-citation mapping-citation-link" href="#"
+    data-open-passage="${escapeHtml(documentId)}"
+    data-location="${escapeHtml(location)}"
+    data-quote="${escapeHtml(quote || "")}"
+    data-requirement="${escapeHtml(requirement || "")}"
+    >${escapeHtml(location)} &rarr;</a>`;
+}
+
+// ==========================================================================
 // Mappings modal — one document's clause and control structure
 // ==========================================================================
 
@@ -1336,14 +1647,41 @@ async function openVersionModal(groupId) {
 // GET /api/documents/{id}/mappings.
 
 function renderRequirement(m) {
-  const coverage = m.coverage_score === null ? "—" : `${Math.round(m.coverage_score)}%`;
+  // A fraction, never a percentage. With 3 obligations the only reachable values are
+  // 0/1/2/3 of 3, so a percentage implies a precision that doesn't exist.
+  const coverage = m.fraction || "—";
   // The citation is the point of the whole feature — a verbatim quote plus a place
   // a person can actually look. Both can be absent: OCR'd documents produce no
   // positional chunks, so the quote can't be located.
   const quote = m.rationale ? `<blockquote class="mapping-quote">${escapeHtml(m.rationale)}</blockquote>` : "";
-  const citation = m.source_location
-    ? `<div class="mapping-citation">${escapeHtml(m.source_location)}</div>`
-    : `<div class="mapping-citation mapping-citation-missing">Location not resolved — the quote could not be matched back to the document</div>`;
+  const citation = citationLink({
+    documentId: mappingsDocumentId,
+    location: m.source_location,
+    quote: m.rationale,
+    requirement: `${m.code} — ${m.title}`,
+  });
+
+  // WHICH obligations this document satisfies, not just how many. The modal used to
+  // print the fraction and the single strongest quote, so "1 of 3" gave no way to
+  // tell which two were missing — the same defect as the percentage it replaced,
+  // one decimal place shorter. The verdicts were already in the response.
+  const obligations = (m.obligation_verdicts || []).length === 0
+    ? ""
+    : `<ul class="mapping-obligations">${m.obligation_verdicts.map(v => `
+        <li class="mapping-obligation mapping-obligation-${v.verdict}">
+          <span class="mapping-obligation-mark">${VERDICT_MARK[v.verdict] || "?"}</span>
+          <span class="mapping-obligation-text">
+            ${escapeHtml(v.obligation || `Obligation ${v.index + 1}`)}
+            <span class="mapping-obligation-verdict">${VERDICT_LABEL[v.verdict] || v.verdict}</span>
+            ${v.quote
+              ? `<blockquote class="mapping-quote">${escapeHtml(v.quote)}</blockquote>
+                 ${citationLink({ documentId: mappingsDocumentId, location: v.source_location,
+                                  quote: v.quote, requirement: `${m.code} — ${m.title}` })}`
+              // No quote for an unmet obligation, by design: the prompt omits it
+              // (rule 2) because an absence has no passage to cite.
+              : `<span class="mapping-obligation-none">Nothing in this document addresses this.</span>`}
+          </span>
+        </li>`).join("")}</ul>`;
 
   let guidance = "";
   if (m.unmet_guidance_points.length > 0) {
@@ -1363,23 +1701,38 @@ function renderRequirement(m) {
         <span class="mapping-title">${escapeHtml(m.title)}</span>
         <span class="mapping-coverage">${coverage}</span>
       </div>
-      ${quote}
-      ${citation}
+      ${obligations || quote + citation}
       ${guidance}
     </div>`;
 }
 
+// Why a section can legitimately be empty. Without this, "0 of 32" reads as failure
+// when it is usually correct — a Statement of Applicability has no business
+// evidencing clause 9.2, and a document is not expected to cover the standard.
+const SEGMENT_NOTES = {
+  "Clauses 4–10": `Mandatory management-system requirements. A document is not expected to
+    address all of them — a gap only exists where NO document in the set does.`,
+  "Annex A controls": `Risk-treatment controls, selectable and excludable. Annex B points
+    shown under a control are guidance: unaddressed ones are opportunities for improvement,
+    never nonconformities.`,
+};
+
 function renderSegment(segment, heading) {
+  const note = `<p class="section-note">${SEGMENT_NOTES[heading] || ""}</p>`;
   if (segment.mappings.length === 0) {
     return `
       <section class="mapping-segment">
         <h4>${heading} <span class="mapping-count">0 of ${segment.total}</span></h4>
-        <p class="mapping-segment-empty">This document provides no evidence for any of the ${segment.total} ${heading}.</p>
+        ${note}
+        <p class="mapping-segment-empty">This document provides no evidence for any of the
+        ${segment.total} ${heading}. That is normal for a document outside their scope —
+        it is only a gap if no other document covers them either.</p>
       </section>`;
   }
   return `
     <section class="mapping-segment">
       <h4>${heading} <span class="mapping-count">${segment.matched} of ${segment.total}</span></h4>
+      ${note}
       ${segment.mappings.map(renderRequirement).join("")}
     </section>`;
 }
@@ -1391,7 +1744,7 @@ function renderMappings(data) {
   if (data.status === "not_analysed") {
     return `
       <div class="mapping-notice">
-        <strong>Not analysed yet.</strong>
+        <strong>Not analyzed yet.</strong>
         <p>An auditor needs to run Analyze before this document's clause and control coverage can be shown.</p>
       </div>`;
   }
@@ -1399,7 +1752,7 @@ function renderMappings(data) {
   if (data.status === "no_match") {
     return `
       <div class="mapping-notice mapping-notice-warn">
-        <strong>Analysed — no requirements matched.</strong>
+        <strong>Analyzed — no requirements matched.</strong>
         <p>This document was read in full and provided evidence for none of the ${data.clauses.total} clauses
         or ${data.controls.total} controls. That usually means the file is out of scope, was tagged to the
         wrong standard, or its text could not be extracted. Check the file and its standard tag.</p>
@@ -1407,16 +1760,21 @@ function renderMappings(data) {
   }
 
   return `
-    <div class="mapping-meta">Analysed ${formatDate(data.analysed_at)} · ${escapeHtml(data.file_name)} · v${data.version_number}</div>
+    <div class="mapping-meta">Analyzed ${formatDate(data.analysed_at)} · ${escapeHtml(data.file_name)} · v${data.version_number}</div>
     ${renderSegment(data.clauses, "Clauses 4–10")}
     ${renderSegment(data.controls, "Annex A controls")}
     <p class="mapping-disclaimer">Documentary review only — coverage is assessed from the submitted text and is
     not a conformity determination.</p>`;
 }
 
+// Which document the open Requirements modal belongs to, so its citations can link
+// back into that same document's passages.
+let mappingsDocumentId = null;
+
 async function openMappingsModal(documentId) {
+  mappingsDocumentId = documentId;
   const data = await apiGet(`/api/documents/${documentId}/mappings`);
-  document.getElementById("mappings-modal-title").textContent = `Requirements Covered — ${data.document_name}`;
+  document.getElementById("mappings-modal-title").textContent = `Requirements addressed — ${data.document_name}`;
   document.getElementById("mappings-modal-body").innerHTML = renderMappings(data);
   showModal("mappings-modal");
 }

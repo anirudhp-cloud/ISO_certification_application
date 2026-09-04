@@ -1,0 +1,36 @@
+Certainly! Here is the content from the page, set out as requested:
+
+---
+
+**Annex C (informative)**  
+Potential AI-related organizational objectives and risk sources
+
+**C.1 General**  
+This annex outlines potential organizational objectives, risk sources and descriptions that can be considered by the organization when managing risks. This annex is not intended to be exhaustive or applicable for every organization. The organization should determine the objectives and risk sources that are relevant. ISO/IEC 23894 provides more detailed information on these objectives and risk sources, and their relationship to risk management. Evaluation of AI systems, initially, regularly, and when warranted, provides evidence that an AI system is being assessed against organizational objectives.
+
+**C.2 Objectives**
+
+**C.2.1 Accountability**  
+The use of AI can change existing accountability frameworks. Where previously persons would be held accountable for their actions, their actions can now be supported by or based on the use of an AI system.
+
+**C.2.2 AI expertise**  
+A selection of dedicated specialists with interdisciplinary skill sets and expertise in assessing, developing and deploying AI systems is needed.
+
+**C.2.3 Availability and quality of training and test data**  
+AI systems based on ML need training, validation and test data in order to train and verify the systems for the intended behaviour.
+
+**C.2.4 Environmental impact**  
+The use of AI can have positive and negative impacts on the environment.
+
+**C.2.5 Fairness**  
+The inappropriate application of AI systems for automated decision-making can be unfair to specific persons or groups of persons.
+
+**C.2.6 Maintainability**  
+Maintainability is related to the ability of the organization to handle modifications of the AI system in order to correct defects or adjust to new requirements.
+
+**C.2.7 Privacy**  
+The misuse or disclosure of personal and sensitive data (e.g. health records) can have harmful effects on data subjects.
+
+---
+
+There are no NOTES on this page.

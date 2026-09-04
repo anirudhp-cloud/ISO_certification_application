@@ -1,0 +1,48 @@
+When establishing the internal audit programme(s), the organization shall consider the importance of the processes concerned and the results of previous audits.
+
+The organization shall:
+
+a) define the audit objectives, criteria and scope for each audit;
+
+b) select auditors and conduct audits to ensure objectivity and the impartiality of the audit process;
+
+c) ensure that the results of audits are reported to relevant managers.
+
+Documented information shall be available as evidence of the implementation of the audit programme(s) and the audit results.
+
+9.3 Management review
+
+9.3.1 General
+
+Top management shall review the organization’s AI management system, at planned intervals, to ensure its continuing suitability, adequacy and effectiveness.
+
+9.3.2 Management review inputs
+
+The management review shall include:
+
+a) the status of actions from previous management reviews;
+
+b) changes in external and internal issues that are relevant to the AI management system;
+
+c) changes in needs and expectations of interested parties that are relevant to the AI management system;
+
+d) information on the AI management system performance, including trends in:
+    1) nonconformities and corrective actions;
+    2) monitoring and measurement results;
+    3) audit results;
+
+e) opportunities for continual improvement.
+
+9.3.3 Management review results
+
+The results of the management review shall include decisions related to continual improvement opportunities and any need for changes to the AI management system.
+
+Documented information shall be available as evidence of the results of management reviews.
+
+10 Improvement
+
+10.1 Continual improvement
+
+The organization shall continually improve the suitability, adequacy and effectiveness of the AI management system.
+
+© ISO/IEC 2023 – All rights reserved 15

@@ -1,0 +1,38 @@
+Certainly! Here is the content from the page, set out as requested:
+
+---
+
+**Annex D (informative)**  
+**Use of the AI management system across domains or sectors**
+
+**D.1 General**
+
+This management system is applicable to any organization developing, providing or using products or services that utilize an AI system. Therefore, it is applicable potentially to a great variety of products and services, in different sectors, which are subject to obligations, good practices, expectations or contractual commitment towards interested parties. Examples of sectors are:
+
+— health;  
+— defence;  
+— transport;  
+— finance;  
+— employment;  
+— energy.
+
+Various organizational objectives (see Annex C for possible objectives) can be considered for the responsible development and use of an AI system. This document provides requirements and guidance from an AI technology specific view. For several of the potential objectives, generic or sector-specific management system standards exist. These management system standards consider the objective usually from a technology neutral point of view, while the AI management system provides AI technology specific considerations.
+
+AI systems consist not only of components using AI technology, but can use a variety of technologies and components. Responsible development and use of an AI system therefore requires taking into account not only AI-specific considerations, but also the system as a whole with all the technologies and components that are used. Even for the AI technology specific part, other aspects besides AI-specific considerations should be taken into account. For example, as AI is an information processing technology, information security applies generally to it. Objectives such as safety, security, privacy and environmental impact should be managed holistically and not separately for AI and the other components of the system. Integration of the AI management system with generic or sector-specific management system standards for relevant topics is therefore essential for responsible development and use of an AI system.
+
+**D.2 Integration of AI management system with other management system standards**
+
+When providing or using AI systems, the organization can have objectives or obligations related to aspects which are topics of other management system standards. These can include, for example, security, privacy, quality, respectively topics covered in ISO/IEC 27001, ISO/IEC 27701 and ISO 9001.
+
+When providing, using or developing AI systems, potential relevant generic management system standards, but not limited to, are:
+
+— ISO/IEC 27001: In most contexts, security is key to achieving the objectives of the organization with the AI system. The way an organization pursues security objectives depends on its context and its own policies. If an organization identifies the need to implement an AI management system [illegible]
+
+---
+
+**NOTES:**  
+No explicit NOTE statements are visible on this page.
+
+---
+
+Let me know if you need further breakdown or more pages!

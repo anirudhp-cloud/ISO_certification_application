@@ -1,0 +1,52 @@
+Certainly! Here is the content from the provided page of ISO/IEC 42001:2023, set out as plain text with clause/annex numbers and headings, every requirement or guidance statement, and every NOTE, as requested:
+
+---
+
+**1 Scope**
+
+This document specifies the requirements and provides guidance for establishing, implementing, maintaining and continually improving an AI (artificial intelligence) management system within the context of an organization.
+
+This document is intended for use by an organization providing or using products or services that utilize AI systems. This document is intended to help the organization develop, provide or use AI systems responsibly in pursuing its objectives and meet applicable requirements, obligations related to interested parties and expectations from them.
+
+This document is applicable to any organization, regardless of size, type and nature, that provides or uses products or services that utilize AI systems.
+
+---
+
+**2 Normative references**
+
+The following documents are referred to in the text in such a way that some or all of their content constitutes requirements of this document. For dated references, only the edition cited applies. For undated references, the latest edition of the referenced document (including any amendments) applies.
+
+ISO/IEC 22989:2022, *Information technology — Artificial intelligence — Artificial intelligence concepts and terminology*
+
+---
+
+**3 Terms and definitions**
+
+For the purposes of this document, the terms and definitions given in ISO/IEC 22989 and the following apply.
+
+ISO and IEC maintain terminology databases for use in standardization at the following addresses:
+
+— ISO Online browsing platform: available at https://www.iso.org/obp  
+— IEC Electropedia: available at https://www.electropedia.org/
+
+---
+
+**3.1 organization**
+
+person or group of people, that has its own functions with responsibilities, authorities and relationships to achieve its objectives (3.6)
+
+Note 1 to entry: The concept of organization includes, but is not limited to, sole-trader, company, corporation, firm, enterprise, authority, partnership, charity or institution or part or combination thereof, whether incorporated or not, public or private.
+
+Note 2 to entry: If the organization is part of a larger entity, the term "organization" refers only to the part of the larger entity that is within the scope of the AI management system (3.4).
+
+---
+
+**3.2 interested party**
+
+person or organization (3.1) that can affect, be affected by, or perceive itself to be affected by a decision or activity
+
+Note 1 to entry: An overview of interested parties in AI is provided in ISO/IEC 22989:2022, 5.19.
+
+---
+
+If you need more pages or further breakdown, let me know!

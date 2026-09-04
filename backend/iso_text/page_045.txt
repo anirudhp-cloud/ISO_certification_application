@@ -1,0 +1,44 @@
+Certainly! Here is the content from the page, set out as requested:
+
+---
+
+Other information  
+Some AI systems, such as biometric identification systems, can have additional logging requirements depending on jurisdiction. Organizations should be aware of these requirements.
+
+**B.7 Data for AI systems**
+
+**B.7.1 Objective**  
+To ensure that the organization understands the role and impacts of data in AI systems in the application and development, provision or use of AI systems throughout their life cycles.
+
+**B.7.2 Data for development and enhancement of AI system**
+
+*Control*  
+The organization should define, document and implement data management processes related to the development of AI systems.
+
+*Implementation guidance*  
+Data management can include various topics such as, but not limited to:  
+— privacy and security implications due to the use of data, some of which can be sensitive in nature;  
+— security and safety threats that can arise from data dependent AI system development;  
+— transparency and explainability aspects including data provenance and the ability to provide an explanation of how data are used for determining an AI system’s output if the system requires transparency and explainability;  
+— representativeness of training data compared to operational domain of use;  
+— accuracy and integrity of the data.
+
+NOTE Detailed information of AI system life cycle and data management concepts is provided by ISO/IEC 22989.
+
+**B.7.3 Acquisition of data**
+
+*Control*  
+The organization should determine and document details about the acquisition and selection of the data used in AI systems.
+
+*Implementation guidance*  
+The organization can need different categories of data from different sources depending on the scope and use of their AI systems. Details for data acquisition can include:  
+— categories of data needed for the AI system;  
+— quantity of data needed;  
+— data sources (e.g. internal, purchased, shared, open data, synthetic);  
+— characteristics of the data source (e.g. static, streamed, gathered, machine generated);  
+— data subject demographics and characteristics (e.g. known or potential biases or other systematic errors);  
+— prior handling of the data (e.g. previous uses, conformity with privacy and security requirements);
+
+---
+
+Let me know if you need further formatting or additional pages!

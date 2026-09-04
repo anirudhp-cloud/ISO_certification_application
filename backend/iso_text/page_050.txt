@@ -1,0 +1,46 @@
+Certainly! Here is the content from the page as plain text, with clause/annex numbers and headings, every requirement or guidance statement, and every NOTE, exactly as printed:
+
+---
+
+**B.9.3 Objectives for responsible use of AI system**
+
+**Control**
+
+The organization should identify and document objectives to guide the responsible use of AI systems.
+
+**Implementation guidance**
+
+The organization operating in different contexts can have different expectations and objectives for what constitutes the responsible development of AI systems. Depending on its context, the organization should identify its objectives related to responsible use. Some objectives include:
+
+— fairness;
+— accountability;
+— transparency;
+— explainability;
+— reliability;
+— safety;
+— robustness and redundancy;
+— privacy and security;
+— accessibility.
+
+Once defined, the organization should implement mechanisms to achieve its objectives within the organization. This can include determining if a third-party solution fulfils the organization’s objectives or if an internally developed solution is applicable for the intended use. The organization should determine at which stages of the AI system life cycle meaningful human oversight objectives should be incorporated. This can include:
+
+— involving human reviewers to check the outputs of the AI system, including having authority to override decisions made by the AI system;
+— ensuring that human oversight is included if required for acceptable use of the AI system according to instructions or other documentation associated with the intended deployment of the AI system;
+— monitoring the performance of the AI system, including the accuracy of the AI system outputs;
+— reporting concerns related to the outputs of the AI system and their impact to relevant interested parties;
+— reporting concerns with changes in the performance or ability of the AI system to make correct outputs on the production data;
+— considering whether automated decision-making is appropriate for a responsible approach to the use of an AI system and the intended use of the AI system.
+
+The need for human oversight can be informed by the AI system impact assessments (see B.5). The personnel involved in human oversight activities related to the AI system should be informed of, trained
+
+---
+
+[The last sentence is cut off and unreadable.]
+
+**Page number:** 42
+
+**© ISO/IEC 2023 – All rights reserved**
+
+---
+
+Let me know if you need more pages or further formatting!

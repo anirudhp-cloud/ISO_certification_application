@@ -30,6 +30,24 @@ def build_guidance_checklist(
     ]
 
 
+class ObligationDocumentRead(BaseModel):
+    document_id: str
+    document_name: str
+    verdict: str
+    quote: str | None
+    source_location: str | None
+
+
+class ObligationRollupRead(BaseModel):
+    """One obligation's outcome across every contributing document."""
+
+    index: int
+    obligation: str
+    verdict: str  # met | partial | unmet — the strongest any document achieved
+    document_count: int
+    documents: list[ObligationDocumentRead] = []
+
+
 class FindingRead(BaseModel):
     clause_id: uuid.UUID
     requirement_type: str  # 'clause' | 'control'
@@ -39,8 +57,19 @@ class FindingRead(BaseModel):
 
     finding_id: uuid.UUID | None = None
     status: str = "not_assessed"
-    relevance_score: float | None = None
     coverage_score: float | None = None
+    # How the score is written for a person: "2 of 3". Preferred over the percentage
+    # everywhere in the UI — with 3 obligations the only reachable values are 0/1/2/3
+    # of 3, and rendering that as 0/33/67/100% implies a precision that isn't there.
+    fraction: str | None = None
+    obligations_total: int = 0
+    obligations_met: int = 0
+    obligations_partial: int = 0
+    # Per-obligation: the strongest verdict any document achieved, and which documents
+    # supplied it. This IS the reasoning — there is no prose summary any more.
+    obligation_rollup: list[ObligationRollupRead] = []
+    # The obligations no contributing document satisfies. The audit question.
+    unmet_obligations: list[str] = []
     rationale: str | None = None
     # Where `rationale`'s quoted passage actually sits in the source document
     # (e.g. "Page 3, Paragraph 2") — computed deterministically at read time by
@@ -98,8 +127,19 @@ class FindingsReportRead(BaseModel):
 class FindingReviewRequest(BaseModel):
     action: Literal["save", "delete"]
     status: str | None = None
-    relevance_score: float | None = None
     coverage_score: float | None = None
+    # How the score is written for a person: "2 of 3". Preferred over the percentage
+    # everywhere in the UI — with 3 obligations the only reachable values are 0/1/2/3
+    # of 3, and rendering that as 0/33/67/100% implies a precision that isn't there.
+    fraction: str | None = None
+    obligations_total: int = 0
+    obligations_met: int = 0
+    obligations_partial: int = 0
+    # Per-obligation: the strongest verdict any document achieved, and which documents
+    # supplied it. This IS the reasoning — there is no prose summary any more.
+    obligation_rollup: list[ObligationRollupRead] = []
+    # The obligations no contributing document satisfies. The audit question.
+    unmet_obligations: list[str] = []
     # The auditor's grade decision. Separate from `status` so the two rubrics can
     # coexist while the frontend migrates.
     grade: Literal["conforming", "ofi", "minor_nc", "major_nc", "not_applicable"] | None = None

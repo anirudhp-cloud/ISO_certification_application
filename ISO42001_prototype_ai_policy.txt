@@ -1,0 +1,616 @@
+==============================================================================
+PROTOTYPE — REQUIREMENT-FIRST ASSESSMENT   (prompt iso42001-v5-proto)
+==============================================================================
+
+ONE API call. system message = instructions + all 20 documents
+(the static, cacheable prefix). user message = the assessment unit below.
+temperature=0, seed=42, response_format=json_object.
+
+##############################################################################
+# PART 1 — SYSTEM MESSAGE, INSTRUCTIONS
+##############################################################################
+
+You are assessing one topic of ISO/IEC 42001:2023 against an organisation's
+complete set of submitted documents.
+
+Every document is given below, each under its own header. You will be given ONE
+assessment unit — a topic, with the mandatory clause requirements, the Annex A control
+requirements, and the Annex B guidance points that the standard groups under it.
+
+Your job is to say, for each requirement, whether the DOCUMENT SET satisfies it and
+which document does so. Conformity is a property of the evidence as a whole, not of any
+single document: no one document is expected to satisfy everything.
+
+WHAT COUNTS AS EVIDENCE
+A passage evidences a requirement when it states, about the organisation, the thing the
+requirement demands — specifically enough that a reader could tell whether it had been
+done. It follows that these are NOT evidence:
+  - a passage that names the topic without stating what the organisation does about it
+  - a document's own control block (id, version, classification, prepared/reviewed/
+    approved-by), which shows how that one file is controlled and nothing more
+  - a heading, title, purpose statement or scope sentence, unless it itself states the
+    required thing
+  - a passage about an adjacent subject. Sustainability is not climate change; a table
+    of internal job titles is not a determination of the organisation's role as an AI
+    provider or customer. Adjacent is "unmet", not "partial".
+
+FOLLOWING A POINTER FROM ONE DOCUMENT TO ANOTHER
+Documents cross-reference each other ("refer to the Risk Register", "as per the
+Recruitment procedure"). Because every document is in front of you, resolve them:
+  - if the referenced document IS in the set and states the required thing, the
+    requirement is satisfied. Set "kind": "referenced", quote the passage from the
+    REFERENCED document, and name both documents in "reference_chain".
+  - if the referenced document is NOT in the set, the requirement is NOT satisfied by
+    that pointer — you cannot see the artefact. Record it in
+    "unresolved_references" so the auditor learns which cited artefacts were never
+    submitted. Do not guess at their contents.
+
+CONTRADICTIONS
+If one passage satisfies a requirement while another passage in the set forbids or
+undercuts it, the verdict is "contradicted", and you must quote BOTH. Example: a policy
+that must be "available to interested parties" while its own notice marks it internal
+use only, reproduction prohibited. A contradiction is not a partial — it is a defect
+that a reader of the document set would hit.
+
+WHO MUST DO IT
+Each requirement names its actor. Where the actor is "top_management", evidence must
+show top management doing or ensuring it — an approval, a signature, a minuted
+decision, an allocation. A document asserting that top management is committed to
+something is the document's claim, not top management's act.
+
+WHAT KIND OF EVIDENCE SATISFIES IT
+  determination           - the organisation has worked the thing out and can show it
+  process                 - a defined, repeatable way of doing it exists
+  documented_information  - it exists as a document, available for use
+  record                  - evidence that it actually happened, at least once
+A defined process does NOT satisfy a requirement whose kind is "record": a procedure
+saying reviews happen annually is not evidence that a review happened.
+
+VERDICTS
+  "met"          - a passage states the required thing, by the required actor, in the
+                   required form. Quote it.
+  "partial"      - this requirement is addressed incompletely: part of what it demands
+                   is evidenced and part is not, or an intention is stated rather than a
+                   practice. Say in "shortfall" exactly which part is missing. A
+                   "partial" with no stated shortfall is not acceptable — if you cannot
+                   name what is missing, the verdict is "met" or "unmet".
+  "unmet"        - nothing in the set addresses this requirement
+  "contradicted" - satisfied in one place and undercut in another; quote both
+
+RULES
+1. Judge each requirement independently. A strong passage for one carries no weight
+   for another.
+2. Quote verbatim, exactly as the document reads. Quotes are matched back against the
+   source to locate and highlight the evidence, so a paraphrase is unusable.
+3. For "unmet", give no quote. An absence has no passage.
+4. Return a verdict for EVERY requirement listed, in the order given, using the ids
+   exactly as printed.
+5. Name the document for every quote, exactly as its header reads.
+6. Use only these documents. Never infer from outside knowledge of the organisation
+   and never assume a practice exists because it would be normal.
+7. Annex B guidance is informative. Report each point as addressed or not; it must
+   never change a Layer 1 or Layer 2 verdict, and never produces a nonconformity.
+8. Return no score, percentage, grade or classification. Counting and grading happen
+   outside this assessment.
+9. Where a requirement is not satisfied, give a "recommendation": the specific thing
+   the organisation would have to add or do. One sentence, concrete.
+
+Output strict JSON, no text before or after it:
+{
+  "unit": string,
+  "requirements": [
+    {
+      "id": string,
+      "verdict": "met" | "partial" | "unmet" | "contradicted",
+      "evidence": [
+        { "document": string, "quote": string, "kind": "direct" | "referenced",
+          "reference_chain": [string] }
+      ],
+      "contradicted_by": { "document": string, "quote": string },
+      "shortfall": string,
+      "recommendation": string
+    }
+  ],
+  "guidance": [
+    { "id": string, "addressed": true | false, "document": string, "quote": string }
+  ],
+  "unresolved_references": [
+    { "document": string, "refers_to": string, "quote": string }
+  ]
+}
+Omit "contradicted_by", "shortfall" and "recommendation" where they do not apply.
+
+
+
+
+##############################################################################
+# PART 2 — SYSTEM MESSAGE, THE CORPUS (20 documents, 171,182 chars)
+##############################################################################
+
+  DOCUMENT: 24.Competence and Training Procedure   (3,847 chars)
+  DOCUMENT: 25.Awareness Communication Procedure   (4,584 chars)
+  DOCUMENT: 17.AI Incident Management Procedure   (4,659 chars)
+  DOCUMENT: 18.Human Oversight Escalation Procedure   (9,990 chars)
+  DOCUMENT: 19.Legal and Regulatory Compliance Procedure   (7,113 chars)
+  DOCUMENT: 1A.Scope of AIMS QMS for TechVest Global and Vertiscript Global    (2,847 chars)
+  DOCUMENT: 1B.AI Governance Framework for TechVest   (6,751 chars)
+  DOCUMENT: 20.Ethical AI Responsible AI Guidelines   (7,804 chars)
+  DOCUMENT: 21.Transparency Explainability Procedure AI   (3,957 chars)
+  DOCUMENT: 22.AI Security Controls Procedure   (4,697 chars)
+  DOCUMENT: 23 39.Procurement Procedure   (5,408 chars)
+  DOCUMENT: 26. Documented Information Control Procedure   (4,088 chars)
+  DOCUMENT: 27 29 Internal Audit CA procedure   (8,916 chars)
+  DOCUMENT: 28. Management Review Procedure   (4,870 chars)
+  DOCUMENT: 2A.AI Policy for TechVest   (10,490 chars)
+  DOCUMENT: 2B.Quality Policy TechVest Global   (4,335 chars)
+  DOCUMENT: 3 4.Context of Organization Procedure   (7,492 chars)
+  DOCUMENT: 30.Continual Improvement Procedure   (5,468 chars)
+  DOCUMENT: 31. Quality AI  Manual  for TechVest Global   (39,745 chars)
+  DOCUMENT: 32.TechVest Roles Responsibilities   (13,886 chars)
+
+        [each document's full text follows its header in the real prompt]
+
+##############################################################################
+# PART 3 — USER MESSAGE, THE ASSESSMENT UNIT
+##############################################################################
+
+ASSESSMENT UNIT: AI policy
+Sources in the standard: 5.2, A.2.2, A.2.3, A.2.4, B.2.2, B.2.3, B.2.4
+
+This unit gathers everything ISO/IEC 42001 says about this topic. The three
+layers below are graded differently — keep them separate in your answer.
+
+==========================================================================
+LAYER 1 — MANDATORY CLAUSE 5.2 (AI policy)
+Clauses apply to every organisation and cannot be excluded. A requirement here
+that no document satisfies is a shortfall against the standard.
+==========================================================================
+
+  5.2/0  An AI policy is established that is appropriate to the purpose of the organization
+        who must do it: top_management   satisfied by: documented_information
+
+  5.2/1  The AI policy provides a framework for setting AI objectives (see 6.2)
+        who must do it: top_management   satisfied by: documented_information
+
+  5.2/2  The AI policy includes a commitment to meet applicable requirements
+        who must do it: top_management   satisfied by: documented_information
+
+  5.2/3  The AI policy includes a commitment to continual improvement of the AI management system
+        who must do it: top_management   satisfied by: documented_information
+
+  5.2/4  The AI policy is available as documented information
+        who must do it: organization   satisfied by: documented_information
+
+  5.2/5  The AI policy refers, as relevant, to other organizational policies
+        who must do it: organization   satisfied by: documented_information
+
+  5.2/6  The AI policy is communicated within the organization
+        who must do it: organization   satisfied by: record
+
+  5.2/7  The AI policy is available to interested parties, as appropriate
+        who must do it: organization   satisfied by: record
+
+  NOTE (informative): Considerations for organizations when developing AI policies are provided in ISO/IEC 38507.
+
+==========================================================================
+LAYER 2 — ANNEX A CONTROLS
+Controls are risk-treatment options. They are selected from the organisation's
+AI risk assessment and may be EXCLUDED with a justification recorded in the
+Statement of Applicability. Judge them on the evidence; whether an excluded
+control still counts is decided outside this assessment.
+==========================================================================
+
+  A.2.2 — AI policy
+        control text: The organization shall document a policy for the development or use of AI systems.
+    A.2.2/0  A policy for the development or use of AI systems is documented
+        who must do it: organization   satisfied by: documented_information
+
+  A.2.3 — Alignment with other organizational policies
+        control text: The organization shall determine where other policies can be affected by, or apply to, the organization's objectives with respect to AI systems.
+    A.2.3/0  Other policies that can be affected by, or apply to, the organization's objectives with respect to AI systems are determined
+        who must do it: organization   satisfied by: determination
+    A.2.3/1  The relationship between the AI policy and those other policies is addressed
+        who must do it: organization   satisfied by: documented_information
+
+  A.2.4 — Review of the AI policy
+        control text: The AI policy shall be reviewed at planned intervals or additionally as needed to ensure its continuing suitability, adequacy and effectiveness.
+    A.2.4/0  The AI policy is reviewed at planned intervals, and additionally as needed
+        who must do it: organization   satisfied by: process
+    A.2.4/1  The review addresses the policy's continuing suitability, adequacy and effectiveness
+        who must do it: organization   satisfied by: record
+
+==========================================================================
+LAYER 3 — ANNEX B IMPLEMENTATION GUIDANCE
+Every statement here uses 'should'. Annex B is INFORMATIVE: an unaddressed point
+is an opportunity for improvement and can NEVER be a nonconformity. It must not
+change any verdict in Layer 1 or Layer 2. Report only whether each is addressed.
+==========================================================================
+
+  G00 [B.2.2] The AI policy should be informed by business strategy.
+  G01 [B.2.2] The AI policy should be informed by organizational values and culture and the amount of risk the organization is willing to pursue or retain.
+  G02 [B.2.2] The AI policy should be informed by the level of risk posed by the AI systems.
+  G03 [B.2.2] The AI policy should be informed by legal requirements, including contracts.
+  G04 [B.2.2] The AI policy should be informed by the risk environment of the organization.
+  G05 [B.2.2] The AI policy should be informed by impact to relevant interested parties.
+  G06 [B.2.2] The AI policy should include principles that guide all activities of the organization related to AI.
+  G07 [B.2.2] The AI policy should include processes for handling deviations and exceptions to policy.
+  G08 [B.2.2] The AI policy should consider topic-specific aspects such as AI resources and assets.
+  G09 [B.2.2] The AI policy should consider topic-specific aspects such as AI system impact assessments.
+  G10 [B.2.2] The AI policy should consider topic-specific aspects such as AI system development.
+  G11 [B.2.2] Relevant policies should guide the development, purchase, operation and use of AI systems.
+  G12 [B.2.3] The organization should analyse whether and where current policies (e.g. quality, security, safety, privacy) intersect with AI.
+  G13 [B.2.3] The organization should update those existing policies if updates are required, or include provisions in the AI policy.
+  G14 [B.2.4] A role approved by management should be responsible for the development, review and evaluation of the AI policy or its components.
+  G15 [B.2.4] The review should assess opportunities for improvement in response to changes to the organizational environment, business circumstances, legal conditions or technical environment.
+  G16 [B.2.4] The review of the AI policy should take the results of management reviews into account.
+
+##############################################################################
+# PART 4 — RAW MODEL OUTPUT
+##############################################################################
+
+{
+  "unit": "AI policy",
+  "requirements": [
+    {
+      "id": "5.2/0",
+      "verdict": "met",
+      "evidence": [
+        {
+          "document": "2A.AI Policy for TechVest",
+          "quote": "This Artificial Intelligence Policy (\"AI Policy\" or \"the Policy\") sets forth TechVest Global's overarching commitment to the responsible design, development, procurement, deployment, and governance of Artificial Intelligence (AI) and Machine Learning (ML) systems across the organisation. It establishes the foundational principles and boundaries within which TechVest Global's AI Management System (AIMS) operates, in full conformance with ISO/IEC 42001:2023.",
+          "kind": "direct",
+          "reference_chain": ["2A.AI Policy for TechVest"]
+        }
+      ]
+    },
+    {
+      "id": "5.2/1",
+      "verdict": "met",
+      "evidence": [
+        {
+          "document": "2A.AI Policy for TechVest",
+          "quote": "The Policy reflects the organisation's recognition that AI technologies offer significant opportunities for innovation and competitive advantage, while also introducing risks that must be proactively identified, assessed, and controlled. TechVest Global is unequivocal in its commitment to harnessing AI in a manner that is ethical, transparent, safe, and aligned with both regulatory obligations and the legitimate interests of all stakeholders.",
+          "kind": "direct",
+          "reference_chain": ["2A.AI Policy for TechVest"]
+        },
+        {
+          "document": "2A.AI Policy for TechVest",
+          "quote": "All AI activities conducted by or on behalf of TechVest Global shall be guided by the following core principles. These principles are non-negotiable and must be embedded throughout the AI system lifecycle.",
+          "kind": "direct",
+          "reference_chain": ["2A.AI Policy for TechVest"]
+        }
+      ]
+    },
+    {
+      "id": "5.2/2",
+      "verdict": "met",
+      "evidence": [
+        {
+          "document": "2A.AI Policy for TechVest",
+          "quote": "TechVest Global shall at all times comply with applicable laws, regulations, and standards governing AI, including data protection legislation, sector-specific regulatory requirements, and evolving AI-specific regulatory frameworks.",
+          "kind": "direct",
+          "reference_chain": ["2A.AI Policy for TechVest"]
+        }
+      ]
+    },
+    {
+      "id": "5.2/3",
+      "verdict": "met",
+      "evidence": [
+        {
+          "document": "2A.AI Policy for TechVest",
+          "quote": "The organisation acknowledges that effective AI governance requires sustained leadership accountability, adequate resourcing, and a culture of continuous improvement.",
+          "kind": "direct",
+          "reference_chain": ["2A.AI Policy for TechVest"]
+        },
+        {
+          "document": "2A.AI Policy for TechVest",
+          "quote": "Reviewing the Policy annually or in response to material changes in organisational context, technology, or regulatory requirements.",
+          "kind": "direct",
+          "reference_chain": ["2A.AI Policy for TechVest"]
+        }
+      ]
+    },
+    {
+      "id": "5.2/4",
+      "verdict": "met",
+      "evidence": [
+        {
+          "document": "2A.AI Policy for TechVest",
+          "quote": "This Artificial Intelligence Policy (\"AI Policy\" or \"the Policy\") sets forth TechVest Global's overarching commitment to the responsible design, development, procurement, deployment, and governance of Artificial Intelligence (AI) and Machine Learning (ML) systems across the organisation.",
+          "kind": "direct",
+          "reference_chain": ["2A.AI Policy for TechVest"]
+        }
+      ]
+    },
+    {
+      "id": "5.2/5",
+      "verdict": "met",
+      "evidence": [
+        {
+          "document": "2A.AI Policy for TechVest",
+          "quote": "AI development and deployment shall comply with applicable data protection laws and TechVest Global's Data Governance framework.",
+          "kind": "direct",
+          "reference_chain": ["2A.AI Policy for TechVest"]
+        }
+      ]
+    },
+    {
+      "id": "5.2/6",
+      "verdict": "met",
+      "evidence": [
+        {
+          "document": "31. Quality AI  Manual  for TechVest Global",
+          "quote": "The IMS Policy is reviewed annually, communicated to all personnel, and made available to interested parties on request.",
+          "kind": "direct",
+          "reference_chain": ["31. Quality AI  Manual  for TechVest Global"]
+        }
+      ]
+    },
+    {
+      "id": "5.2/7",
+      "verdict": "met",
+      "evidence": [
+        {
+          "document": "31. Quality AI  Manual  for TechVest Global",
+          "quote": "The IMS Policy is reviewed annually, communicated to all personnel, and made available to interested parties on request.",
+          "kind": "direct",
+          "reference_chain": ["31. Quality AI  Manual  for TechVest Global"]
+        }
+      ]
+    },
+    {
+      "id": "A.2.2/0",
+      "verdict": "met",
+      "evidence": [
+        {
+          "document": "2A.AI Policy for TechVest",
+          "quote": "This Artificial Intelligence Policy (\"AI Policy\" or \"the Policy\") sets forth TechVest Global's overarching commitment to the responsible design, development, procurement, deployment, and governance of Artificial Intelligence (AI) and Machine Learning (ML) systems across the organisation.",
+          "kind": "direct",
+          "reference_chain": ["2A.AI Policy for TechVest"]
+        }
+      ]
+    },
+    {
+      "id": "A.2.3/0",
+      "verdict": "met",
+      "evidence": [
+        {
+          "document": "2A.AI Policy for TechVest",
+          "quote": "AI development and deployment shall comply with applicable data protection laws and TechVest Global's Data Governance framework. Personal data used in AI systems shall be collected, processed, and retained lawfully, with appropriate safeguards to protect individual privacy rights.",
+          "kind": "direct",
+          "reference_chain": ["2A.AI Policy for TechVest"]
+        }
+      ]
+    },
+    {
+      "id": "A.2.3/1",
+      "verdict": "met",
+      "evidence": [
+        {
+          "document": "2A.AI Policy for TechVest",
+          "quote": "AI development and deployment shall comply with applicable data protection laws and TechVest Global's Data Governance framework.",
+          "kind": "direct",
+          "reference_chain": ["2A.AI Policy for TechVest"]
+        }
+      ]
+    },
+    {
+      "id": "A.2.4/0",
+      "verdict": "met",
+      "evidence": [
+        {
+          "document": "2A.AI Policy for TechVest",
+          "quote": "This Policy shall be reviewed at least annually by the Chief AI Officer and AI Governance and Certification Director, in consultation with the CEO and relevant stakeholders. Reviews shall also be triggered by: Material changes in TechVest Global's AI activities or strategic direction. Significant developments in AI technology, risk landscape, or industry best practice. Changes in applicable laws, regulations, or standards, including updates to ISO/IEC 42001. Findings arising from internal or external AIMS audits or incident investigations.",
+          "kind": "direct",
+          "reference_chain": ["2A.AI Policy for TechVest"]
+        }
+      ]
+    },
+    {
+      "id": "A.2.4/1",
+      "verdict": "met",
+      "evidence": [
+        {
+          "document": "2A.AI Policy for TechVest",
+          "quote": "This Policy shall be reviewed at least annually by the Chief AI Officer and AI Governance and Certification Director, in consultation with the CEO and relevant stakeholders. Reviews shall also be triggered by: Material changes in TechVest Global's AI activities or strategic direction. Significant developments in AI technology, risk landscape, or industry best practice. Changes in applicable laws, regulations, or standards, including updates to ISO/IEC 42001. Findings arising from internal or external AIMS audits or incident investigations.",
+          "kind": "direct",
+          "reference_chain": ["2A.AI Policy for TechVest"]
+        }
+      ]
+    }
+  ],
+  "guidance": [
+    {
+      "id": "G00",
+      "addressed": true,
+      "document": "2A.AI Policy for TechVest",
+      "quote": "The Policy reflects the organisation's recognition that AI technologies offer significant opportunities for innovation and competitive advantage, while also introducing risks that must be proactively identified, assessed, and controlled."
+    },
+    {
+      "id": "G01",
+      "addressed": true,
+      "document": "2A.AI Policy for TechVest",
+      "quote": "TechVest Global's Executive Leadership Team are fully committed to the responsible and ethical use of AI. The organisation acknowledges that effective AI governance requires sustained leadership accountability, adequate resourcing, and a culture of continuous improvement."
+    },
+    {
+      "id": "G02",
+      "addressed": true,
+      "document": "2A.AI Policy for TechVest",
+      "quote": "TechVest Global shall take reasonable and proportionate steps to identify, assess, and mitigate bias and discriminatory outcomes in AI systems."
+    },
+    {
+      "id": "G03",
+      "addressed": true,
+      "document": "2A.AI Policy for TechVest",
+      "quote": "TechVest Global shall at all times comply with applicable laws, regulations, and standards governing AI, including data protection legislation, sector-specific regulatory requirements, and evolving AI-specific regulatory frameworks."
+    },
+    {
+      "id": "G04",
+      "addressed": true,
+      "document": "2A.AI Policy for TechVest",
+      "quote": "The Policy reflects the organisation's recognition that AI technologies offer significant opportunities for innovation and competitive advantage, while also introducing risks that must be proactively identified, assessed, and controlled."
+    },
+    {
+      "id": "G05",
+      "addressed": true,
+      "document": "2A.AI Policy for TechVest",
+      "quote": "TechVest Global is unequivocal in its commitment to harnessing AI in a manner that is ethical, transparent, safe, and aligned with both regulatory obligations and the legitimate interests of all stakeholders."
+    },
+    {
+      "id": "G06",
+      "addressed": true,
+      "document": "2A.AI Policy for TechVest",
+      "quote": "All AI activities conducted by or on behalf of TechVest Global shall be guided by the following core principles. These principles are non-negotiable and must be embedded throughout the AI system lifecycle."
+    },
+    {
+      "id": "G07",
+      "addressed": false,
+      "document": "",
+      "quote": ""
+    },
+    {
+      "id": "G08",
+      "addressed": true,
+      "document": "2A.AI Policy for TechVest",
+      "quote": "Ensuring sufficient human, financial, and technological resources are allocated to support the AIMS."
+    },
+    {
+      "id": "G09",
+      "addressed": true,
+      "document": "2A.AI Policy for TechVest",
+      "quote": "Risks associated with AI failures, unintended outputs, or adversarial manipulation shall be assessed and mitigated through appropriate technical and procedural controls."
+    },
+    {
+      "id": "G10",
+      "addressed": true,
+      "document": "2A.AI Policy for TechVest",
+      "quote": "AI model design, development, training, evaluation, and validation."
+    },
+    {
+      "id": "G11",
+      "addressed": true,
+      "document": "2A.AI Policy for TechVest",
+      "quote": "AI development and deployment shall comply with applicable data protection laws and TechVest Global's Data Governance framework."
+    },
+    {
+      "id": "G12",
+      "addressed": true,
+      "document": "2A.AI Policy for TechVest",
+      "quote": "AI development and deployment shall comply with applicable data protection laws and TechVest Global's Data Governance framework."
+    },
+    {
+      "id": "G13",
+      "addressed": true,
+      "document": "2A.AI Policy for TechVest",
+      "quote": "Reviews shall also be triggered by: Material changes in TechVest Global's AI activities or strategic direction. Significant developments in AI technology, risk landscape, or industry best practice. Changes in applicable laws, regulations, or standards, including updates to ISO/IEC 42001."
+    },
+    {
+      "id": "G14",
+      "addressed": true,
+      "document": "2A.AI Policy for TechVest",
+      "quote": "This Policy shall be reviewed at least annually by the Chief AI Officer and AI Governance and Certification Director, in consultation with the CEO and relevant stakeholders."
+    },
+    {
+      "id": "G15",
+      "addressed": true,
+      "document": "2A.AI Policy for TechVest",
+      "quote": "Reviews shall also be triggered by: Material changes in TechVest Global's AI activities or strategic direction. Significant developments in AI technology, risk landscape, or industry best practice. Changes in applicable laws, regulations, or standards, including updates to ISO/IEC 42001."
+    },
+    {
+      "id": "G16",
+      "addressed": true,
+      "document": "2A.AI Policy for TechVest",
+      "quote": "Findings arising from internal or external AIMS audits or incident investigations."
+    }
+  ],
+  "unresolved_references": []
+}
+
+##############################################################################
+# PART 5 — WHAT THE APPLICATION MAKES OF IT
+##############################################################################
+
+
+==============================================================================
+LAYER 1 — CLAUSE 5.2 (mandatory, cannot be excluded)
+==============================================================================
+5.2/0  MET           An AI policy is established that is appropriate to the purpo
+        [direct: 2A.AI Policy for TechVest] 2A.AI Policy for TechVest
+          'This Artificial Intelligence Policy ("AI Policy" or "the Policy") sets forth TechVest Global\'s overarching commitment '
+5.2/1  MET           The AI policy provides a framework for setting AI objectives
+        [direct: 2A.AI Policy for TechVest] 2A.AI Policy for TechVest
+          "The Policy reflects the organisation's recognition that AI technologies offer significant opportunities for innovation"
+        [direct: 2A.AI Policy for TechVest] 2A.AI Policy for TechVest
+          'All AI activities conducted by or on behalf of TechVest Global shall be guided by the following core principles. These'
+5.2/2  MET           The AI policy includes a commitment to meet applicable requi
+        [direct: 2A.AI Policy for TechVest] 2A.AI Policy for TechVest
+          'TechVest Global shall at all times comply with applicable laws, regulations, and standards governing AI, including dat'
+5.2/3  MET           The AI policy includes a commitment to continual improvement
+        [direct: 2A.AI Policy for TechVest] 2A.AI Policy for TechVest
+          'The organisation acknowledges that effective AI governance requires sustained leadership accountability, adequate reso'
+        [direct: 2A.AI Policy for TechVest] 2A.AI Policy for TechVest
+          'Reviewing the Policy annually or in response to material changes in organisational context, technology, or regulatory '
+5.2/4  MET           The AI policy is available as documented information
+        [direct: 2A.AI Policy for TechVest] 2A.AI Policy for TechVest
+          'This Artificial Intelligence Policy ("AI Policy" or "the Policy") sets forth TechVest Global\'s overarching commitment '
+5.2/5  MET           The AI policy refers, as relevant, to other organizational p
+        [direct: 2A.AI Policy for TechVest] 2A.AI Policy for TechVest
+          "AI development and deployment shall comply with applicable data protection laws and TechVest Global's Data Governance "
+5.2/6  MET           The AI policy is communicated within the organization
+        [direct: 31. Quality AI  Manual  for TechVest Global] 31. Quality AI  Manual  for TechVest Global
+          'The IMS Policy is reviewed annually, communicated to all personnel, and made available to interested parties on reques'
+5.2/7  MET           The AI policy is available to interested parties, as appropr
+        [direct: 31. Quality AI  Manual  for TechVest Global] 31. Quality AI  Manual  for TechVest Global
+          'The IMS Policy is reviewed annually, communicated to all personnel, and made available to interested parties on reques'
+
+==============================================================================
+LAYER 2 — ANNEX A CONTROLS (excludable via the Statement of Applicability)
+==============================================================================
+A.2.2/0  MET           A policy for the development or use of AI systems is docum
+        [direct] 2A.AI Policy for TechVest: 'This Artificial Intelligence Policy ("AI Policy" or "the Policy") sets forth TechVest Global\'s o'
+A.2.3/0  MET           Other policies that can be affected by, or apply to, the o
+        [direct] 2A.AI Policy for TechVest: 'AI development and deployment shall comply with applicable data protection laws and TechVest Glo'
+A.2.3/1  MET           The relationship between the AI policy and those other pol
+        [direct] 2A.AI Policy for TechVest: 'AI development and deployment shall comply with applicable data protection laws and TechVest Glo'
+A.2.4/0  MET           The AI policy is reviewed at planned intervals, and additi
+        [direct] 2A.AI Policy for TechVest: 'This Policy shall be reviewed at least annually by the Chief AI Officer and AI Governance and Ce'
+A.2.4/1  MET           The review addresses the policy's continuing suitability, 
+        [direct] 2A.AI Policy for TechVest: 'This Policy shall be reviewed at least annually by the Chief AI Officer and AI Governance and Ce'
+
+==============================================================================
+LAYER 3 — ANNEX B GUIDANCE: 16 of 17 addressed
+(informative — unaddressed points are OFIs, never nonconformities)
+==============================================================================
+  G00 addressed  The AI policy should be informed by business strategy.
+  G01 addressed  The AI policy should be informed by organizational values and culture and the amount of 
+  G02 addressed  The AI policy should be informed by the level of risk posed by the AI systems.
+  G03 addressed  The AI policy should be informed by legal requirements, including contracts.
+  G04 addressed  The AI policy should be informed by the risk environment of the organization.
+  G05 addressed  The AI policy should be informed by impact to relevant interested parties.
+  G06 addressed  The AI policy should include principles that guide all activities of the organization re
+  G07 NOT        The AI policy should include processes for handling deviations and exceptions to policy.
+  G08 addressed  The AI policy should consider topic-specific aspects such as AI resources and assets.
+  G09 addressed  The AI policy should consider topic-specific aspects such as AI system impact assessment
+  G10 addressed  The AI policy should consider topic-specific aspects such as AI system development.
+  G11 addressed  Relevant policies should guide the development, purchase, operation and use of AI system
+  G12 addressed  The organization should analyse whether and where current policies (e.g. quality, securi
+  G13 addressed  The organization should update those existing policies if updates are required, or inclu
+  G14 addressed  A role approved by management should be responsible for the development, review and eval
+  G15 addressed  The review should assess opportunities for improvement in response to changes to the org
+  G16 addressed  The review of the AI policy should take the results of management reviews into account.
+
+==============================================================================
+CITED BUT NEVER SUBMITTED — 0 reference(s)
+==============================================================================
+
+==============================================================================
+COUNTED IN CODE (the model returned no score)
+==============================================================================
+  clause 5.2      8 of 8 met   (partial 0, unmet 0, contradicted 0)
+  Annex A         5 of 5 met   (partial 0, unmet 0, contradicted 0)
+  Annex B         16 of 17 addressed -> 1 OFI(s)
+
+tokens: 40,358 in / 2,970 out
+cached: 40,192 of the input
+cost:   $0.044 for this one call; x54 units ~= $2.39 per run (the corpus is cached after the first call)

@@ -1,0 +1,41 @@
+Certainly! Here is the content from the page, set out as requested:
+
+---
+
+**B.6 AI system life cycle**
+
+**B.6.1 Management guidance for AI system development**
+
+**B.6.1.1 Objective**
+
+To ensure that the organization identifies and documents objectives and implements processes for the responsible design and development of AI systems.
+
+**B.6.1.2 Objectives for responsible development of AI system**
+
+*Control*
+
+The organization should identify and document objectives to guide the responsible development of AI systems, and take those objectives into account and integrate measures to achieve them in the development life cycle.
+
+*Implementation guidance*
+
+The organization should identify objectives (see 6.2) that affect the AI system design and development processes. These objectives should be taken into account in the design and development processes.  
+For example, if an organization defines "fairness" as one objective, this should be incorporated in the requirements specification, data acquisition, data conditioning, model training, verification and validation, etc. The organization should provide requirements and guidelines as necessary to ensure that measures are integrated into the various stages (e.g. the requirement to use a specific testing tool or method to address unfairness or unwanted bias) to achieve such objectives.
+
+*Other information*
+
+AI techniques are being used to augment security measures such as threat prediction detection and prevention of security attacks. This is an application of AI techniques that can be used to reinforce security measures to protect both AI systems and conventional non-AI based software systems. Annex C provides examples of organizational objectives for managing risk, which can be useful in determining the objectives for AI system development.
+
+**B.6.1.3 Processes for responsible design and development of AI systems**
+
+*Control*
+
+The organization should define and document the specific processes for the responsible design and development of the AI system.
+
+---
+
+**NOTE**  
+ISO/IEC TR 24368 provides a high-level overview of ethical and societal concerns related to AI systems and applications.
+
+---
+
+[No unreadable regions detected.]

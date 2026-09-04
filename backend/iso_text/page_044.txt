@@ -1,0 +1,57 @@
+Certainly! Here is the content from the page, set out as requested:
+
+---
+
+**B.6.2.8 AI system recording of event logs**
+
+**Control**
+
+The organization should determine at which phases of the AI system life cycle, record keeping of event logs should be enabled, but at the minimum when the AI system is in use.
+
+**Implementation guidance**
+
+The organization should ensure logging for AI systems it deploys to automatically collect and record event logs related to certain events that occur during operation. Such logging can include but is not limited to:
+
+— traceability of the AI system’s functionality to ensure that the AI system is operating as intended;
+
+— detection of the AI system’s performance outside of the AI system’s intended operating conditions that can result in undesirable performance on production data or impacts to relevant interested parties through monitoring of the operation of the AI system.
+
+AI system event logs can include information, such as the time and date each time the AI system is used, the production data on which the AI system operates on, the outputs that fall out of the range of the intended operation of the AI system, etc.
+
+Event logs should be kept for as long as required for the intended use of the AI system and within the data retention policies of the organization. Legal requirements related to data retention can apply.
+
+---
+
+**[The preceding content on the page, before B.6.2.8, is:]**
+
+— changes made to the AI system when it is in operation;
+
+— impact assessment documentation as described in B.5.
+
+The organization should document technical information related to the responsible operation of the AI system. This can include, but is not limited to:
+
+— documenting a plan for managing failures. This can include for example, the need to describe a rollback plan for the AI system, turning off features of the AI system, an update process or a plan for notifying customers, users, etc. of changes to the AI system, updated information on system failures and how these can be mitigated;
+
+— documenting processes for monitoring the health of the AI system (i.e. the AI system operates as intended and within its normal operating margins, also referred to as observability) and processes for addressing AI system failures;
+
+— documenting standard operating procedures for the AI system, including which events should be monitored and how event logs are prioritized and reviewed. It can also include how to investigate failures and the prevention of failures;
+
+— documenting the roles of personnel responsible for operation of the AI system as well as those responsible for accountability of the system use, especially in relation to handling the effects of AI system failures or managing updates to the AI system;
+
+— documenting system updates like changes in the system operations, new or modified intended uses, or other changes in system functionality.
+
+The organization should have procedures in place to address operational changes including communication to users and internal evaluations on the type of change.
+
+Documentation should be up to date and accurate. Documentation should be approved by the relevant management within the organization.
+
+When provided as part of the user documentation the controls provided in Table A.1 should be taken into account.
+
+---
+
+**NOTES:**
+
+No explicit NOTE is visible on this page.
+
+---
+
+**[illegible]** is marked where text is unreadable, but all visible text has been transcribed.

@@ -292,6 +292,35 @@ textarea {
   margin: -4px 0 14px;
 }
 
+/* Explanatory copy that carries meaning rather than decoration: what a segment IS,
+   what a count means. Given a tinted panel so it reads as guidance the auditor can
+   skip once learned, not as part of the data. */
+.segment-explainer {
+  margin: 0 0 14px;
+  padding: 10px 14px;
+  border-left: 3px solid var(--accent-green);
+  border-radius: 0 6px 6px 0;
+  background: var(--bg);
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--text);
+}
+
+.segment-explainer-split {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin: 6px 0 6px 2px;
+}
+
+/* Sits under a section heading, above that section's data. */
+.section-note {
+  margin: 0 0 10px;
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--text-muted);
+}
+
 /* ---------- Tabs ---------- */
 .tabs {
   display: flex;
@@ -645,6 +674,46 @@ textarea {
   background: var(--bg);
 }
 
+/* One document's verdict per obligation, inside the Requirements modal. Same colour
+   language as the findings page (green / amber / red) so a verdict reads the same
+   wherever it appears. */
+.mapping-obligations {
+  list-style: none;
+  margin: 10px 0 0;
+  padding: 0;
+}
+
+.mapping-obligation {
+  display: flex;
+  gap: 8px;
+  padding: 8px 0;
+  border-top: 1px solid var(--border);
+}
+
+.mapping-obligation-mark { flex: 0 0 14px; font-weight: 700; }
+.mapping-obligation-met .mapping-obligation-mark { color: var(--accent-green); }
+.mapping-obligation-partial .mapping-obligation-mark { color: var(--accent-amber); }
+.mapping-obligation-unmet .mapping-obligation-mark { color: var(--danger); }
+
+.mapping-obligation-text { flex: 1 1 auto; font-size: 13px; line-height: 1.5; }
+
+.mapping-obligation-verdict {
+  display: block;
+  margin-top: 2px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+}
+
+.mapping-obligation-none {
+  display: block;
+  margin-top: 4px;
+  font-size: 12px;
+  font-style: italic;
+  color: var(--text-muted);
+}
+
 .mapping-citation {
   font-size: 12px;
   color: var(--accent-green);
@@ -925,3 +994,214 @@ textarea {
 
 /* A requirement no document provided evidence for — nothing to confirm yet. */
 .badge-unassessed { background: #fbe9e9; color: var(--danger); }
+
+/* ===== Obligations — the reasoning, replacing the prose summary ===== */
+
+.obligation {
+  border: 1px solid var(--border);
+  border-left-width: 3px;
+  border-radius: var(--radius);
+  padding: 10px 12px;
+  margin-bottom: 8px;
+}
+
+.obligation-met { border-left-color: var(--accent-green); }
+.obligation-partial { border-left-color: var(--accent-amber); }
+.obligation-unmet { border-left-color: var(--danger); }
+
+.obligation-head {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.obligation-mark {
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 1.3;
+  flex: none;
+  width: 14px;
+}
+
+.obligation-met .obligation-mark { color: var(--accent-green); }
+.obligation-partial .obligation-mark { color: var(--accent-amber); }
+.obligation-unmet .obligation-mark { color: var(--danger); }
+
+.obligation-text { flex: 1 1 auto; font-size: 13px; line-height: 1.5; }
+
+.obligation-verdict {
+  flex: none;
+  font-size: 11px;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.obligation-none {
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--danger);
+  font-weight: 500;
+}
+
+.obligation-docs { margin-top: 8px; }
+.obligation-doc { margin-bottom: 6px; }
+.obligation-doc:last-child { margin-bottom: 0; }
+.obligation-doc-name { font-size: 12px; font-weight: 600; }
+
+/* The arithmetic, shown. A stated rule you can disagree with beats a number
+   nobody could account for. */
+.obligation-workings {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+  font-size: 12px;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* The partial note sits under the count rather than beside it, so a partial can
+   never be read as part of the fraction. */
+.obligation-workings-note {
+  display: block;
+  margin-top: 4px;
+  font-style: italic;
+}
+
+.obligation-count { font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+
+/* ===== Document view — the real document, at the citation ===== */
+
+.doc-context {
+  background: var(--accent-blue-bg);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  margin-bottom: 14px;
+  font-size: 13px;
+}
+
+.doc-context-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* Mode toggle plus "open original" sit together, so neither wraps under the
+   description text on a narrow window. */
+.doc-context-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  flex: 0 0 auto;
+}
+
+.doc-context-quote {
+  margin: 10px 0 0;
+  padding: 8px 12px;
+  border-left: 3px solid var(--primary);
+  background: var(--surface);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.doc-context-warn { margin-top: 8px; color: var(--accent-amber); font-size: 12px; line-height: 1.55; }
+
+/* Superseded: the document is now served as a PDF and rendered by the browser.
+   Kept only for the plain-text case. */
+.doc-rendered {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 32px 40px;
+  max-height: 72vh;
+  overflow-y: auto;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.doc-rendered h1, .doc-rendered h2, .doc-rendered h3,
+.doc-rendered h4, .doc-rendered h5 {
+  margin: 22px 0 8px;
+  line-height: 1.3;
+}
+
+.doc-rendered h1, .doc-rendered .doc-title { font-size: 20px; }
+.doc-rendered h2 { font-size: 17px; }
+.doc-rendered h3 { font-size: 15px; }
+.doc-rendered h4, .doc-rendered h5 { font-size: 14px; }
+.doc-rendered p { margin: 0 0 10px; }
+.doc-rendered ul, .doc-rendered ol { margin: 0 0 10px; padding-left: 24px; }
+.doc-rendered li { margin-bottom: 4px; }
+
+.doc-rendered table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 12px 0 16px;
+  font-size: 13px;
+}
+
+.doc-rendered th, .doc-rendered td {
+  border: 1px solid var(--border);
+  padding: 6px 9px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.doc-rendered th { background: var(--bg); font-weight: 600; }
+.doc-rendered img { display: none; }  /* not extracted, so not shown as if assessed */
+
+.doc-plaintext {
+  margin: 0;
+  font-family: ui-monospace, Consolas, monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+/* The cited passage. */
+.doc-highlight {
+  background: #ffe9a8;
+  padding: 1px 2px;
+  border-radius: 2px;
+  box-shadow: 0 0 0 2px #ffe9a8;
+}
+
+/* Fallback when the quote spans element boundaries and can't be wrapped inline. */
+.doc-highlight-block {
+  background: #fff6d9;
+  border-left: 3px solid var(--accent-amber);
+  padding-left: 10px;
+}
+
+.doc-pdf {
+  width: 100%;
+  height: 72vh;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.doc-unrenderable {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  padding: 24px;
+}
+
+.doc-unrenderable strong { display: block; margin-bottom: 6px; font-size: 14px; }
+.doc-unrenderable p { margin: 0 0 12px; font-size: 13px; line-height: 1.6; color: var(--text-muted); }
+
+.doc-loading {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  padding: 32px;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.doc-pdf { height: 78vh; }

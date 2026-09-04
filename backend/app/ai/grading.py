@@ -44,6 +44,51 @@ def evidence_state(*, has_evidence: bool, coverage_score: float | None) -> str:
     return INSUFFICIENT
 
 
+def propose_grade_from_obligations(
+    *,
+    segment: str,
+    total_obligations: int,
+    met: int,
+    partial: int,
+    unmet_guidance_points: list[str] | None,
+    is_applicable: bool | None = None,
+) -> str:
+    """Grade from a COUNT of obligations — no thresholds.
+
+    The percentage thresholds this replaces (90 and 50) were numbers I chose, acting
+    on a coverage figure the model had also chosen. Two layers of invention stacked on
+    each other: a finding at 89% proposed minor_nc and one at 90% proposed conforming,
+    and the difference between them was sampling noise.
+
+    Counting removes both. Either every obligation is satisfied or it is not, and the
+    only remaining judgement — whether unaddressed Annex B guidance is an OFI rather
+    than a shortfall — follows from Annex B being guidance, not a requirement.
+    """
+    if segment == "control" and is_applicable is False:
+        return NOT_APPLICABLE
+
+    if total_obligations <= 0:
+        # No mark scheme seeded for this requirement; nothing can be counted, so
+        # refuse to imply an assessment happened.
+        return MAJOR_NC if segment == "clause" else MINOR_NC
+
+    if met == 0 and partial == 0:
+        return MAJOR_NC if segment == "clause" else MINOR_NC
+
+    if met == total_obligations:
+        # Every obligation satisfied. Unaddressed Annex B guidance is worth improving,
+        # not a failure to meet the control.
+        return OFI if unmet_guidance_points else CONFORMING
+
+    # Some but not all. A mandatory clause with nothing evidenced is already handled
+    # above; a clause still missing obligations is a shortfall against a requirement
+    # no organisation may exclude, so it grades harder than a control gap whose
+    # severity would depend on a risk register that does not exist here.
+    if segment == "clause" and (met + partial) * 2 <= total_obligations:
+        return MAJOR_NC
+    return MINOR_NC
+
+
 def propose_grade(
     *,
     segment: str,
@@ -52,7 +97,8 @@ def propose_grade(
     unmet_guidance_points: list[str] | None,
     is_applicable: bool | None = None,
 ) -> str:
-    """Suggest a grade for one requirement.
+    """Legacy percentage-threshold grading, kept only for findings written before the
+    mark scheme existed. New assessments use propose_grade_from_obligations.
 
     `segment` matters because the two halves of the standard carry different weight.
     A mandatory clause with no documented evidence is a candidate major

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>ISO Certification Platform — UI Flow Mockup</title>
+<title>ISO Certification Platform</title>
 <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -224,9 +224,13 @@
         </div>
 
         <p class="hint">All 70 requirements. A grade marked <strong>Suggested</strong> is the machine's
-        assessment and carries no auditor decision yet — confirm or override it on the
-        <strong>Review</strong> page. Click <strong>Open</strong> on any row for the quote from each
-        contributing document and where it sits.</p>
+        assessment and carries no auditor decision yet — confirm or override it inline on any row.
+        Click <strong>Open</strong> for the quote from each contributing document and where it sits.</p>
+
+        <!-- The two halves of ISO 42001 are not the same kind of thing, and an
+             auditor who reads this page as one flat list of 70 will misread it. The
+             explainer changes with the tab rather than stating both at once. -->
+        <div class="segment-explainer" id="findings-segment-explainer"></div>
 
         <div id="findings-summary" class="findings-summary"></div>
 
@@ -258,7 +262,7 @@
               <th>Document(s)</th>
               <th id="findings-col-requirement">Requirement</th>
               <th>Grade</th>
-              <th>Coverage</th>
+              <th>Obligations</th>
               <th></th>
             </tr>
           </thead>
@@ -267,6 +271,25 @@
       </section>
 
 
+
+      <!-- ---------- DOCUMENT VIEW — the document opened at a citation ----------
+           Every citation used to be plain text: accurate, but you had to open Word
+           and search for it yourself. This renders the document's passages with the
+           cited one highlighted and its neighbours around it, so a quote can be
+           checked in place. -->
+      <section id="document-view" class="view hidden">
+        <button id="back-from-document-view" class="btn btn-ghost back-btn">&larr; Back</button>
+
+        <div class="view-header">
+          <div>
+            <h2 id="document-view-name"></h2>
+            <p class="meta-line" id="document-view-meta"></p>
+          </div>
+        </div>
+
+        <div id="document-view-context" class="doc-context hidden"></div>
+        <div id="document-view-body" class="doc-passages"></div>
+      </section>
 
     </main>
 
@@ -308,7 +331,7 @@
   <div id="mappings-modal" class="modal-overlay hidden">
     <div class="modal modal-wide">
       <div class="modal-header">
-        <h3 id="mappings-modal-title">Requirements Covered</h3>
+        <h3 id="mappings-modal-title">Requirements addressed</h3>
         <button class="modal-close" data-close="mappings-modal">&times;</button>
       </div>
       <div class="modal-body" id="mappings-modal-body"></div>
@@ -353,9 +376,6 @@
             <option value="not_applicable">Not applicable (Annex A controls only)</option>
           </select>
         </label>
-        <label>Coverage score (0-100)
-          <input type="number" id="save-finding-coverage-score" min="0" max="100" />
-        </label>
         <p class="hint" id="save-finding-suggested" style="margin-top:8px;"></p>
         <div class="form-actions">
           <button id="submit-save-finding-btn" class="btn btn-primary">Save Override</button>
@@ -373,8 +393,15 @@
       </div>
       <div class="modal-body">
         <div id="finding-detail-meta" class="meta-line" style="margin-bottom:12px;"></div>
-        <h4 style="margin:0 0 4px;">Summary</h4>
-        <div id="finding-detail-evidence" style="margin-bottom:16px;"></div>
+        <!-- The reasoning: every obligation this requirement imposes, the strongest
+             verdict any document achieved for it, and the passage behind that verdict.
+             This replaced a prose summary written by a second LLM call — prose about
+             several documents rather than a quote from one, so it could not be located,
+             and it buried the audit question (which obligation does NOBODY satisfy?)
+             inside a paragraph. -->
+        <h4 style="margin:0 0 4px;" id="finding-detail-obligations-heading">Obligations</h4>
+        <p class="section-note" id="finding-detail-obligations-note"></p>
+        <div id="finding-detail-obligations" style="margin-bottom:16px;"></div>
         <!-- The verbatim quote from each contributing document, with where it sits.
              The summary above is the reduce step's merged narrative — prose about
              several documents rather than a quote from one, so it cannot be located
@@ -389,6 +416,9 @@
              guidance exists and simply wasn't found. -->
         <div id="finding-detail-guidance-wrap">
           <h4 style="margin:0 0 4px;" id="finding-detail-guidance-heading">Annex B guidance</h4>
+          <p class="section-note">Annex B is <strong>guidance, not requirement</strong>. An
+          unaddressed point here is an opportunity for improvement — it can never make this
+          control a nonconformity, and it does not affect the obligation count above.</p>
           <div id="finding-detail-guidance"></div>
         </div>
         <div id="finding-detail-delete-wrap" class="form-actions hidden">

@@ -1,0 +1,35 @@
+Certainly! Here is the content from the page, set out as requested:
+
+---
+
+**B.8 Information for interested parties**
+
+**B.8.1 Objective**
+
+To ensure that relevant interested parties have the necessary information to understand and assess the risks and their impacts (both positive and negative).
+
+**B.8.2 System documentation and information for users**
+
+**Control**
+
+The organization should determine and provide the necessary information to users of the system.
+
+**Implementation guidance**
+
+Information about the AI system can include both technical details and instructions, as well as general notifications to users that they are interacting with an AI system, depending on the context. This can also include the system itself, as well as potential outputs of the system (e.g. notifying users that an image is created by AI).
+
+Although AI systems can be complex, it is critical that users are able to understand when they are interacting with an AI system, how the system works. Users also need to understand its intended purpose and intended uses, its potential to cause harm or benefit the user. Some system documentation can necessarily be targeted for more technical uses (e.g. system administrators), and the organization should understand the needs of different interested parties and what understandability can mean to them. The information should also be accessible, both in terms of ease of use in finding it, as well as for users who can need additional accessibility features.
+
+Information that can be provided to users include, but are not limited to:
+
+— purpose of the system;
+— that the user is interacting with an AI system;
+— how to interact with the system;
+
+---
+
+**NOTE** For additional information on data preparation specific to machine learning see the ISO/IEC 5259 series[29] and ISO/IEC 23053.
+
+---
+
+[illegible] marks are not needed for this page; all content is readable.

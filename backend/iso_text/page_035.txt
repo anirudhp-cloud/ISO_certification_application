@@ -1,0 +1,55 @@
+Certainly! Here is the content from the page, set out as requested:
+
+---
+
+**Implementation guidance**
+
+Because AI systems potentially generate significant impact to individuals, groups of individuals, or both, and societies, the organization that provides and uses such systems should, based on the intended purpose and use of these systems, assess the potential impacts of these systems on these groups.
+
+The organization should consider whether an AI system affects:
+— the legal position or life opportunities of individuals;
+— the physical or psychological well-being of individuals;
+— universal human rights;
+— societies.
+
+The organization’s procedures should include, but are not limited to:
+
+a) circumstances under which an AI system impact assessment should be performed, which can include, but are not limited to:
+   1) criticality of the intended purpose and context in which the AI system is used or any significant changes to these;
+   2) complexity of AI technology and the level of automation of AI systems or any significant changes to that;
+   3) sensitivity of data types and sources processed by the AI system or any significant changes to that;
+
+b) elements that are part of the AI system impact assessment process, which can include:
+   1) identification (e.g. sources, events and outcomes);
+   2) analysis (e.g. consequences and likelihood);
+   3) evaluation (e.g. acceptance decisions and prioritization);
+   4) treatment (e.g. mitigation measures);
+   5) documentation, reporting and communication (see 7.4, 7.5 and B.3.3);
+
+c) who performs the AI system impact assessment;
+
+d) how the AI system impact assessment can be utilized (e.g. how it can inform the design or use of the system (see B.6 and B.9), whether it can trigger reviews and approvals);
+
+e) individuals and societies that are potentially impacted based on the system’s intended purpose, use and characteristics (e.g. assessment for individuals, groups of individuals or societies).
+
+Impact assessment should take various aspects of the AI system into account, including the data used for the development of the AI system, the AI technologies used and the functionality of the overall system.
+
+The processes can vary based on the role of the organization and the domain of AI application and depending on the specific disciplines for which the impact is assessed (e.g. security, privacy and safety).
+
+---
+
+**Other information**
+
+For some disciplines or organizations, detailed consideration of the impact on individuals or groups of individuals, or both, and societies is part of risk management, particularly in disciplines such as information security, safety and environmental management. The organization should determine
+
+---
+
+[The last sentence is cut off and unreadable.]
+
+---
+
+**Page number:** 27
+
+---
+
+Let me know if you need further formatting or additional pages!
